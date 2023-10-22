@@ -2,10 +2,8 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import Loading from '../components/Loading';
-import { useNavigate } from 'react-router-dom';
 
 const StudentCreate = () => {
-    const navigate = useNavigate();
     const [inputError, setInputError] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -35,7 +33,13 @@ const StudentCreate = () => {
         axios.post(`http://localhost:8000/api/students`, data).then(res=>{
             setLoading(false);
             alert(res.data.message);
-            navigate('/students');
+            setStudent({
+                name:"",
+                email:"",
+                course:"",
+                phone:""
+            });
+            setInputError({});
         }).catch(function (error) {
             if(error.response) {
                 if(error.response.status === 422) {
@@ -71,22 +75,22 @@ const StudentCreate = () => {
                             <span className="text-danger">{inputError.message}</span>
                             <div className="mb-3">
                                 <label>Name*</label>
-                                <input type="text" name="name" onChange={handleChange} className="form-control" />
+                                <input type="text" name="name" value={student.name} onChange={handleChange} className="form-control" />
                                 <span className="text-danger">{inputError.name}</span>
                             </div>
                             <div className="mb-3">
                                 <label>Email*</label>
-                                <input type="text" name="email" onChange={handleChange} className="form-control" />
+                                <input type="text" name="email" value={student.email} onChange={handleChange} className="form-control" />
                                 <span className="text-danger">{inputError.email}</span>
                             </div>
                             <div className="mb-3">
                                 <label>Course*</label>
-                                <input type="text" name="course" onChange={handleChange} className="form-control" />
+                                <input type="text" name="course" value={student.course} onChange={handleChange} className="form-control" />
                                 <span className="text-danger">{inputError.course}</span>
                             </div>
                             <div className="mb-3">
                                 <label>Phone*</label>
-                                <input type="text" name="phone"onChange={handleChange}  className="form-control" />
+                                <input type="text" name="phone" value={student.phone} onChange={handleChange}  className="form-control" />
                                 <span className="text-danger">{inputError.phone}</span>
                             </div>
                             <button type="submit" className="btn btn-primary">Save</button>
