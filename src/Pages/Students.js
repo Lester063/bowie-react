@@ -10,7 +10,7 @@ const Student = () => {
     const [isClicked, setClicked] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/students`).then(res => {
+        axios.get(`http://localhost:8000/api/students`,{withCredentials:true}).then(res => {
             setStudent(res.data.message);
             setLoading(false);
             setClicked(false);

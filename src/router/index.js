@@ -5,6 +5,8 @@ import About from "../Pages/About";
 import Students from "../Pages/Students";
 import StudentCreate from '../Pages/StudentCreate';
 import StudentEdit from '../Pages/StudentEdit';
+import Register from '../Pages/Register';
+import Login from '../Pages/Login';
 import NotFound from '../Pages/NotFound';
 function MyRouter() {
     return (
@@ -15,7 +17,10 @@ function MyRouter() {
             <Route path="/students" element={<Students />} />
             <Route path="/student/create" element={<StudentCreate />} />
             <Route path="/students/:id/edit" element={<StudentEdit />} />
+            <Route path="/register" element={<Register />}/>
+            <Route path="/login" element={<Login />}/>
             <Route path="*" element={<NotFound />} />
+
         </Routes>
     )
 }
