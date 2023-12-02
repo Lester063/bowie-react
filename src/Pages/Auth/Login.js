@@ -1,9 +1,10 @@
-import Loading from '../components/Loading.js';
-import useLoading from "../components/useLoading";
-import { useState, useEffect } from 'react';
+import Loading from '../../components/Loading.js';
+import useLoading from "../../components/useLoading.js";
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
+    document.title = 'Login';
     const navigate = useNavigate();
     const { loading } = useLoading();
     const [ clickLoading, setLoading] = useState(false);

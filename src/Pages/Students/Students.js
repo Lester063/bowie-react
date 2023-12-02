@@ -1,25 +1,29 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Loading from '../components/Loading';
-import StudentList from './Students/StudentList';
+import Loading from '../../components/Loading';
+import StudentList from './StudentList';
+import useFetch from '../../components/useFetch';
 
 const Student = () => {
     const [students, setStudent] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isClicked, setClicked] = useState(false);
 
+    const data = useFetch(`http://localhost:8000/api/students`, isClicked);
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/students`,{withCredentials:true}).then(res => {
-            setStudent(res.data.message);
+        document.title = 'Students';
+        if(data && data !== null) {
+            setStudent(data);
             setLoading(false);
             setClicked(false);
-        })
-    }, [isClicked]);
+            console.log(data);
+        }
+    }, [isClicked, data]);
 
     const handleDelete = (e, id) => {
         e.preventDefault();
-        axios.delete(`http://localhost:8000/api/students/${id}/delete`).then(res => {
+        axios.delete(`http://localhost:8000/api/students/${id}/delete`,{withCredentials:true}).then(res => {
             alert(res.data.message);
             setClicked(true);
         })
