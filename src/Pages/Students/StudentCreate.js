@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-import Loading from '../components/Loading';
+import Loading from '../../components/Loading';
 
 const StudentCreate = () => {
     const [inputError, setInputError] = useState({});
@@ -30,7 +30,7 @@ const StudentCreate = () => {
             course: student.course,
             phone: student.phone,
         }
-        axios.post(`http://localhost:8000/api/students`, data).then(res=>{
+        axios.post(`http://localhost:8000/api/students`, data,{withCredentials:true}).then(res=>{
             setLoading(false);
             alert(res.data.message);
             setStudent({

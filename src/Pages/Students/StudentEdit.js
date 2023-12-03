@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Loading from '../components/Loading';
+import Loading from '../../components/Loading';
 import { useNavigate } from 'react-router-dom';
 
 const StudentEdit = () => {
@@ -24,7 +24,7 @@ const StudentEdit = () => {
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:8000/api/students/${id}/edit`).then(res=>{
+        axios.get(`http://localhost:8000/api/students/${id}/edit`,{withCredentials:true}).then(res=>{
             setStudent(res.data.data);
             setLoading(false);
         })
@@ -32,7 +32,7 @@ const StudentEdit = () => {
 
     const saveNewStudentData = (e) =>{
         e.preventDefault();
-        axios.put(`http://localhost:8000/api/students/${id}/edit`, student).then(res=>{
+        axios.put(`http://localhost:8000/api/students/${id}/edit`, student,{withCredentials:true}).then(res=>{
             setLoading(false);
             alert('Data have been updated successfully.');
             navigate('/students');

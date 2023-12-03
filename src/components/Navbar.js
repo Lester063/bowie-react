@@ -27,6 +27,7 @@ const Navbar = () => {
     }
 
     useEffect(() => {
+
         if (token) {
             axios.get(`http://localhost:8000/api/user`,
                 {
@@ -46,7 +47,7 @@ const Navbar = () => {
     }, [token]);
 
     let menu;
-    if (token == '') {
+    if (!token) {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">Student</Link>
@@ -71,16 +72,21 @@ const Navbar = () => {
                 </div>
             </>
         )
-    } else {
+    } else if (token) {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">{userData.name}</Link>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                        {userData.is_admin == 1 &&
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/students">Students</Link>
-                            </li>
+                        {userData.is_admin === 1 &&
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/students">Students</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/items">Item</Link>
+                                </li>
+                            </>
                         }
                         <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>

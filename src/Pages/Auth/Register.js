@@ -1,8 +1,8 @@
-import Loading from '../components/Loading.js';
+import Loading from '../../components/Loading.js';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 const Register = () => {
-
+    document.title = 'Register';
     const [loading, setLoading] = useState(false);
     const [inputError, setInputError] = useState({});
 
