@@ -11,6 +11,13 @@ const useFetch = (url, isClicked) => {
             .then(res=>{
                 setData(res.data.message)
             })
+            .catch((error) => {
+                if(error.response) {
+                    if(error.response.status === 403) {
+                        setData(403);
+                    }
+                }
+            });
     }, [url, isClicked])
     return data;
 }

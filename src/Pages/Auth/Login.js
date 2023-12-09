@@ -8,6 +8,7 @@ const Login = () => {
     const navigate = useNavigate();
     const { loading } = useLoading();
     const [ clickLoading, setLoading] = useState(false);
+    const [inputError, setInputError] = useState();
 
     const [ cred, setCredentials ] = useState({
         email:"",
@@ -29,12 +30,21 @@ const Login = () => {
         }
         axios.post(`http://localhost:8000/api/login`, data,{withCredentials:true}).then(res => {
             setLoading(false);
-            setCredentials({
-                email:"",
-                password:""
-            });
-            localStorage.setItem('token', res.data.token);
-            navigate('/');
+            if (res.data.statuscode === 200) {
+                setCredentials({
+                    email:"",
+                    password:""
+                });
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('is_admin', res.data.is_admin);
+                navigate('/');
+            }
+            else if (res.data.statuscode === 422) {
+                setInputError(res.data.message);
+            }
+            else {
+                setInputError('There might be a problem, please come back later.');
+            }
         })
     }
 
@@ -46,6 +56,7 @@ const Login = () => {
                     <h1>Please login</h1>
                     <input type="email" placeholder="Email" className="form-control" value={cred.email} name="email" onChange={handleChange}/>
                     <input type="password" placeholder="Password" className="form-control" value={cred.password} name="password" onChange={handleChange} />
+                    <span className="text-danger">{inputError}</span>
                     <button className="w-100 btn btn-lg btn-primary">Login</button>
                 </form>
             }
