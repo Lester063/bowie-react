@@ -10,6 +10,8 @@ import Login from '../Pages/Auth/Login';
 import NotFound from '../Pages/NotFound';
 import Navbar from "../components/Navbar";
 import Items from "../Pages/Item/Items";
+import ItemCreate from "../Pages/Item/ItemCreate";
+import ItemEdit from "../Pages/Item/ItemEdit";
 
 function MyRouter() {
 
@@ -24,9 +26,12 @@ function MyRouter() {
             <Route path="/login" element={<><Navbar /> <Login/></>}/>
             {/* logged in -admin*/}
             <Route path="/students" element={<><Navbar /> <Students/></>} />
-            <Route path="/items" element={<><Navbar /> <Items/></>} />
             <Route path="/student/create" element={<><Navbar /> <StudentCreate/></>} />
             <Route path="/students/:id/edit" element={<><Navbar /> <StudentEdit/></>} />
+
+            <Route path="/items" element={<><Navbar /> <Items/></>} />
+            <Route path="/item/create" element={<><Navbar /> <ItemCreate/></>} />
+            <Route path="/items/:id/edit" element={<><Navbar /> <ItemEdit/></>} />
 
             <Route path="*" element={<NotFound />}/>
         </Routes>

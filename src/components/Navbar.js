@@ -13,6 +13,7 @@ const Navbar = () => {
     const handleLogout = async (e) => {
         e.preventDefault();
         localStorage.setItem('token', '');
+        localStorage.setItem('is_admin', '');
         //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
         await axios.post(`http://localhost:8000/api/logout`, token,
             {

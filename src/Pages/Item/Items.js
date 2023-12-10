@@ -10,11 +10,13 @@ const Items = () => {
     const [loading, setLoading] = useState(true);
     const [isClicked, setClicked] = useState(false);
 
+    const is_admin = localStorage.getItem('is_admin');
+
     const data = useFetch(`http://localhost:8000/api/items`, isClicked);
 
     useEffect(() => {
         document.title = 'Items';
-        if(data && data !== null) {
+        if (data && data !== null && data !== 403) {
             setItem(data);
             setLoading(false);
             setClicked(false);
@@ -24,35 +26,50 @@ const Items = () => {
 
     const handleDelete = (e, id) => {
         e.preventDefault();
-        axios.delete(`http://localhost:8000/api/items/${id}/delete`,{withCredentials:true}).then(res => {
+        axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true }).then(res => {
             alert(res.data.message);
             setClicked(true);
         })
     }
 
-    return (
-        <div className="container mt-3">
-            {loading && <Loading />}
-            {
-                !loading &&
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card">
-                            <div className="card-header">
-                                <h4>Item List
-                                    <Link to="/student/create" className="btn btn-primary float-end">Add Item</Link>
-                                </h4>
-                            </div>
-                            <div className="card-body">
-                                <ItemList items={items} handleDelete={handleDelete}/>
-                                {items.length < 1 && <p>No item to fetch.</p>}
+    let menu;
+    if (is_admin === '1') {
+        menu = (
+            <>
+                <div className="container mt-3">
+                    {loading && <Loading />}
+                    {
+                        !loading &&
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h4>Item List
+                                            <Link to="/item/create" className="btn btn-primary float-end">Add Item</Link>
+                                        </h4>
+                                    </div>
+                                    <div className="card-body">
+                                        <ItemList items={items} handleDelete={handleDelete} />
+                                        {items.length < 1 && <p>No item to fetch.</p>}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
-            }
-        </div>
+            </>
+        )
+    } else {
+        menu = (
+            <p>Forbidden</p>
+        )
+    }
+
+    return (
+        <>
+            {menu}
+        </>
     );
 }
- 
+
 export default Items;

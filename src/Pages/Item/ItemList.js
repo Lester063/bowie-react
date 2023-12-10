@@ -19,7 +19,7 @@ const ItemList = ({items, handleDelete}) => {
                             <td>{index + 1}</td>
                             <td>{item.itemname}</td>
                             <td>{item.itemcode}</td>
-                            <td>{item.itemstatus}</td>
+                            <td>{item.is_available ? 'AVAILABLE' : 'NOT AVAILABLE'}</td>
                             <td style={{width:"220px"}}>
                                 <Link to={`/items/${item.id}/edit`} className="btn btn-primary">Edit</Link>
                                 <button className="btn btn-danger" style={{marginLeft:"5px"}} onClick={(e) => {
