@@ -7,6 +7,7 @@ import ItemList from './ItemList';
 
 const Items = () => {
     const [items, setItem] = useState([]);
+    const [getItems, setNewItem] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isClicked, setClicked] = useState(false);
 
@@ -32,38 +33,48 @@ const Items = () => {
         })
     }
 
+    const filterAvailableItems = (event) => {
+        setNewItem(items)
+        if (event.target.checked) {
+            const newItems = items.filter((item) =>
+                item.is_available === 1
+            );
+            setItem(newItems);
+        } else {
+            setItem(getItems);
+        }
+    }
+
     let menu;
-    if (is_admin === '1') {
-        menu = (
-            <>
-                <div className="container mt-3">
-                    {loading && <Loading />}
-                    {
-                        !loading &&
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="card">
-                                    <div className="card-header">
-                                        <h4>Item List
+    menu = (
+        <>
+            <div className="container mt-3">
+                {loading && <Loading />}
+                {
+                    !loading &&
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="card">
+                                <div className="card-header">
+                                    <h4>Item List
+                                        {is_admin === '1' &&
                                             <Link to="/item/create" className="btn btn-primary float-end">Add Item</Link>
-                                        </h4>
-                                    </div>
-                                    <div className="card-body">
-                                        <ItemList items={items} handleDelete={handleDelete} />
-                                        {items.length < 1 && <p>No item to fetch.</p>}
-                                    </div>
+                                        }
+                                    </h4>
+                                    <input type="checkbox" onChange={(e) => { filterAvailableItems(e) }} />
+                                    <label>Available</label>
+                                </div>
+                                <div className="card-body">
+                                    <ItemList items={items} handleDelete={handleDelete} />
+                                    {items.length < 1 && <p>No item to fetch.</p>}
                                 </div>
                             </div>
                         </div>
-                    }
-                </div>
-            </>
-        )
-    } else {
-        menu = (
-            <p>Forbidden</p>
-        )
-    }
+                    </div>
+                }
+            </div>
+        </>
+    )
 
     return (
         <>

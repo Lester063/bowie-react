@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-const ItemList = ({items, handleDelete}) => {
-
+const ItemList = ({ items, handleDelete }) => {
+    const is_admin = localStorage.getItem('is_admin');
     return (
         <table className="table table-striped">
             <thead>
@@ -9,7 +9,9 @@ const ItemList = ({items, handleDelete}) => {
                     <th>Item Name</th>
                     <th>Item Code</th>
                     <th>Item Status</th>
-                    <th colSpan="2">Action</th>
+                    {is_admin === '1' && 
+                        <th colSpan="2">Action</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -20,14 +22,16 @@ const ItemList = ({items, handleDelete}) => {
                             <td>{item.itemname}</td>
                             <td>{item.itemcode}</td>
                             <td>{item.is_available ? 'AVAILABLE' : 'NOT AVAILABLE'}</td>
-                            <td style={{width:"220px"}}>
-                                <Link to={`/items/${item.id}/edit`} className="btn btn-primary">Edit</Link>
-                                <button className="btn btn-danger" style={{marginLeft:"5px"}} onClick={(e) => {
-                                    if (window.confirm('are you sure?')) {
-                                        handleDelete(e, item.id);
-                                    }
-                                }}>Delete</button>
-                            </td>
+                            {is_admin === '1' &&
+                                <td style={{ width: "220px" }}>
+                                    <Link to={`/items/${item.id}/edit`} className="btn btn-primary">Edit</Link>
+                                    <button className="btn btn-danger" style={{ marginLeft: "5px" }} onClick={(e) => {
+                                        if (window.confirm('are you sure?')) {
+                                            handleDelete(e, item.id);
+                                        }
+                                    }}>Delete</button>
+                                </td>
+                            }
                         </tr>
                     )
                 })
@@ -37,5 +41,5 @@ const ItemList = ({items, handleDelete}) => {
         </table>
     );
 }
- 
+
 export default ItemList;
