@@ -14,6 +14,7 @@ const Navbar = () => {
         e.preventDefault();
         localStorage.setItem('token', '');
         localStorage.setItem('is_admin', '');
+        localStorage.setItem('userid', '');
         //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
         await axios.post(`http://localhost:8000/api/logout`, token,
             {
@@ -28,7 +29,6 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-
         if (token) {
             axios.get(`http://localhost:8000/api/user`,
                 {
@@ -88,6 +88,9 @@ const Navbar = () => {
                         }
                         <li className="nav-item">
                             <Link className="nav-link" to="/items">Item</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/requests">My Requests</Link>
                         </li>
                         <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>

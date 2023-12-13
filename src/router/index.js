@@ -12,6 +12,9 @@ import Navbar from "../components/Navbar";
 import Items from "../Pages/Item/Items";
 import ItemCreate from "../Pages/Item/ItemCreate";
 import ItemEdit from "../Pages/Item/ItemEdit";
+import MyRequests from "../Pages/MyRequests/MyRequest";
+import RequestCommunication from "../Pages/RequestCommunication/RequestCommunication";
+
 
 function MyRouter() {
 
@@ -32,6 +35,12 @@ function MyRouter() {
             <Route path="/items" element={<><Navbar /> <Items/></>} />
             <Route path="/item/create" element={<><Navbar /> <ItemCreate/></>} />
             <Route path="/items/:id/edit" element={<><Navbar /> <ItemEdit/></>} />
+
+            {/*request */}
+            <Route path="/requests" element={<><Navbar /> <MyRequests/></>} />
+
+            {/*request communication */}
+            <Route path="/requestcommunication/:id" element={<><Navbar /> <RequestCommunication/></>} />
 
             <Route path="*" element={<NotFound />}/>
         </Routes>

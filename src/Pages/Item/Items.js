@@ -12,6 +12,7 @@ const Items = () => {
     const [isClicked, setClicked] = useState(false);
 
     const is_admin = localStorage.getItem('is_admin');
+    const userid = localStorage.getItem('userid');
 
     const data = useFetch(`http://localhost:8000/api/items`, isClicked);
 
@@ -30,6 +31,29 @@ const Items = () => {
         axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true }).then(res => {
             alert(res.data.message);
             setClicked(true);
+        })
+    }
+
+    const handleRequestItem = (e, iditem) => {
+        const requestdata = {
+            idrequester: userid,
+            iditem: String(iditem),
+            statusrequest: 'Pending',
+        }
+        e.preventDefault();
+        axios.post(`http://localhost:8000/api/requests/`,requestdata, { withCredentials: true }).then(res => {
+            alert(res.data.message);
+            console.log('request '+requestdata);
+        })
+        .catch(function(error){
+            if(error.response) {
+                if(error.response.status === 422) {
+                    console.log(error.response.data.errors)
+                }
+                else if(error.response.status === 400) {
+                    alert(error.response.data.message)
+                }
+            }
         })
     }
 
@@ -65,7 +89,7 @@ const Items = () => {
                                     <label>Available</label>
                                 </div>
                                 <div className="card-body">
-                                    <ItemList items={items} handleDelete={handleDelete} />
+                                    <ItemList items={items} handleDelete={handleDelete} handleRequestItem={handleRequestItem}/>
                                     {items.length < 1 && <p>No item to fetch.</p>}
                                 </div>
                             </div>
