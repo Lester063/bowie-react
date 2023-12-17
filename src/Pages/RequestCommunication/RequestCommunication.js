@@ -1,34 +1,107 @@
 import { useParams } from "react-router-dom";
-import useFetch from "../../components/useFetch";
 import { useEffect, useState } from "react";
 import Loading from '../../components/Loading';
+import io from 'socket.io-client';
 
+const socket = io.connect('http://localhost:3001');
 const RequestCommunication = () => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
-    const [isClicked, setClicked] = useState(false);
-    const [comms, setComms] = useState();
+    const [comms, setComms] = useState([]);
 
     const userid = localStorage.getItem('userid');
 
-    const data = useFetch(`http://localhost:8000/api/requestcommunication/${id}`, isClicked);
+    const [getError, setError] = useState('');
 
+    const [isFocus, setFocus] = useState(false);
+
+    const [requestData, setRequestData] = useState({
+        idrequest: "",
+        message: "",
+    });
+
+    //input changes
+    const handleChange = (e) => {
+        e.preventDefault();
+        setRequestData({ ...requestData, [e.target.name]: e.target.value });
+    }
+
+    const sendCommunication = async (e) => {
+        e.preventDefault();
+
+        const datos = {
+            idrequest: id,
+            message: requestData.message,
+        }
+
+        await axios.post(`http://localhost:8000/api/requestcommunication/`, datos, { withCredentials: true }).then(res => {
+            setRequestData({
+                idrequest: "",
+                message: ""
+            });
+            document.getElementById('message').focus();
+            setFocus(true);
+            setComms((state) => [
+                ...state,
+                {
+                    id: res.data.data.id,
+                    idrequest: res.data.data.idrequest,
+                    idsender: res.data.data.idsender,
+                    message: res.data.data.message,
+                    created_at: res.data.data.created_at,
+                    updated_at: res.data.data.updated_at,
+                },
+            ]);
+            socket.emit("sendChatToServer", res.data.data);
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status === 422) {
+                    setError(error.response.status);
+                    console.log(getError);
+                }
+            }
+        })
+    }
     useEffect(() => {
         document.title = 'Request Communication';
-        if (data.constructor === Array) {
-            setComms(data);
-            setLoading(false);
-            setClicked(false);
-            console.log(data);
-        }
-        else if(data.constructor !== Array) {
-            setComms(data);
-        }
-    }, [isClicked, data, comms]);
-    
-    const sendCommunication = (e) => {
-        e.preventDefault();
-    }
+        axios.get(`http://localhost:8000/api/requestcommunication/${id}`,
+            { withCredentials: true })
+            .then(res => {
+                setComms(res.data.message);
+                setLoading(false);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        setComms(403);
+                        setLoading(false);
+                    }
+                    if (error.response.status === 422) {
+                        setComms(error.response.data.message);
+                        setLoading(false);
+                    }
+                }
+            });
+        socket.on("sendChatToClient", (message) => {
+            setComms((state) => [
+                ...state,
+                {
+                    id: message.id,
+                    idrequest: message.idrequest,
+                    idsender: message.idsender,
+                    message: message.message,
+                    created_at: message.created_at,
+                    updated_at: message.updated_at,
+                },
+            ]);
+
+        });
+
+        return () => socket.off('receive_message');
+
+    }, [socket]);
+
+
     return (
         <div className="container mt-3">
             {loading && <Loading />}
@@ -37,11 +110,11 @@ const RequestCommunication = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
-                            <table className="table table-striped">
+                            <table className="table table-striped" id="tabs">
                                 <tbody>
                                     {comms && comms.constructor === Array && comms.map((comm, index) => {
                                         return (
-                                            <tr key={index} style={{ textAlign: userid === comm.idsender ? "right" : "left" }}>
+                                            <tr key={index} style={{ textAlign: String(userid) === String(comm.idsender) ? "right" : "left" }}>
                                                 <td>{comm.message}</td>
                                             </tr>
                                         )
@@ -50,10 +123,10 @@ const RequestCommunication = () => {
                                 </tbody>
                             </table>
                             {comms.constructor !== Array && <>{comms}</>}
-                            <form onSubmit={sendCommunication}>
-                                <input type="text" placeholder="Enter a message" className="form-control" style={{width:"95%", display:"inline-block"}}/>
-                                <button type="submit" className="btn btn-primary" style={{float:"right"}}>Send</button>
-                            </form>
+                            <div>
+                            <input type="text" required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control" style={{ width: requestData.message!=='' || isFocus===true ? "95%" : "100%", display: "inline-block" }} />
+                            <button className="btn btn-primary" onClick={sendCommunication} style={{ width: "5%",float: "right", display: requestData.message!=='' || isFocus===true ? "block" : "none" }}>Send</button>
+                            </div>
                         </div>
                     </div>
                 </div>
