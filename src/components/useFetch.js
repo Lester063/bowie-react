@@ -21,7 +21,7 @@ const useFetch = (url, isClicked) => {
                     }
                 }
             });
-    }, [url, isClicked])
+    }, [url, isClicked]);
     return data;
 }
  
