@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Loading from '../../components/Loading';
 import axios from "axios";
 import io from 'socket.io-client';
@@ -9,17 +9,14 @@ const RequestCommunication = () => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [comms, setComms] = useState([]);
-
     const userid = localStorage.getItem('userid');
-
     const [getError, setError] = useState('');
-
     const [isFocus, setFocus] = useState(false);
-
     const [requestData, setRequestData] = useState({
         idrequest: "",
         message: "",
     });
+    const bottomRef = useRef(null);
 
     //input changes
     const handleChange = (e) => {
@@ -63,6 +60,12 @@ const RequestCommunication = () => {
             }
         })
     }
+
+    useEffect(() => {
+        //scroll to bottom every time messages change
+        bottomRef.current?.scrollIntoView({ behavior: 'instant' });
+    }, [comms]);
+
     useEffect(() => {
         document.title = 'Request Communication';
         axios.get(`http://localhost:8000/api/requestcommunication/${id}`,
@@ -103,31 +106,53 @@ const RequestCommunication = () => {
     }, [socket]);
 
 
+
     return (
         <div className="container mt-3">
             {loading && <Loading />}
             {
                 !loading &&
                 <div className="row">
-                    <div className="col-md-12">
-                        <div className="card">
-                            <table className="table table-striped" id="tabs">
-                                <tbody>
-                                    {comms && comms.constructor === Array && comms.map((comm, index) => {
-                                        return (
-                                            <tr key={index} style={{ textAlign: String(userid) === String(comm.idsender) ? "right" : "left" }}>
-                                                <td>{comm.message}</td>
-                                            </tr>
-                                        )
-                                    })
-                                    }
-                                </tbody>
-                            </table>
-                            {comms.constructor !== Array && <>{comms}</>}
-                            <div>
-                            <input type="text" required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control" style={{ width: requestData.message!=='' || isFocus===true ? "95%" : "100%", display: "inline-block" }} />
-                            <button className="btn btn-primary" onClick={sendCommunication} style={{ width: "5%",float: "right", display: requestData.message!=='' || isFocus===true ? "block" : "none" }}>Send</button>
-                            </div>
+                    <div className="col-md-12" style={{
+                        border: "1px solid #ccc",
+                        height: "800px",
+                        overflowY: "scroll",
+                        borderRadius: "5px",
+                    }}>
+                        {comms && comms.constructor === Array && comms.map((comm, index, arr) => {                           
+                            const previousItem = arr[index - 1];
+                            return (
+                                <div key={index}>
+                                {index==0 && comm.name}
+                                {index>0 && comm.idsender !== previousItem.idsender && comm.idsender !== userid &&
+                                <span>{comm.name}</span>
+                                }
+                                <div className="messageBox mt-1" key={index} style={{
+                                    backgroundColor: String(userid) === String(comm.idsender) ? "#78b5ff" : "#f5f3f0",
+                                    width: "fit-content",
+                                    padding: "10px",
+                                    borderRadius: "7px",
+                                    marginRight:String(userid) === String(comm.idsender) ? "0" : "",
+                                    marginLeft:String(userid) === String(comm.idsender) ? "auto" : "",
+
+                                }}>
+                                    <p>{comm.message}</p>
+                                </div>
+                                </div>
+                            )
+                        })
+                        }
+
+                        {comms.constructor !== Array && <>{comms}</>}
+                        <div className="mt-2 mb-2">
+                            <input type="text" ref={bottomRef} required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control" style={{
+                                width: (requestData.message !== '' || isFocus === true ? "95%" : "100%"),
+                                display: "inline-block",
+                                }} />
+                            <button className="btn btn-primary" onClick={sendCommunication} style={{
+                                float: "right", 
+                                display: requestData.message !== '' || isFocus === true ? "block" : "none",
+                                }}>{window.innerWidth > 1450 ? 'Send' : 'S' }</button>
                         </div>
                     </div>
                 </div>
