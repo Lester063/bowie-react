@@ -41,20 +41,20 @@ const Items = () => {
             statusrequest: 'Pending',
         }
         e.preventDefault();
-        axios.post(`http://localhost:8000/api/requests/`,requestdata, { withCredentials: true }).then(res => {
+        axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true }).then(res => {
             alert(res.data.message);
-            console.log('request '+requestdata);
+            console.log('request ' + requestdata);
         })
-        .catch(function(error){
-            if(error.response) {
-                if(error.response.status === 422) {
-                    console.log(error.response.data.errors)
+            .catch(function (error) {
+                if (error.response) {
+                    if (error.response.status === 422) {
+                        console.log(error.response.data.errors)
+                    }
+                    else if (error.response.status === 400) {
+                        alert(error.response.data.message)
+                    }
                 }
-                else if(error.response.status === 400) {
-                    alert(error.response.data.message)
-                }
-            }
-        })
+            })
     }
 
     const filterAvailableItems = (event) => {
@@ -89,7 +89,7 @@ const Items = () => {
                                     <label>Available</label>
                                 </div>
                                 <div className="card-body">
-                                    <ItemList items={items} handleDelete={handleDelete} handleRequestItem={handleRequestItem}/>
+                                    <ItemList items={items} handleDelete={handleDelete} handleRequestItem={handleRequestItem} />
                                     {items.length < 1 && <p>No item to fetch.</p>}
                                 </div>
                             </div>

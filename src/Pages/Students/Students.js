@@ -4,6 +4,7 @@ import axios from 'axios';
 import Loading from '../../components/Loading';
 import StudentList from './StudentList';
 import useFetch from '../../components/useFetch';
+import ForbiddenPage from '../../components/ForbiddenPage';
 
 const Student = () => {
     const [students, setStudent] = useState([]);
@@ -60,7 +61,7 @@ const Student = () => {
         )
     } else {
         menu = (
-            <p>Forbidden</p>
+            <ForbiddenPage />
         )
     }
 

@@ -84,13 +84,16 @@ const Navbar = () => {
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/students">Students</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/requests">Users Request</Link>
+                                </li>
                             </>
                         }
                         <li className="nav-item">
                             <Link className="nav-link" to="/items">Item</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/requests">My Requests</Link>
+                            <Link className="nav-link" to="/myrequests">My Requests</Link>
                         </li>
                         <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>

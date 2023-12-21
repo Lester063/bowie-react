@@ -9,7 +9,8 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                     <th>Item Name</th>
                     <th>Item Code</th>
                     <th>Item Status</th>
-                    <th colSpan="2">Action</th>
+                    <th>Action</th>
+                    <th>User Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,7 +31,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                                     }}>Delete</button>
                                 </td>
                             }
-                            {is_admin === '0' &&
+                            {/* {is_admin === '0' && */}
                             <td style={{ width: "220px" }}>
                                 <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled = {item.is_available ? false : true} 
                                     onClick={(e) => {
@@ -41,7 +42,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                                 
                                 >Request</button>
                                 </td>
-                            }
+                            {/* } */}
                             
                         </tr>
                     )

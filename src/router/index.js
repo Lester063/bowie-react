@@ -12,7 +12,8 @@ import Navbar from "../components/Navbar";
 import Items from "../Pages/Item/Items";
 import ItemCreate from "../Pages/Item/ItemCreate";
 import ItemEdit from "../Pages/Item/ItemEdit";
-import MyRequests from "../Pages/MyRequests/MyRequest";
+import MyRequests from "../Pages/Request/MyRequest";
+import UsersRequest from "../Pages/Request/UsersRequest";
 import RequestCommunication from "../Pages/RequestCommunication/RequestCommunication";
 
 
@@ -37,7 +38,8 @@ function MyRouter() {
             <Route path="/items/:id/edit" element={<><Navbar /> <ItemEdit/></>} />
 
             {/*request */}
-            <Route path="/requests" element={<><Navbar /> <MyRequests/></>} />
+            <Route path="/myrequests" element={<><Navbar /> <MyRequests/></>} />
+            <Route path="/requests" element={<><Navbar /> <UsersRequest/></>} />
 
             {/*request communication */}
             <Route path="/requestcommunication/:id" element={<><Navbar /> <RequestCommunication/></>} />
