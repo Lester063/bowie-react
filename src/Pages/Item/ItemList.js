@@ -10,7 +10,10 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                     <th>Item Code</th>
                     <th>Item Status</th>
                     <th>Action</th>
+                    {/* admin view & */}
+                    {is_admin === '1' && 
                     <th>User Action</th>
+                    }
                 </tr>
             </thead>
             <tbody>

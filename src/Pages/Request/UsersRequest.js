@@ -3,6 +3,7 @@ import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import RequestsList from './RequestsList';
 import ForbiddenPage from '../../components/ForbiddenPage';
+import axios from 'axios';
 
 const UsersRequest = () => {
     const [requests, setRequests] = useState([]);
@@ -19,10 +20,20 @@ const UsersRequest = () => {
             setRequests(data);
             setLoading(false);
             setClicked(false);
-            console.log(data);
-            console.log(requests);
         }
     }, [isClicked, data, requests]);
+
+    const actionRequest = async (e, id, action) => {
+        e.preventDefault();
+        try {
+            let response = await axios.put(`http://localhost:8000/api/actionrequest/${id}/edit`, { action: action }, { withCredentials: true });
+            setClicked(true);
+            console.log(response.data);
+        }
+        catch(error) {
+            alert(error.response.data.message);
+        }
+    }
 
     let menu;
     if (is_admin === '1') {
@@ -39,7 +50,7 @@ const UsersRequest = () => {
                                     <h4>User's Requests</h4>
                                 </div>
                                 <div className="card-body">
-                                    <RequestsList requests={requests} />
+                                    <RequestsList requests={requests} actionRequest={actionRequest}/>
                                     {requests.length < 1 && <p>No request to fetch.</p>}
                                 </div>
                             </div>
