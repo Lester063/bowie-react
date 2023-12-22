@@ -82,9 +82,6 @@ const Navbar = () => {
                         {userData.is_admin === 1 &&
                             <>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/students">Students</Link>
-                                </li>
-                                <li className="nav-item">
                                     <Link className="nav-link" to="/requests">Users Request</Link>
                                 </li>
                             </>

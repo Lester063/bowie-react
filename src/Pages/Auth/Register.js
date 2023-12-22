@@ -25,7 +25,7 @@ const Register = () => {
         setUser({...user, [e.target.name]: e.target.value});
     }
 
-    const saveStudent = (e) => {
+    const saveUser = (e) => {
         e.preventDefault();
         setLoading(true);
         const data = {
@@ -61,7 +61,7 @@ const Register = () => {
         <div>
             {loading && <Loading />}
             {!loading &&
-                <form onSubmit={saveStudent}>
+                <form onSubmit={saveUser}>
                     <h1>Please register</h1>
                     <input type="text" placeholder="Name" className="form-control" value={user.name} name="name" onChange={handleChange}/>
                     <span className="text-danger">{inputError.name}</span>
