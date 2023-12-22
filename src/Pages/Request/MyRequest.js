@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import RequestsList from './RequestsList';
+import axios from 'axios';
 
 const MyRequest = () => {
     const [requests, setRequests] = useState([]);
@@ -21,6 +22,18 @@ const MyRequest = () => {
         }
     }, [isClicked, data, requests]);
 
+    const actionRequest = async (e, id, action) => {
+        e.preventDefault();
+        try {
+            let response = await axios.put(`http://localhost:8000/api/actionrequest/${id}/edit`, { action: action }, { withCredentials: true });
+            setClicked(true);
+            console.log(response.data);
+        }
+        catch(error) {
+            alert(error.response.data.message);
+        }
+    }
+
     let menu;
     menu = (
         <>
@@ -35,7 +48,7 @@ const MyRequest = () => {
                                     <h4>My Requests</h4>
                                 </div>
                                 <div className="card-body">
-                                    <RequestsList requests={requests} />
+                                    <RequestsList requests={requests} actionRequest={actionRequest}/>
                                     {requests.length < 1 && <p>No request to fetch.</p>}
                                 </div>
                             </div>

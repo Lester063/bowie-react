@@ -23,7 +23,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                             <td style={{width: "10px"}}>{index + 1}</td>
                             <td>{item.itemname}</td>
                             <td>{item.itemcode}</td>
-                            <td>{item.is_available ? 'AVAILABLE' : 'NOT AVAILABLE'}</td>
+                            <td>{item.is_available ? 'Available' : 'Not available'}</td>
                             {is_admin === '1' &&
                                 <td style={{ width: "220px" }}>
                                     <Link to={`/items/${item.id}/edit`} className="btn btn-primary">Edit</Link>

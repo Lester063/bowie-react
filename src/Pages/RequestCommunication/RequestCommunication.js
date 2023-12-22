@@ -10,7 +10,7 @@ const RequestCommunication = () => {
     const [loading, setLoading] = useState(true);
     const [comms, setComms] = useState([]);
     const userid = localStorage.getItem('userid');
-    const [getError, setError] = useState('');
+    const [requestStatus, setRequestStatus] = useState('');
     const [requestData, setRequestData] = useState({
         idrequest: "",
         message: "",
@@ -55,8 +55,7 @@ const RequestCommunication = () => {
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status === 422) {
-                    setError(error.response.status);
-                    console.log(getError);
+                    console.log(error.response.status);
                 }
             }
         })
@@ -71,6 +70,8 @@ const RequestCommunication = () => {
         axios.get(`http://localhost:8000/api/requestcommunication/${id}`,
             { withCredentials: true })
             .then(res => {
+                setRequestStatus(res.data.statusrequest)
+                //console.log(res.data.statusrequest)
                 console.log(res.data.message)
                 setComms(res.data.message);
                 setLoading(false);
@@ -147,21 +148,26 @@ const RequestCommunication = () => {
                         }
 
                         {comms.length < 1 && <>No messages.</>}
-                        <div className="mt-2 mb-2">
-                            <input type="text" ref={messageRef} required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control"
-                                style={{
-                                    width:
-                                        window.innerWidth > 1450 ?
-                                            (requestData.message !== '' || messageRef.current!=null ? "95%" : "100%")
-                                            :
-                                            (requestData.message !== '' || messageRef.current!=null ? "85%" : "100%"),
-                                    display: "inline-block",
-                                }} />
-                            <button className="btn btn-primary" onClick={sendCommunication} style={{
-                                float: "right",
-                                display: requestData.message !== '' || messageRef.current!=null ? "block" : "none",
-                            }}>Send</button>
-                        </div>
+                        {requestStatus === 'Closed' ?
+                            <p ref={messageRef} style={{textAlign:"center", marginTop:"20px"}}>This request has been closed due to the item being unavailable at the moment,
+                            please make a request again or contact the admin if you have any question.</p>
+                            :
+                            <div className="mt-2 mb-2">
+                                <input type="text" ref={messageRef} required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control"
+                                    style={{
+                                        width:
+                                            window.innerWidth > 1450 ?
+                                                (requestData.message !== '' || messageRef.current != null ? "95%" : "100%")
+                                                :
+                                                (requestData.message !== '' || messageRef.current != null ? "85%" : "100%"),
+                                        display: "inline-block",
+                                    }} />
+                                <button className="btn btn-primary" onClick={sendCommunication} style={{
+                                    float: "right",
+                                    display: requestData.message !== '' || messageRef.current != null ? "block" : "none",
+                                }}>Send</button>
+                            </div>
+                        }
                     </div>
                 </div>
             }
