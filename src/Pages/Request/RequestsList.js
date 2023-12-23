@@ -1,15 +1,14 @@
 import { useState } from "react";
 import HoverMessage from "../../components/HoverMessage";
 
-const RequestsList = ({ requests, actionRequest }) => {
+const RequestsList = ({ requests, actionRequest, returnItem }) => {
     const is_admin = localStorage.getItem('is_admin');
-
+    const userid = localStorage.getItem('userid');
     const [message, setMessage] = useState('')
 
-    const hoverDisabledButton = async (id, statusrequest, isDisabled) => {
-        if(isDisabled) {
-            console.log(isDisabled)
-            switch (statusrequest) {
+    const hoverDisabledButton = async (id, message, isDisabled) => {
+        if (isDisabled) {
+            switch (message) {
                 case 'Approved':
                     setMessage('Request is already approved.')
                     document.getElementById(id).style.display = 'block';
@@ -20,6 +19,10 @@ const RequestsList = ({ requests, actionRequest }) => {
                     break;
                 case 'Declined':
                     setMessage('Request is already declined.')
+                    document.getElementById(id).style.display = 'block';
+                    break;
+                case 'Return':
+                    setMessage('Request is not approve or return request is already sent.')
                     document.getElementById(id).style.display = 'block';
                     break;
                 default: break;
@@ -41,9 +44,7 @@ const RequestsList = ({ requests, actionRequest }) => {
                     <th>Item Code</th>
                     <th>Item Status</th>
                     <th>Request Status</th>
-                    {is_admin === '1' &&
-                        <th>Action</th>
-                    }
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,33 +63,50 @@ const RequestsList = ({ requests, actionRequest }) => {
                                     borderRadius: "5px",
                                     color: "#fff",
                                 }}>{request.statusrequest}</span></td>
-                            {is_admin === '1' &&
-                                <td>
-                                    <HoverMessage id={index+'approve'} message={message} />
-                                    <span onMouseOut={() => { hoverOut(index + 'approve') }} onMouseOver={() => {
-                                        hoverDisabledButton(index + 'approve', request.statusrequest, request.statusrequest === 'Approved' || request.statusrequest === 'Closed' ? true : false)
-                                    }}>
-                                        <button id='approvebutton' className="btn btn-primary" onClick={(e) => {
-                                            if (window.confirm('are you sure?')) {
-                                                actionRequest(e, request.id, 'Approving');
-                                            }
-                                        }} disabled={request.statusrequest === 'Approved' || request.statusrequest === 'Closed' ? true : false}>Approve</button>
-                                    </span>
+                            <td>
+                                {is_admin === '1' &&
+                                    <>
+                                        <HoverMessage id={index + 'approve'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'approve') }} onMouseOver={() => {
+                                            hoverDisabledButton(index + 'approve', request.statusrequest, request.statusrequest === 'Approved' || request.statusrequest === 'Closed' ? true : false)
+                                        }}>
+                                            <button id='approvebutton' className="btn btn-primary" onClick={(e) => {
+                                                if (window.confirm('are you sure?')) {
+                                                    actionRequest(e, request.id, 'Approving');
+                                                }
+                                            }} disabled={request.statusrequest === 'Approved' || request.statusrequest === 'Closed' ? true : false}>Approve</button>
+                                        </span>
 
-                                    <HoverMessage id={index+'decline'} message={message} />
-                                    <span onMouseOut={() => { hoverOut(index + 'decline') }} onMouseOver={() => {
-                                        hoverDisabledButton(index + 'decline', request.statusrequest, request.statusrequest === 'Declined' || request.statusrequest === 'Closed' ? true : false)
-                                    }}>
-                                        <button className="btn btn-danger" onClick={(e) => {
-                                            if (window.confirm('are you sure?')) {
-                                                actionRequest(e, request.id, 'Declining');
-                                            }
-                                        }} disabled={request.statusrequest === 'Declined' || request.statusrequest === 'Closed' ? true : false}>Decline</button>
-                                    </span>
+                                        <HoverMessage id={index + 'decline'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'decline') }} onMouseOver={() => {
+                                            hoverDisabledButton(index + 'decline', request.statusrequest, request.statusrequest === 'Declined' || request.statusrequest === 'Closed' ? true : false)
+                                        }}>
+                                            <button className="btn btn-danger" onClick={(e) => {
+                                                if (window.confirm('are you sure?')) {
+                                                    actionRequest(e, request.id, 'Declining');
+                                                }
+                                            }} disabled={request.statusrequest === 'Declined' || request.statusrequest === 'Closed' ? true : false}>Decline</button>
+                                        </span>
 
-                                </td>
-                            }
+                                    </>
+                                }
+                                {String(request.idrequester) === String(userid) &&
+                                    <>
+                                        <HoverMessage id={index + 'return'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'return') }} onMouseOver={() => {
+                                            hoverDisabledButton(index + 'return', 'Return', request.statusrequest !== 'Approved' || request.isreturnsent === 1 ? true : false)
+                                        }}>
+                                            <button id='returnbutton' className="btn btn-primary" disabled={request.statusrequest !== 'Approved' || request.isreturnsent === 1 ? true : false}
+                                                onClick={(e) => {
+                                                    if (window.confirm('are you sure?')) {
+                                                        returnItem(e, request.id);
+                                                    }
+                                                }}>Return</button>
+                                        </span>
 
+                                    </>
+                                }
+                            </td>
                         </tr>
                     )
                 })

@@ -39,6 +39,7 @@ const Items = () => {
             idrequester: userid,
             iditem: String(iditem),
             statusrequest: 'Pending',
+            // isreturnsent: false
         }
         e.preventDefault();
         axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true }).then(res => {

@@ -12,7 +12,8 @@ import ItemEdit from "../Pages/Item/ItemEdit";
 import MyRequests from "../Pages/Request/MyRequest";
 import UsersRequest from "../Pages/Request/UsersRequest";
 import RequestCommunication from "../Pages/RequestCommunication/RequestCommunication";
-
+import MyReturns from "../Pages/Returns/MyReturn";
+import UsersReturns from "../Pages/Returns/UsersReturn";
 
 function MyRouter() {
 
@@ -36,6 +37,10 @@ function MyRouter() {
 
             {/*request communication */}
             <Route path="/requestcommunication/:id" element={<><Navbar /> <RequestCommunication/></>} />
+
+            {/*returns */}
+            <Route path="/myreturns" element={<><Navbar /> <MyReturns/></>} />
+            <Route path="/returns" element={<><Navbar /> <UsersReturns/></>} />
 
             <Route path="*" element={<NotFound />}/>
         </Routes>

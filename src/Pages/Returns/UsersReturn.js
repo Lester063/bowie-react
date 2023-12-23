@@ -1,47 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
-import RequestsList from './RequestsList';
+import ReturnsList from './ReturnsList';
 import ForbiddenPage from '../../components/ForbiddenPage';
 import axios from 'axios';
 
-const UsersRequest = () => {
-    const [requests, setRequests] = useState([]);
+const UsersReturn = () => {
+    const [returns, setReturns] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isClicked, setClicked] = useState(false);
 
     const is_admin = localStorage.getItem('is_admin');
 
-    const data = useFetch(`http://localhost:8000/api/requests`, isClicked);
+    const data = useFetch(`http://localhost:8000/api/returns`, isClicked);
 
     useEffect(() => {
-        document.title = "User's Requests";
+        document.title = "User's Return";
         if (data && data !== null && data !== 403) {
-            setRequests(data);
+            setReturns(data);
             setLoading(false);
             setClicked(false);
         }
-    }, [isClicked, data, requests]);
-
-    const actionRequest = async (e, id, action) => {
+    }, [isClicked, data, returns]);
+    
+    const approveReturn = async (e, returnid) => {
         e.preventDefault();
+        let data = 'data,not sure why I need to pass a data, definitely a bug.'
         try {
-            let response = await axios.put(`http://localhost:8000/api/actionrequest/${id}/edit`, { action: action }, { withCredentials: true });
+            let response = await axios.put(`http://localhost:8000/api/return/${returnid}/approve`,data, { withCredentials: true });
             setClicked(true);
             console.log(response.data);
-        }
-        catch(error) {
-            alert(error.response.data.message);
-        }
-    }
-
-    const returnItem = async (e, idrequest) => {
-        e.preventDefault();
-        try {
-            let response = await axios.post(`http://localhost:8000/api/return`, { idrequest: idrequest }, { withCredentials: true });
-            setClicked(true);
-            console.log(response.data);
-            alert(response.data.message);
         }
         catch(error) {
             alert(error.response.data.message);
@@ -60,11 +48,11 @@ const UsersRequest = () => {
                         <div className="col-md-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h4>User's Requests</h4>
+                                    <h4>User's Returns</h4>
                                 </div>
                                 <div className="card-body">
-                                    <RequestsList requests={requests} actionRequest={actionRequest} returnItem={returnItem}/>
-                                    {requests.length < 1 && <p>No request to fetch.</p>}
+                                    <ReturnsList returns={returns} approveReturn={approveReturn}/>
+                                    {returns.length < 1 && <p>No returns to fetch.</p>}
                                 </div>
                             </div>
                         </div>
@@ -86,4 +74,4 @@ const UsersRequest = () => {
     );
 }
 
-export default UsersRequest;
+export default UsersReturn;

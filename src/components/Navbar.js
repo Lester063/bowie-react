@@ -84,6 +84,9 @@ const Navbar = () => {
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/requests">Users Request</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/returns">Users Return</Link>
+                                </li>
                             </>
                         }
                         <li className="nav-item">
@@ -91,6 +94,9 @@ const Navbar = () => {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/myrequests">My Requests</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/myreturns">My Returns</Link>
                         </li>
                         <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>

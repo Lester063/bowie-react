@@ -28,6 +28,20 @@ const MyRequest = () => {
             let response = await axios.put(`http://localhost:8000/api/actionrequest/${id}/edit`, { action: action }, { withCredentials: true });
             setClicked(true);
             console.log(response.data);
+            alert(response.data.message);
+        }
+        catch(error) {
+            alert(error.response.data.message);
+        }
+    }
+
+    const returnItem = async (e, idrequest) => {
+        e.preventDefault();
+        try {
+            let response = await axios.post(`http://localhost:8000/api/return`, { idrequest: idrequest }, { withCredentials: true });
+            setClicked(true);
+            console.log(response.data);
+            alert(response.data.message);
         }
         catch(error) {
             alert(error.response.data.message);
@@ -48,7 +62,7 @@ const MyRequest = () => {
                                     <h4>My Requests</h4>
                                 </div>
                                 <div className="card-body">
-                                    <RequestsList requests={requests} actionRequest={actionRequest}/>
+                                    <RequestsList requests={requests} actionRequest={actionRequest} returnItem={returnItem}/>
                                     {requests.length < 1 && <p>No request to fetch.</p>}
                                 </div>
                             </div>
