@@ -13,14 +13,13 @@ const MyRequest = () => {
 
     useEffect(() => {
         document.title = 'My Requests';
-        if (data && data !== null && data !== 403) {
+        if (data.constructor === Array) {
             setRequests(data);
             setLoading(false);
             setClicked(false);
             console.log(data);
-            console.log(requests);
         }
-    }, [isClicked, data, requests]);
+    }, [data]);
 
     const actionRequest = async (e, id, action) => {
         e.preventDefault();
