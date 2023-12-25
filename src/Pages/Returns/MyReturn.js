@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
-import axios from 'axios';
 
 const MyReturn = () => {
     const [returns, setReturns] = useState([]);
@@ -13,15 +12,13 @@ const MyReturn = () => {
 
     useEffect(() => {
         document.title = 'My Returns';
-        if (data && data !== null && data !== 403) {
+        if (data.constructor === Array) {
             setReturns(data);
             setLoading(false);
             setClicked(false);
             console.log(data);
-            console.log(returns);
         }
-        console.log(data);
-    }, [isClicked, data, returns]);
+    }, [data]);
 
     let menu;
     menu = (

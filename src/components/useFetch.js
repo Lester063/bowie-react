@@ -6,22 +6,19 @@ const useFetch = (url, isClicked) => {
     const [data, setData] = useState([]);
 
     useEffect(()=>{
-        axios.get(url,
-            {withCredentials:true})
-            .then(res=>{
-                setData(res.data.message)
-            })
-            .catch((error) => {
-                if(error.response) {
-                    if(error.response.status === 403) {
-                        setData(403);
-                    }
-                    if(error.response.status === 422) {
-                        setData(error.response.data.message);
-                    }
-                }
-            });
-    }, [url, isClicked]);
+        async function fetchData(){
+            try {
+                const response = await axios.get(url, {withCredentials:true});
+                setData(response.data.message);
+            }
+            catch(error) {
+                setData(error.response.status);
+            }
+    
+        }
+        
+        fetchData();
+    }, [isClicked]);
     return data;
 }
  

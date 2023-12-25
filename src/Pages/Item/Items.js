@@ -18,20 +18,41 @@ const Items = () => {
 
     useEffect(() => {
         document.title = 'Items';
-        if (data && data !== null && data !== 403) {
+        if (data.constructor === Array) {
             setItem(data);
             setLoading(false);
             setClicked(false);
             console.log(data);
         }
-    }, [isClicked, data]);
+    }, [data]);
 
-    const handleDelete = (e, id) => {
+    const handleDelete = async (e, id) => {
         e.preventDefault();
-        axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true }).then(res => {
-            alert(res.data.message);
-            setClicked(true);
-        })
+        try {
+            const checkRequest = await axios.get(`http://localhost:8000/api/items/${id}/itemrequest`, { withCredentials: true });
+            console.log(checkRequest.data.count);
+            if(checkRequest.data.count >= 1) {
+                console.log('aaaa')
+                if (window.confirm('There are existing request, are you sure?')) {
+                    const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
+                    alert(deleteresponse.data.message);
+                    const newItems = items.filter((item) =>
+                    item.id !== id
+                );
+                setItem(newItems);
+                }
+            } else {
+                console.log('ehehe')
+                const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
+                alert(deleteresponse.data.message);
+                const newItems = items.filter((item) =>
+                item.id !== id
+            );
+            setItem(newItems);
+            }
+        } catch(error) {
+            console.log(error.response.status);
+        }
     }
 
     const handleRequestItem = (e, iditem) => {
@@ -44,7 +65,6 @@ const Items = () => {
         e.preventDefault();
         axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true }).then(res => {
             alert(res.data.message);
-            console.log('request ' + requestdata);
         })
             .catch(function (error) {
                 if (error.response) {

@@ -38,7 +38,6 @@ const Login = () => {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('is_admin', res.data.is_admin);
                 localStorage.setItem('userid', res.data.userid);
-                console.log('id '+res.data.userid)
                 navigate('/');
             }
             else if (res.data.statuscode === 422) {
