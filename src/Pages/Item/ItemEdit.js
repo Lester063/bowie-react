@@ -70,7 +70,7 @@ const ItemEdit = () => {
                             <div className="card">
                                 <div className="card-header">
                                     <h4>
-                                        <Link to="/items" className="btn btn-secondary float-end">Back</Link>
+                                        <Link to="/items" className="btn btn-secondary float-right"><i className="bi bi-arrow-left"></i></Link>
                                         Edit Item
                                     </h4>
                                 </div>
