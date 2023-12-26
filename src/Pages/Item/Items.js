@@ -27,10 +27,15 @@ const Items = () => {
         e.preventDefault();
         try {
             const checkRequest = await axios.get(`http://localhost:8000/api/items/${id}/itemrequest`, { withCredentials: true });
+            const getrequests = checkRequest.data.message;
             console.log(checkRequest.data.count);
             if(checkRequest.data.count >= 1) {
                 console.log('aaaa')
-                if (window.confirm('There are existing request, are you sure?')) {
+                if (window.confirm('Pending request for this item will be automatically closed, are you sure you want to delete the item?')) {
+                    //delete all request from checkRequest
+                    await getrequests.forEach((request)=>{
+                        axios.put(`http://localhost:8000/api/actionrequest/${request.id}/edit`, { action: 'Closing' }, { withCredentials: true });
+                    });
                     const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
                     alert(deleteresponse.data.message);
                     console.log(deleteresponse.data);
