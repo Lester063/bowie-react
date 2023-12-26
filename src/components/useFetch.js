@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const useFetch = (url, isClicked) => {
+const useFetch = (url) => {
 
     const [data, setData] = useState([]);
 
@@ -18,7 +18,7 @@ const useFetch = (url, isClicked) => {
         }
         
         fetchData();
-    }, [isClicked]);
+    }, [url]);
     return data;
 }
  

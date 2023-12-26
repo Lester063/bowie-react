@@ -9,20 +9,17 @@ const Items = () => {
     const [items, setItem] = useState([]);
     const [getItems, setNewItem] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isClicked, setClicked] = useState(false);
 
     const is_admin = localStorage.getItem('is_admin');
     const userid = localStorage.getItem('userid');
 
-    const data = useFetch(`http://localhost:8000/api/items`, isClicked);
+    const data = useFetch(`http://localhost:8000/api/items`);
 
     useEffect(() => {
         document.title = 'Items';
         if (data.constructor === Array) {
             setItem(data);
             setLoading(false);
-            setClicked(false);
-            console.log(data);
         }
     }, [data]);
 
@@ -56,7 +53,7 @@ const Items = () => {
         }
     }
 
-    const handleRequestItem = (e, iditem) => {
+    const handleRequestItem = async (e, iditem) => {
         const requestdata = {
             idrequester: userid,
             iditem: String(iditem),
@@ -64,19 +61,18 @@ const Items = () => {
             // isreturnsent: false
         }
         e.preventDefault();
-        axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true }).then(res => {
-            alert(res.data.message);
-        })
-            .catch(function (error) {
-                if (error.response) {
-                    if (error.response.status === 422) {
-                        console.log(error.response.data.errors)
-                    }
-                    else if (error.response.status === 400) {
-                        alert(error.response.data.message)
-                    }
-                }
-            })
+        try {
+            const response = await axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true });
+            alert(response.data.message);
+        }
+        catch(error) {
+            if(error.response.status === 422) {
+                console.log(error.response.data.errors)
+            }
+            else if (error.response.status === 400) {
+                alert(error.response.data.message)
+            }
+        }
     }
 
     const filterAvailableItems = (event) => {

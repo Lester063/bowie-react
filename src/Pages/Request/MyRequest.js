@@ -7,17 +7,14 @@ import axios from 'axios';
 const MyRequest = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isClicked, setClicked] = useState(false);
 
-    const data = useFetch(`http://localhost:8000/api/userrequest`, isClicked);
+    const data = useFetch(`http://localhost:8000/api/userrequest`);
 
     useEffect(() => {
         document.title = 'My Requests';
         if (data.constructor === Array) {
             setRequests(data);
             setLoading(false);
-            setClicked(false);
-            console.log(data);
         }
     }, [data]);
 
@@ -25,9 +22,29 @@ const MyRequest = () => {
         e.preventDefault();
         try {
             let response = await axios.put(`http://localhost:8000/api/actionrequest/${id}/edit`, { action: action }, { withCredentials: true });
-            setClicked(true);
-            console.log(response.data);
-            alert(response.data.message);
+            if(response.status === 200) {
+                const newRequests = requests.map((request) => {
+                    if (request.id === id) {
+                      const updatedRequest = {
+                        ...request,
+                        statusrequest: action === 'Approving' ? 'Approved' : 'Declined',
+                        is_available: action === 'Approving' ? 0 : 1
+                      };              
+                      return updatedRequest;
+                    }
+
+                    if(response.data.data.iditem === request.iditem && request.statusrequest === 'Pending') {
+                        const updatedRequest = {
+                            ...request,
+                            statusrequest: action === 'Approving' ? 'Closed' : request.statusrequest,
+                            is_available: action === 'Approving' ? 0 : 1
+                          };              
+                          return updatedRequest;
+                    }
+                    return request;
+                  });
+                  setRequests(newRequests);
+            }
         }
         catch(error) {
             alert(error.response.data.message);
@@ -38,9 +55,22 @@ const MyRequest = () => {
         e.preventDefault();
         try {
             let response = await axios.post(`http://localhost:8000/api/return`, { idrequest: idrequest }, { withCredentials: true });
-            setClicked(true);
-            console.log(response.data);
-            alert(response.data.message);
+            if(response.status === 200) {
+                const newRequests = requests.map((request)=>{
+                    if(request.id ===idrequest) {
+                        const updatedRequest = {
+                            ...request,
+                            isreturnsent: 1
+                        }
+                        return updatedRequest;
+                    }
+                    return request;
+                });
+                setRequests(newRequests);
+            }
+            else {
+                console.log(response.status);
+            }
         }
         catch(error) {
             alert(error.response.data.message);

@@ -7,17 +7,14 @@ import axios from 'axios';
 const MyReturn = () => {
     const [returns, setReturns] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isClicked, setClicked] = useState(false);
 
-    const data = useFetch(`http://localhost:8000/api/userreturns`, isClicked);
+    const data = useFetch(`http://localhost:8000/api/userreturns`);
 
     useEffect(() => {
         document.title = 'My Returns';
         if (data.constructor === Array) {
             setReturns(data);
             setLoading(false);
-            setClicked(false);
-            console.log(data);
         }
     }, [data]);
 
@@ -26,8 +23,23 @@ const MyReturn = () => {
         let data = 'data,not sure why I need to pass a data, definitely a bug.'
         try {
             let response = await axios.put(`http://localhost:8000/api/return/${returnid}/approve`,data, { withCredentials: true });
-            setClicked(true);
-            console.log(response.data);
+            console.log(returnid);
+            if(response.status === 200) {
+                const newReturns = returns.map((returnn)=> {
+                    if(returnn.id === returnid) {
+                        const updatedReturns = {
+                            ...returnn,
+                            is_approve: 1
+                        }
+                        return updatedReturns;
+                    }
+                    return returnn;
+                });
+                setReturns(newReturns);
+            }
+            else {
+                console.log(response.status);
+            }
         }
         catch(error) {
             alert(error.response.data.message);

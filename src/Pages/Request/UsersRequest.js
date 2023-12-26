@@ -8,18 +8,16 @@ import axios from 'axios';
 const UsersRequest = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isClicked, setClicked] = useState(false);
 
     const is_admin = localStorage.getItem('is_admin');
 
-    const data = useFetch(`http://localhost:8000/api/requests`, isClicked);
+    const data = useFetch(`http://localhost:8000/api/requests`);
 
     useEffect(() => {
         document.title = "User's Requests";
         if (data.constructor === Array) {
             setRequests(data);
             setLoading(false);
-            setClicked(false);
         }
     }, [data]);
 
@@ -60,8 +58,22 @@ const UsersRequest = () => {
         e.preventDefault();
         try {
             let response = await axios.post(`http://localhost:8000/api/return`, { idrequest: idrequest }, { withCredentials: true });
-            console.log(response.data);
-            alert(response.data.message);
+            if(response.status === 200) {
+                const newRequests = requests.map((request)=>{
+                    if(request.id ===idrequest) {
+                        const updatedRequest = {
+                            ...request,
+                            isreturnsent: 1
+                        }
+                        return updatedRequest;
+                    }
+                    return request;
+                });
+                setRequests(newRequests);
+            }
+            else {
+                console.log(response.status);
+            }
         }
         catch(error) {
             alert(error.response.data.message);
