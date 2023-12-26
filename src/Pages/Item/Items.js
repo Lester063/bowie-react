@@ -36,6 +36,7 @@ const Items = () => {
                 if (window.confirm('There are existing request, are you sure?')) {
                     const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
                     alert(deleteresponse.data.message);
+                    console.log(deleteresponse.data);
                     const newItems = items.filter((item) =>
                     item.id !== id
                 );
