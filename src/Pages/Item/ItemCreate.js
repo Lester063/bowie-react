@@ -67,7 +67,7 @@ const ItemCreate = () => {
                                     <div className="card">
                                         <div className="card-header">
                                             <h4>
-                                                <Link to="/items" className="btn btn-secondary">Back</Link>
+                                                <Link to="/items" className="btn btn-secondary"><i className="bi bi-arrow-left"></i></Link>
                                                 Create Item
                                             </h4>
                                         </div>

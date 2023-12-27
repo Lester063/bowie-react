@@ -59,7 +59,7 @@ const ReturnsList = ({ returns, approveReturn }) => {
                                                 }
                                             }
                                             }
-                                        >Approve</button>
+                                        ><i className="bi bi-check-circle"></i></button>
                                     </span>
                                 </td>
                             }

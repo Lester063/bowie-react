@@ -53,12 +53,12 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                             <td>{item.is_available ? 'Available' : 'Not available'}</td>
                             {is_admin === '1' &&
                                 <td style={{ width: "220px" }}>
-                                    <Link to={`/items/${item.id}/edit`} className="btn btn-primary">Edit</Link>
+                                    <Link to={`/items/${item.id}/edit`} className="btn btn-primary"><i className="bi bi-pencil-square"></i></Link>
                                     <button className="btn btn-danger" style={{ marginLeft: "5px" }} onClick={(e) => {
                                         if (window.confirm('are you sure?')) {
                                             handleDelete(e, item.id);
                                         }
-                                    }}>Delete</button>
+                                    }}><i className="bi bi-trash"></i></button>
                                 </td>
                             }
                             {/* {is_admin === '0' && */}
@@ -75,7 +75,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                                         }
                                     }}
                                 
-                                >Request</button>
+                                ><i className="bi bi-bag-check"></i></button>
                                 </span>
                                 </>
                                 </td>

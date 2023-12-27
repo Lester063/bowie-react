@@ -81,7 +81,7 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
                                                     actionRequest(e, request.id, 'Approving');
                                                 }
                                             }} disabled={request.statusrequest === 'Approved' || request.statusrequest === 'Closed'
-                                                || request.statusrequest === 'Completed' ? true : false}>Approve</button>
+                                                || request.statusrequest === 'Completed' ? true : false}><i className="bi bi-check-circle"></i></button>
                                         </span>
 
                                         <HoverMessage id={index + 'decline'} message={message} />
@@ -94,7 +94,7 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
                                                     actionRequest(e, request.id, 'Declining');
                                                 }
                                             }} disabled={request.statusrequest === 'Declined' || request.statusrequest === 'Closed'
-                                                || request.statusrequest === 'Completed' ? true : false}>Decline</button>
+                                                || request.statusrequest === 'Completed' ? true : false}><i className="bi bi-bag-x"></i></button>
                                         </span>
 
                                     </>
