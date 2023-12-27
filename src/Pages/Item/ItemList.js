@@ -1,6 +1,27 @@
 import { Link } from 'react-router-dom';
-const ItemList = ({ items, handleDelete, handleRequestItem }) => {
+import { useState } from "react";
+import HoverMessage from "../../components/HoverMessage";
+
+const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
     const is_admin = localStorage.getItem('is_admin');
+    const [message, setMessage] = useState('')
+
+    const hoverDisabledButton = async (id, message, isDisabled) => {
+        if (isDisabled) {
+            switch (message) {
+                case 'Request':
+                    setMessage('Item might not be available or you have a pending request.')
+                    document.getElementById(id).style.display = 'block';
+                    break;
+                default: break;
+            }
+        }
+    }
+
+    const hoverOut = async (id) => {
+        document.getElementById(id).style.display = 'none';
+    }
+
     return (
         <table className="table table-striped">
             <thead>
@@ -18,6 +39,12 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
             </thead>
             <tbody>
                 {items && items.map((item, index) => {
+                    let isRequested=false;
+                    myRequest.map((myreq)=>{
+                        if(myreq.iditem == item.id && myreq.statusrequest === 'Pending') {
+                            isRequested=true
+                        }
+                    });
                     return (
                         <tr key={index}>
                             <td style={{width: "10px"}}>{index + 1}</td>
@@ -36,7 +63,12 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                             }
                             {/* {is_admin === '0' && */}
                             <td style={{ width: "220px" }}>
-                                <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled = {item.is_available ? false : true} 
+                                <>
+                                <HoverMessage id={index + 'request'} message={message} />
+                                <span onMouseOut={() => { hoverOut(index + 'request') }} onMouseOver={() => {
+                                            hoverDisabledButton(index + 'request', 'Request', item.is_available && !isRequested ? false : true)
+                                        }}>
+                                <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled = {item.is_available && !isRequested ? false : true} 
                                     onClick={(e) => {
                                         if (window.confirm('are you sure?')) {
                                             handleRequestItem(e, item.id);
@@ -44,6 +76,8 @@ const ItemList = ({ items, handleDelete, handleRequestItem }) => {
                                     }}
                                 
                                 >Request</button>
+                                </span>
+                                </>
                                 </td>
                             {/* } */}
                             

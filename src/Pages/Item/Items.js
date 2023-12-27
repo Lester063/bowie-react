@@ -7,6 +7,7 @@ import ItemList from './ItemList';
 
 const Items = () => {
     const [items, setItem] = useState([]);
+    const [myRequest, setMyRequest] = useState([]);
     const [getItems, setNewItem] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -22,6 +23,15 @@ const Items = () => {
         }
         setLoading(false);
     }, [data]);
+
+    useEffect(() => {
+        async function getReq(){
+            const response = await axios.get('http://localhost:8000/api/userrequest', {withCredentials: true});
+            setMyRequest(response.data.data);
+            console.log(response.data.data);
+        }
+        getReq();
+    }, []);
 
     const handleDelete = async (e, id) => {
         e.preventDefault();
@@ -66,7 +76,20 @@ const Items = () => {
         e.preventDefault();
         try {
             const response = await axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true });
+            console.log(response.data.data);
             alert(response.data.message);
+            setMyRequest((req)=>[
+                ...req,
+                {
+                    created_at: response.data.data.created_at,
+                    id: response.data.data.id,
+                    iditem: response.data.data.iditem,
+                    idrequester: response.data.data.idrequester,
+                    isreturnsent: response.data.data.isreturnsent,
+                    statusrequest: response.data.data.statusrequest,
+                    updated_at: response.data.data.updated_at
+                }
+            ]);
         }
         catch(error) {
             if(error.response.status === 422) {
@@ -110,7 +133,7 @@ const Items = () => {
                                     <label>Available</label>
                                 </div>
                                 <div className="card-body">
-                                    <ItemList items={items} handleDelete={handleDelete} handleRequestItem={handleRequestItem} />
+                                    <ItemList items={items} myRequest={myRequest} handleDelete={handleDelete} handleRequestItem={handleRequestItem} />
                                     {items.length < 1 && <p>No item to fetch.</p>}
                                 </div>
                             </div>
