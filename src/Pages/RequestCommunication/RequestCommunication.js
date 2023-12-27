@@ -72,8 +72,8 @@ const RequestCommunication = () => {
             .then(res => {
                 setRequestStatus(res.data.statusrequest)
                 //console.log(res.data.statusrequest)
-                console.log(res.data.message)
-                setComms(res.data.message);
+                console.log(res.data.data)
+                setComms(res.data.data);
                 setLoading(false);
             })
             .catch((error) => {

@@ -19,8 +19,8 @@ const Items = () => {
         document.title = 'Items';
         if (data.constructor === Array) {
             setItem(data);
-            setLoading(false);
         }
+        setLoading(false);
     }, [data]);
 
     const handleDelete = async (e, id) => {
@@ -30,7 +30,6 @@ const Items = () => {
             const getrequests = checkRequest.data.message;
             console.log(checkRequest.data.count);
             if(checkRequest.data.count >= 1) {
-                console.log('aaaa')
                 if (window.confirm('Pending request for this item will be automatically closed, are you sure you want to delete the item?')) {
                     //delete all request from checkRequest
                     await getrequests.forEach((request)=>{
@@ -45,7 +44,6 @@ const Items = () => {
                 setItem(newItems);
                 }
             } else {
-                console.log('ehehe')
                 const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
                 alert(deleteresponse.data.message);
                 const newItems = items.filter((item) =>
