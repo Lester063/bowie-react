@@ -102,7 +102,7 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
                                 {String(request.idrequester) === String(userid) &&
                                     <>
                                         <HoverMessage id={index + 'return'} message={message} />
-                                        <span onMouseOut={() => { hoverOut(index + 'return') }} onMouseOver={() => {
+                                        <span style={{marginLeft:"5px"}} onMouseOut={() => { hoverOut(index + 'return') }} onMouseOver={() => {
                                             hoverDisabledButton(index + 'return', 'Return', request.statusrequest !== 'Approved' || request.isreturnsent === 1 ? true : false)
                                         }}>
                                             <button id='returnbutton' className="btn btn-primary" disabled={request.statusrequest !== 'Approved' || request.isreturnsent === 1 ? true : false}
@@ -110,7 +110,7 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
                                                     if (window.confirm('are you sure?')) {
                                                         returnItem(e, request.id);
                                                     }
-                                                }}>Return</button>
+                                                }}><i className="bi bi-arrow-left-right"></i></button>
                                         </span>
 
                                     </>

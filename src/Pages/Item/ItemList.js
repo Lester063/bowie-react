@@ -74,8 +74,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                                             handleRequestItem(e, item.id);
                                         }
                                     }}
-                                
-                                ><i className="bi bi-bag-check"></i></button>
+                                ><i className="bi bi-bag-plus"></i></button>
                                 </span>
                                 </>
                                 </td>
