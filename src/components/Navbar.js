@@ -1,36 +1,36 @@
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const is_admin = localStorage.getItem('is_admin');
     const name = localStorage.getItem('name');
-    const [userData, getUserData] = useState([]);
 
     const handleLogout = async (e) => {
         e.preventDefault();
-        //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
-        const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata',{ withCredentials: true });
-        if(response.data.message === 'Success') {
-            localStorage.setItem('is_admin', '');
-            localStorage.setItem('userid', '');
-            navigate('/login');
+        try {
+            //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
+            const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata', { withCredentials: true });
+            if (response.data.message === 'Success') {
+                localStorage.setItem('is_admin', '');
+                localStorage.setItem('userid', '');
+                localStorage.setItem('name', '');
+                navigate('/login');
+            }
+        }
+        catch(error){
+            console.log('error: '+error);
         }
     }
 
-    // useEffect(()=>{
-    //     console.log('ewq')
-    //     async function getUser(){
-    //         const res = await axios.get('http://localhost:8000/api/user',{withCredentials: true});
-    //         getUserData(res.data);
-    //         console.log(res.data);
-    //     }
-    //     getUser();
-    // },[]);
+    useEffect(()=>{
+        console.log(is_admin)
+        console.log(name)
+    },[])
 
     let menu;
-    if (is_admin === '') {
+    if (is_admin === null || is_admin ==='') {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">Student</Link>
@@ -55,7 +55,7 @@ const Navbar = () => {
                 </div>
             </>
         )
-    } else if (is_admin !== '') {
+    } else if (is_admin !== null || is_admin !=='') {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">{name}</Link>
