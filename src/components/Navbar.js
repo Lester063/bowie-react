@@ -3,52 +3,34 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 const Navbar = () => {
-    const [userData, setUserdata] = useState({
-        name: "",
-        is_admin: ""
-    });
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    const is_admin = localStorage.getItem('is_admin');
+    const name = localStorage.getItem('name');
+    const [userData, getUserData] = useState([]);
 
     const handleLogout = async (e) => {
         e.preventDefault();
-        localStorage.setItem('token', '');
-        localStorage.setItem('is_admin', '');
-        localStorage.setItem('userid', '');
         //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
-        await axios.post(`http://localhost:8000/api/logout`, token,
-            {
-                withCredentials: true
-            }).then(res => {
-                setUserdata({
-                    name: "",
-                    is_admin: ""
-                });
-                navigate('/login');
-            })
+        const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata',{ withCredentials: true });
+        if(response.data.message === 'Success') {
+            localStorage.setItem('is_admin', '');
+            localStorage.setItem('userid', '');
+            navigate('/login');
+        }
     }
 
-    useEffect(() => {
-        if (token) {
-            axios.get(`http://localhost:8000/api/user`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }).then(res => {
-                    const content = res.data;
-                    console.log(content.name);
-                    setUserdata({
-                        name: content.name,
-                        is_admin: content.is_admin
-                    });
-                });
-        }
-    }, [token]);
+    // useEffect(()=>{
+    //     console.log('ewq')
+    //     async function getUser(){
+    //         const res = await axios.get('http://localhost:8000/api/user',{withCredentials: true});
+    //         getUserData(res.data);
+    //         console.log(res.data);
+    //     }
+    //     getUser();
+    // },[]);
 
     let menu;
-    if (!token) {
+    if (is_admin === '') {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">Student</Link>
@@ -73,13 +55,13 @@ const Navbar = () => {
                 </div>
             </>
         )
-    } else if (token) {
+    } else if (is_admin !== '') {
         menu = (
             <>
-                <Link className="navbar-brand" to="/">{userData.name}</Link>
+                <Link className="navbar-brand" to="/">{name}</Link>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                        {userData.is_admin === 1 &&
+                        {is_admin === '1' &&
                             <>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/requests">Users Request</Link>

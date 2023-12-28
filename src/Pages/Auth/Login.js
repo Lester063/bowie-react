@@ -20,7 +20,7 @@ const Login = () => {
         setCredentials({...cred, [e.target.name]: e.target.value});
     }
 
-    const login = (e) => {
+    const login = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -28,25 +28,30 @@ const Login = () => {
             email: cred.email,
             password: cred.password
         }
-        axios.post(`http://localhost:8000/api/login`, data,{withCredentials:true}).then(res => {
+        setCredentials({
+            email:"",
+            password:""
+        });
+        try {
+            const response = await axios.post(`http://localhost:8000/api/login`, data,{withCredentials:true});
             setLoading(false);
-            if (res.data.statuscode === 200) {
-                setCredentials({
-                    email:"",
-                    password:""
-                });
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('is_admin', res.data.is_admin);
-                localStorage.setItem('userid', res.data.userid);
+            if(response.data.statuscode === 200) {
+                localStorage.setItem('is_admin', response.data.data.is_admin);
+                localStorage.setItem('userid', response.data.data.userid);
+                localStorage.setItem('name', response.data.data.name);
                 navigate('/');
             }
-            else if (res.data.statuscode === 422) {
-                setInputError(res.data.message);
+            else if (response.data.statuscode === 422) {
+                setInputError(response.data.message);
             }
             else {
                 setInputError('There might be a problem, please come back later.');
             }
-        })
+
+        }
+        catch(error) {
+            console.log('error: '+error);
+        }
     }
 
     return (
