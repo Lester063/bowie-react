@@ -37,7 +37,7 @@ const Login = () => {
             setLoading(false);
             if(response.data.statuscode === 200) {
                 localStorage.setItem('is_admin', response.data.data.is_admin);
-                localStorage.setItem('userid', response.data.data.userid);
+                localStorage.setItem('userid', response.data.data.id);
                 localStorage.setItem('name', response.data.data.name);
                 navigate('/');
             }

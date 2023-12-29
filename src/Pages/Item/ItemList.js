@@ -4,7 +4,7 @@ import HoverMessage from "../../components/HoverMessage";
 
 const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
     const is_admin = localStorage.getItem('is_admin');
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState('');
 
     const hoverDisabledButton = async (id, message, isDisabled) => {
         if (isDisabled) {
@@ -41,9 +41,10 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                 {items && items.map((item, index) => {
                     let isRequested=false;
                     myRequest.map((myreq)=>{
-                        if(myreq.iditem == item.id && myreq.statusrequest === 'Pending') {
+                        if(String(myreq.iditem) === String(item.id) && myreq.statusrequest === 'Pending' ) {
                             isRequested=true
                         }
+                        return isRequested;
                     });
                     return (
                         <tr key={index}>

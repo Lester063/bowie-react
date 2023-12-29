@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loading from '../../components/Loading';
 import { useNavigate } from 'react-router-dom';
 import ItemForm from '../../components/ItemForm';
+import ForbiddenPage from '../../components/ForbiddenPage';
 
 const ItemEdit = () => {
     const navigate = useNavigate();
@@ -85,7 +86,7 @@ const ItemEdit = () => {
         )
     } else {
         menu = (
-            <p>Forbidden</p>
+            <ForbiddenPage />
         )
     }
 

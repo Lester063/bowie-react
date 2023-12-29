@@ -25,9 +25,14 @@ const Items = () => {
     }, [data]);
 
     useEffect(() => {
-        async function getReq(){
-            const response = await axios.get('http://localhost:8000/api/userrequest', {withCredentials: true});
-            setMyRequest(response.data.data);
+        async function getReq() {
+            try {
+                const response = await axios.get('http://localhost:8000/api/userrequest', { withCredentials: true });
+                setMyRequest(response.data.data);
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
         getReq();
     }, []);
@@ -36,31 +41,25 @@ const Items = () => {
         e.preventDefault();
         try {
             const checkRequest = await axios.get(`http://localhost:8000/api/items/${id}/itemrequest`, { withCredentials: true });
-            const getrequests = checkRequest.data.message;
-            console.log(checkRequest.data.count);
-            if(checkRequest.data.count >= 1) {
+            const pendingrequest = checkRequest.data.pendingrequest;
+            //check if there is a pending or just closed/completed/approve
+            if (checkRequest.data.countpending >= 1) {
                 if (window.confirm('Pending request for this item will be automatically closed, are you sure you want to delete the item?')) {
                     //delete all request from checkRequest
-                    await getrequests.forEach((request)=>{
+                    await pendingrequest.forEach((request) => {
                         axios.put(`http://localhost:8000/api/actionrequest/${request.id}/edit`, { action: 'Closing' }, { withCredentials: true });
                     });
                     const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
                     alert(deleteresponse.data.message);
                     console.log(deleteresponse.data);
-                    const newItems = items.filter((item) =>
-                    item.id !== id
-                );
-                setItem(newItems);
+                    setItem(prevState => prevState.filter(item => item.id !== id))
                 }
             } else {
                 const deleteresponse = await axios.delete(`http://localhost:8000/api/items/${id}/delete`, { withCredentials: true });
                 alert(deleteresponse.data.message);
-                const newItems = items.filter((item) =>
-                item.id !== id
-            );
-            setItem(newItems);
+                setItem(prevState => prevState.filter(item => item.id !== id))
             }
-        } catch(error) {
+        } catch (error) {
             console.log(error.response.status);
         }
     }
@@ -75,9 +74,8 @@ const Items = () => {
         e.preventDefault();
         try {
             const response = await axios.post(`http://localhost:8000/api/requests/`, requestdata, { withCredentials: true });
-            console.log(response.data.data);
             alert(response.data.message);
-            setMyRequest((req)=>[
+            setMyRequest((req) => [
                 ...req,
                 {
                     created_at: response.data.data.created_at,
@@ -90,8 +88,8 @@ const Items = () => {
                 }
             ]);
         }
-        catch(error) {
-            if(error.response.status === 422) {
+        catch (error) {
+            if (error.response.status === 422) {
                 console.log(error.response.data.errors)
             }
             else if (error.response.status === 400) {

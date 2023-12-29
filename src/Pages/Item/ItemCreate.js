@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Loading from '../../components/Loading';
 import ItemForm from '../../components/ItemForm';
+import ForbiddenPage from '../../components/ForbiddenPage';
 
 const ItemCreate = () => {
     const [inputError, setInputError] = useState({});
@@ -22,35 +23,28 @@ const ItemCreate = () => {
     }
 
     //click save button
-    const saveItem = (e) => {
+    const saveItem = async (e) => {
         e.preventDefault();
         setLoading(true);
         const data = {
             itemname: item.itemname,
             itemcode: item.itemcode,
         }
-        axios.post(`http://localhost:8000/api/items`, data, { withCredentials: true }).then(res => {
+        try {
+            const response = await axios.post(`http://localhost:8000/api/items`, data, { withCredentials: true });
             setLoading(false);
-            alert(res.data.message);
+            alert(response.data.message);
             setItem({
                 itemname: "",
                 itemcode: ""
             });
             setInputError({});
-        }).catch(function (error) {
-            if (error.response) {
-                if (error.response.status === 422) {
-                    setLoading(false);
-                    setInputError(error.response.data.errors);
-                    console.log(inputError)
-                }
-                else if (error.response.status === 500) {
-                    setLoading(false);
-                    setInputError(error.response.data.message);
-                    console.log(inputError)
-                }
-            }
-        });
+        }
+        catch(error) {
+            console.log(error)
+            setLoading(false);
+            setInputError(error.response.data.errors);
+        }
     }
 
     let menu;
@@ -82,7 +76,7 @@ const ItemCreate = () => {
         )
     } else {
         menu = (
-            <p>Forbidden</p>
+            <ForbiddenPage />
         )
     }
 

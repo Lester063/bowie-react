@@ -1,6 +1,8 @@
 const ForbiddenPage = () => {
     return (
-        <>Forbidden</>
+        <div className="container mt-3">
+            <p>Forbidden</p>
+        </div>
     );
 }
  
