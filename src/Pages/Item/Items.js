@@ -28,7 +28,6 @@ const Items = () => {
         async function getReq(){
             const response = await axios.get('http://localhost:8000/api/userrequest', {withCredentials: true});
             setMyRequest(response.data.data);
-            console.log(response.data.data);
         }
         getReq();
     }, []);
