@@ -30,25 +30,28 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                     <th>Item Name</th>
                     <th>Item Code</th>
                     <th>Item Status</th>
-                    <th>Action</th>
-                    {/* admin view & */}
-                    {is_admin === '1' && 
-                    <th>User Action</th>
+                    {is_admin && //is_admin means there is a user logged in, either a normal user or admin
+                        <th>Action</th>
+                    }
+                    {is_admin === '1' && //logged in user must be an admin
+                        <th>User Action</th>
                     }
                 </tr>
             </thead>
             <tbody>
                 {items && items.map((item, index) => {
-                    let isRequested=false;
-                    myRequest.map((myreq)=>{
-                        if(String(myreq.iditem) === String(item.id) && myreq.statusrequest === 'Pending' ) {
-                            isRequested=true
+                    let isRequested = false;
+
+                    myRequest.map((myreq) => {
+                        if (String(myreq.iditem) === String(item.id) && myreq.statusrequest === 'Pending') {
+                            isRequested = true
                         }
                         return isRequested;
-                    });
+                    })
+
                     return (
                         <tr key={index}>
-                            <td style={{width: "10px"}}>{index + 1}</td>
+                            <td style={{ width: "10px" }}>{index + 1}</td>
                             <td>{item.itemname}</td>
                             <td>{item.itemcode}</td>
                             <td>{item.is_available ? 'Available' : 'Not available'}</td>
@@ -62,25 +65,26 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                                     }}><i className="bi bi-trash"></i></button>
                                 </td>
                             }
-                            {/* {is_admin === '0' && */}
-                            <td style={{ width: "220px" }}>
-                                <>
-                                <HoverMessage id={index + 'request'} message={message} />
-                                <span onMouseOut={() => { hoverOut(index + 'request') }} onMouseOver={() => {
+                            {is_admin &&
+                                <td style={{ width: "220px" }}>
+                                    <>
+                                        <HoverMessage id={index + 'request'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'request') }} onMouseOver={() => {
                                             hoverDisabledButton(index + 'request', 'Request', item.is_available && !isRequested ? false : true)
                                         }}>
-                                <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled = {item.is_available && !isRequested ? false : true} 
-                                    onClick={(e) => {
-                                        if (window.confirm('are you sure?')) {
-                                            handleRequestItem(e, item.id);
-                                        }
-                                    }}
-                                ><i className="bi bi-bag-plus"></i></button>
-                                </span>
-                                </>
+                                            <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled={item.is_available && !isRequested ? false : true}
+                                                onClick={(e) => {
+                                                    if (window.confirm('are you sure?')) {
+                                                        handleRequestItem(e, item.id);
+                                                    }
+                                                }}
+                                            ><i className="bi bi-bag-plus"></i></button>
+                                        </span>
+                                    </>
                                 </td>
-                            {/* } */}
-                            
+
+
+                            }
                         </tr>
                     )
                 })

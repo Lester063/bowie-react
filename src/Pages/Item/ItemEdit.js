@@ -26,35 +26,31 @@ const ItemEdit = () => {
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:8000/api/items/${id}/edit`,{withCredentials:true}).then(res=>{
-            setItem(res.data.data);
-            setLoading(false);
-        })
-        .catch((error) => {
-            if(error.response) {
-                if(error.response.status === 403) {
-                    console.log('Forbidden')
-                }
+        async function getItemData(){
+            try {
+                const itemdata = await axios.get(`http://localhost:8000/api/items/${id}/edit`,{withCredentials:true});
+                setItem(itemdata.data.data);
+                setLoading(false);
             }
-        })
+            catch (error){
+                console.log('error: '+error);
+            }
+        }
+        getItemData();
     },[id])
 
-    const saveNewItemData = (e) =>{
+    const saveNewItemData = async (e) =>{
         e.preventDefault();
-        axios.put(`http://localhost:8000/api/items/${id}/edit`, item,{withCredentials:true}).then(res=>{
+        try {
+            const response = await axios.put(`http://localhost:8000/api/items/${id}/edit`, item,{withCredentials:true});
             setLoading(false);
-            alert('Data has been updated successfully.');
+            alert(response.data.message);
             navigate('/items');
-        }).catch(function (error){
-            if(error.response) {
-                if(error.response.status === 422) {
-                    setLoading(false);
-                    setInputError(error.response.data.errors);
-                    console.log(inputError)
-                }
-                //add 404 page
-            }
-        })
+        }
+        catch (error) {
+            setLoading(false);
+            setInputError(error.response.data.errors);
+        }
     }
 
     let menu;

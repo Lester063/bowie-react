@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -23,11 +22,6 @@ const Navbar = () => {
             console.log('error: '+error);
         }
     }
-
-    useEffect(()=>{
-        console.log(is_admin)
-        console.log(name)
-    },[])
 
     let menu;
     if (is_admin === null || is_admin ==='') {
@@ -61,6 +55,9 @@ const Navbar = () => {
                 <Link className="navbar-brand" to="/">{name}</Link>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/items">Items</Link>
+                        </li>
                         {is_admin === '1' &&
                             <>
                                 <li className="nav-item">
@@ -71,9 +68,6 @@ const Navbar = () => {
                                 </li>
                             </>
                         }
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/items">Item</Link>
-                        </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/myrequests">My Requests</Link>
                         </li>

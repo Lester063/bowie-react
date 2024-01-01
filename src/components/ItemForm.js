@@ -1,7 +1,6 @@
 const ItemForce = ({item, handleChange, inputError}) => {
     return (
         <div className="card-body">
-            <span className="text-danger">{inputError.message}</span>
             <div className="mb-3">
                 <label>Item Name</label>
                 <input type="text" name="itemname" value={item.itemname} onChange={handleChange} className="form-control" />
