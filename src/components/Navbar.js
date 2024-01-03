@@ -14,7 +14,6 @@ const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
-    const [notificationMessage, setNotificationMessage] = useState([]);
     const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
     const handleLogout = async (e) => {
@@ -55,32 +54,10 @@ const Navbar = () => {
             const response = await axios.get(`http://localhost:8000/api/notifications`, { withCredentials: true });
             setNotifications(response.data.data);
             setUnreadNotificationCount(response.data.unreadnotification);
-            await getMessage(response.data.data);
         }
         catch (error) {
             console.log(error);
         }
-    }
-
-    async function getMessage(notifs) {
-        try {
-            notifs.forEach((notif, index) => {
-                axios.get(`http://localhost:8000/api/notifications/${notif.id}`, { withCredentials: true }).then((res) => {
-                    setNotificationMessage((prev) => [
-                        ...prev,
-                        {
-                            notificationID: notif.id,
-                            notificationMessage: res.data.notificationmessage,
-                        }
-                    ]);
-                });
-
-            });
-        }
-        catch (error) {
-            console.log(error);
-        }
-
     }
 
     useEffect(() => {
@@ -97,6 +74,7 @@ const Navbar = () => {
                             updated_at: notification.updated_at,
                             created_at: notification.created_at,
                             id: notification.id,
+                            notificationMessage: notification.notificationMessage
                         },
                         ...state
                     ]
@@ -105,16 +83,6 @@ const Navbar = () => {
                         ...state
                     ]
             );
-            axios.get(`http://localhost:8000/api/notifications/${notification.id}`, { withCredentials: true }).then((res) => {
-                setNotificationMessage((prev) => [
-                    {
-                        notificationID: notification.id,
-                        notificationMessage: res.data.notificationmessage,
-                    },
-                    ...prev
-                ]);
-
-            });
 
             setUnreadNotificationCount(String(notification.recipientUserId) === String(userid) ? unreadNotificationCount + 1 : unreadNotificationCount);
         });
@@ -202,7 +170,7 @@ const Navbar = () => {
                         </li>
                         <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>
-                            <NotificationContainer isOpen={isOpen} notifications={notifications} notificationMessage={notificationMessage} />
+                            <NotificationContainer isOpen={isOpen} notifications={notifications} />
                         </li>
                     </ul>
                 </div>
