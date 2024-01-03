@@ -1,10 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NotificationContainer from './NotificationContainer.js';
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const is_admin = localStorage.getItem('is_admin');
     const name = localStorage.getItem('name');
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const [notificationMessage, setNotificationMessage] = useState([]);
+    const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -18,13 +25,61 @@ const Navbar = () => {
                 navigate('/login');
             }
         }
-        catch(error){
-            console.log('error: '+error);
+        catch (error) {
+            console.log('error: ' + error);
         }
     }
 
+    const toggleNotification = async (e) => {
+        e.preventDefault();
+        setIsOpen(!isOpen);
+        try {
+            const response = await axios.put(`http://localhost:8000/api/notifications`,'data', { withCredentials: true });
+            setUnreadNotificationCount(0);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function getNotification() {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/notifications`, { withCredentials: true });
+            setNotifications(response.data.data);
+            setUnreadNotificationCount(response.data.unreadnotification);
+            await getMessage(response.data.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function getMessage(notifs) {
+        try {
+            notifs.forEach((notification, index) => {
+                axios.get(`http://localhost:8000/api/notifications/${notification.id}`, { withCredentials: true }).then((res) => {
+                    setNotificationMessage((prev) => [
+                        ...prev,
+                        {
+                            notificationID: notification.id,
+                            notificationMessage: res.data.notificationmessage,
+                        }
+                    ]);
+                });
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    useEffect(() => {
+        getNotification();
+    }, []);
+
     let menu;
-    if (is_admin === null || is_admin ==='') {
+    if (is_admin === null || is_admin === '') {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">Student</Link>
@@ -49,7 +104,7 @@ const Navbar = () => {
                 </div>
             </>
         )
-    } else if (is_admin !== null || is_admin !=='') {
+    } else if (is_admin !== null || is_admin !== '') {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">{name}</Link>
@@ -75,7 +130,29 @@ const Navbar = () => {
                             <Link className="nav-link" to="/myreturns">My Returns</Link>
                         </li>
                         <li className="nav-item">
+                            <button className="nav-link" onClick={(e) => { toggleNotification(e) }}>
+                                {
+                                    unreadNotificationCount > 0 &&
+                                    <b style={{
+                                        position: "absolute",
+                                        zIndex: "1",
+                                        backgroundColor: "red",
+                                        color: "#fff",
+                                        marginTop: "-10px",
+                                        marginLeft: "10px",
+                                        width: "18px",
+                                        height: "18px",
+                                        fontSize: "11px",
+                                        borderRadius: "100%",
+                                    }}>{unreadNotificationCount}</b>
+                                }
+                                <i className="bi bi-bell"></i>
+                            </button>
+
+                        </li>
+                        <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>
+                            <NotificationContainer isOpen={isOpen} notifications={notifications} notificationMessage={notificationMessage} />
                         </li>
                     </ul>
                 </div>
