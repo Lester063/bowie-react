@@ -3,10 +3,14 @@ import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import RequestsList from './RequestsList';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
 
 const MyRequest = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const userid = localStorage.getItem('userid');
 
     const data = useFetch(`http://localhost:8000/api/userrequest`);
 
@@ -17,6 +21,15 @@ const MyRequest = () => {
             setLoading(false);
         }
     }, [data]);
+
+    useEffect(()=>{
+        socket.on("sendNotificationToClient", ([message, newRequests]) => {
+            const newRequest = newRequests.filter((req)=>String(req.idrequester) === String(userid));
+            setRequests(newRequest);
+        });
+
+        return () => socket.off('sendNotificationToClient');
+    },[socket])
 
     const actionRequest = async (e, id, action) => {
         e.preventDefault();

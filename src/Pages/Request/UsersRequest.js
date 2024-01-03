@@ -4,6 +4,9 @@ import useFetch from '../../components/useFetch';
 import RequestsList from './RequestsList';
 import ForbiddenPage from '../../components/ForbiddenPage';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
 
 const UsersRequest = () => {
     const [requests, setRequests] = useState([]);
@@ -24,11 +27,13 @@ const UsersRequest = () => {
     const actionRequest = async (e, id, action) => {
         e.preventDefault();
         try {
+            let newRequests;
+            let updatedRequest;
             let response = await axios.put(`http://localhost:8000/api/actionrequest/${id}/edit`, { action: action }, { withCredentials: true });
             if(response.status === 200) {
-                const newRequests = requests.map((request) => {
+                newRequests = requests.map((request) => {
                     if (request.id === id) {
-                      const updatedRequest = {
+                      updatedRequest = {
                         ...request,
                         statusrequest: action === 'Approving' ? 'Approved' : 'Declined',
                         is_available: action === 'Approving' ? 0 : 1
@@ -37,7 +42,7 @@ const UsersRequest = () => {
                     }
 
                     if(response.data.data.iditem === request.iditem && request.statusrequest === 'Pending') {
-                        const updatedRequest = {
+                        updatedRequest = {
                             ...request,
                             statusrequest: action === 'Approving' ? 'Closed' : request.statusrequest,
                             is_available: action === 'Approving' ? 0 : 1
@@ -48,6 +53,7 @@ const UsersRequest = () => {
                   });
                   setRequests(newRequests);
             }
+            socket.emit("sendNotificationToServer", [response.data.notification, newRequests]);
         }
         catch(error) {
             alert(error.response.data.message);
@@ -60,7 +66,7 @@ const UsersRequest = () => {
             let response = await axios.post(`http://localhost:8000/api/return`, { idrequest: idrequest }, { withCredentials: true });
             if(response.status === 200) {
                 const newRequests = requests.map((request)=>{
-                    if(request.id ===idrequest) {
+                    if(request.id === idrequest) {
                         const updatedRequest = {
                             ...request,
                             isreturnsent: 1

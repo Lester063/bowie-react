@@ -2,11 +2,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NotificationContainer from './NotificationContainer.js';
 import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
 
 const Navbar = () => {
     const navigate = useNavigate();
     const is_admin = localStorage.getItem('is_admin');
     const name = localStorage.getItem('name');
+    const userid = localStorage.getItem('userid');
 
     const [isOpen, setIsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -32,9 +36,13 @@ const Navbar = () => {
 
     const toggleNotification = async (e) => {
         e.preventDefault();
+        const toggledValue = !isOpen;
         setIsOpen(!isOpen);
         try {
-            const response = await axios.put(`http://localhost:8000/api/notifications`,'data', { withCredentials: true });
+            toggledValue ?
+                await getNotification()
+                :
+                await axios.put(`http://localhost:8000/api/notifications`, 'data', { withCredentials: true });
             setUnreadNotificationCount(0);
         }
         catch (error) {
@@ -56,16 +64,17 @@ const Navbar = () => {
 
     async function getMessage(notifs) {
         try {
-            notifs.forEach((notification, index) => {
-                axios.get(`http://localhost:8000/api/notifications/${notification.id}`, { withCredentials: true }).then((res) => {
+            notifs.forEach((notif, index) => {
+                axios.get(`http://localhost:8000/api/notifications/${notif.id}`, { withCredentials: true }).then((res) => {
                     setNotificationMessage((prev) => [
                         ...prev,
                         {
-                            notificationID: notification.id,
+                            notificationID: notif.id,
                             notificationMessage: res.data.notificationmessage,
                         }
                     ]);
                 });
+
             });
         }
         catch (error) {
@@ -75,14 +84,55 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-        getNotification();
+        socket.on("sendNotificationToClient", ([notification, newRequests]) => {
+            setNotifications((state) =>
+                String(notification.recipientUserId) === String(userid) ?
+                    [
+                        {
+                            recipientUserId: notification.recipientUserId,
+                            senderUserId: notification.senderUserId,
+                            type: notification.type,
+                            isRead: notification.isRead,
+                            typeValueID: notification.typeValueID,
+                            updated_at: notification.updated_at,
+                            created_at: notification.created_at,
+                            id: notification.id,
+                        },
+                        ...state
+                    ]
+                    :
+                    [
+                        ...state
+                    ]
+            );
+            axios.get(`http://localhost:8000/api/notifications/${notification.id}`, { withCredentials: true }).then((res) => {
+                setNotificationMessage((prev) => [
+                    {
+                        notificationID: notification.id,
+                        notificationMessage: res.data.notificationmessage,
+                    },
+                    ...prev
+                ]);
+
+            });
+
+            setUnreadNotificationCount(String(notification.recipientUserId) === String(userid) ? unreadNotificationCount + 1 : unreadNotificationCount);
+        });
+
+        return () => socket.off('sendNotificationToClient');
+    }, [socket, unreadNotificationCount]);
+
+    useEffect(() => {
+        if (userid !== '') {
+            getNotification();
+        }
     }, []);
 
     let menu;
     if (is_admin === null || is_admin === '') {
         menu = (
             <>
-                <Link className="navbar-brand" to="/">Student</Link>
+                <Link className="navbar-brand" to="/">Bowie</Link>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li className="nav-item">
