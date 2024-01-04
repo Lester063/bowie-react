@@ -1,4 +1,4 @@
-const NotificationContainer = ({isOpen, notifications, notificationMessage}) => {
+const NotificationContainer = ({isOpen, notifications}) => {
 
     return (
         <div style={{
@@ -24,15 +24,6 @@ const NotificationContainer = ({isOpen, notifications, notificationMessage}) => 
                     default: path = '#';
                 }
 
-                let message;
-
-                notificationMessage?.map((notifmessage) => {
-                    if (notifmessage.notificationID === notification.id) {
-                        message = notifmessage.notificationMessage;
-                    }
-                    return message;
-                })
-
                 return (
                     <div key={index} style={{
                         width: "100%",
@@ -43,7 +34,7 @@ const NotificationContainer = ({isOpen, notifications, notificationMessage}) => 
                         style={{
                             textDecoration:"none",
                             color:"#000"
-                        }}>{message}</a>
+                        }}>{notification.notificationMessage}</a>
                     </div>
                 )
             })}
