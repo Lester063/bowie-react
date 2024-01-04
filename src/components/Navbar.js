@@ -35,13 +35,10 @@ const Navbar = () => {
 
     const toggleNotification = async (e) => {
         e.preventDefault();
-        const toggledValue = !isOpen;
         setIsOpen(!isOpen);
         try {
-            toggledValue ?
-                await getNotification()
-                :
-                await axios.put(`http://localhost:8000/api/notifications`, 'data', { withCredentials: true });
+            await getNotification()
+            await axios.put(`http://localhost:8000/api/notifications`, 'data', { withCredentials: true });
             setUnreadNotificationCount(0);
         }
         catch (error) {
@@ -94,7 +91,7 @@ const Navbar = () => {
         if (userid !== '') {
             getNotification();
         }
-    }, []);
+    }, [userid]);
 
     let menu;
     if (is_admin === null || is_admin === '') {

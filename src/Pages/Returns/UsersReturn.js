@@ -4,6 +4,9 @@ import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
 import ForbiddenPage from '../../components/ForbiddenPage';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
 
 const UsersReturn = () => {
     const [returns, setReturns] = useState([]);
@@ -44,6 +47,7 @@ const UsersReturn = () => {
             else {
                 console.log(response.status);
             }
+            socket.emit("sendNotificationToServer", [response.data.notification]);
         }
         catch(error) {
             alert(error.response.data.message);

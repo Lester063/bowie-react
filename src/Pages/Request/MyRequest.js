@@ -22,14 +22,14 @@ const MyRequest = () => {
         }
     }, [data]);
 
-    useEffect(()=>{
-        socket.on("sendNotificationToClient", ([message, newRequests]) => {
-            const newRequest = newRequests.filter((req)=>String(req.idrequester) === String(userid));
-            setRequests(newRequest);
-        });
+    // useEffect(()=>{
+    //     socket.on("sendNotificationToClient", ([message, newRequests]) => {
+    //         const newRequest = newRequests.filter((req)=>String(req.idrequester) === String(userid));
+    //         setRequests(newRequest);
+    //     });
 
-        return () => socket.off('sendNotificationToClient');
-    },[socket])
+    //     return () => socket.off('sendNotificationToClient');
+    // },[socket])
 
     const actionRequest = async (e, id, action) => {
         e.preventDefault();
