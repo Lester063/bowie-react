@@ -50,8 +50,8 @@ const RequestCommunication = () => {
                 message: ""
             });
             messageRef.current.focus();
-
             socket.emit("sendChatToServer", [res.data.data, res.data.sendername]);
+            socket.emit("sendNotificationToServer", [res.data.notification]);
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status === 422) {

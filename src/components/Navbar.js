@@ -58,7 +58,7 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-        socket.on("sendNotificationToClient", ([notification, newRequests]) => {
+        socket.on("sendNotificationToClient", ([notification]) => {
             setNotifications((state) =>
                 String(notification.recipientUserId) === String(userid) ?
                     [
