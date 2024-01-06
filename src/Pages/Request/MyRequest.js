@@ -10,7 +10,6 @@ const socket = io.connect('http://localhost:3001');
 const MyRequest = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
-    const userid = localStorage.getItem('userid');
 
     const data = useFetch(`http://localhost:8000/api/userrequest`);
 
@@ -22,14 +21,26 @@ const MyRequest = () => {
         }
     }, [data]);
 
-    // useEffect(()=>{
-    //     socket.on("sendNotificationToClient", ([message, newRequests]) => {
-    //         const newRequest = newRequests.filter((req)=>String(req.idrequester) === String(userid));
-    //         setRequests(newRequest);
-    //     });
+    useEffect(()=>{
+        socket.on("sendNotificationToClient", ([message, updatedRequest, action]) => {
+            if(action === 'request') {
+                const newrequest = requests.map((request)=>{
+                    if(String(request.id) === String(updatedRequest.id)) {
+                        const updated = {
+                            ...request,
+                            is_available: updatedRequest.is_available,
+                            statusrequest: updatedRequest.statusrequest,
+                        };
+                        return updated;
+                    }
+                    return request;
+                });
+                setRequests(newrequest);
+            }
+        });
 
-    //     return () => socket.off('sendNotificationToClient');
-    // },[socket])
+        return () => socket.off('sendNotificationToClient');
+    },[socket, requests])
 
     const actionRequest = async (e, id, action) => {
         e.preventDefault();

@@ -3,6 +3,9 @@ import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
 
 const MyReturn = () => {
     const [returns, setReturns] = useState([]);
@@ -17,6 +20,26 @@ const MyReturn = () => {
             setLoading(false);
         }
     }, [data]);
+
+    useEffect(()=>{
+        socket.on("sendNotificationToClient", ([message, updatedReturn, action]) => {
+            if(action === 'return') {
+                const newreturn = returns.map((returnn)=>{
+                    if(String(returnn.id) === String(updatedReturn.id)) {
+                        const updated = {
+                            ...returnn,
+                            is_approve: updatedReturn.is_approve,
+                        };
+                        return updated;
+                    }
+                    return returnn;
+                });
+                setReturns(newreturn);
+            }
+        });
+
+        return () => socket.off('sendNotificationToClient');
+    },[socket, returns])
 
     const approveReturn = async (e, returnid) => {
         e.preventDefault();

@@ -30,15 +30,16 @@ const UsersReturn = () => {
         let data = 'data,not sure why I need to pass a data, definitely a bug.'
         try {
             let response = await axios.put(`http://localhost:8000/api/return/${returnid}/approve`,data, { withCredentials: true });
-            console.log(returnid);
+            let updatedReturn;
             if(response.status === 200) {
                 const newReturns = returns.map((returnn)=> {
-                    if(returnn.id === returnid) {
-                        const updatedReturns = {
+                    if(String(returnn.id) === String(returnid)) {
+                        updatedReturn = {
                             ...returnn,
                             is_approve: 1
                         }
-                        return updatedReturns;
+                        socket.emit("sendNotificationToServer", [response.data.notification, updatedReturn, 'return']);
+                        return updatedReturn;
                     }
                     return returnn;
                 });
@@ -47,7 +48,6 @@ const UsersReturn = () => {
             else {
                 console.log(response.status);
             }
-            socket.emit("sendNotificationToServer", [response.data.notification]);
         }
         catch(error) {
             alert(error.response.data.message);

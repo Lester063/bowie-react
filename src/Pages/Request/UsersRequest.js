@@ -37,7 +37,8 @@ const UsersRequest = () => {
                         ...request,
                         statusrequest: action === 'Approving' ? 'Approved' : 'Declined',
                         is_available: action === 'Approving' ? 0 : 1
-                      };              
+                      };
+                      socket.emit("sendNotificationToServer", [response.data.notification, updatedRequest, 'request']);              
                       return updatedRequest;
                     }
 
@@ -46,14 +47,14 @@ const UsersRequest = () => {
                             ...request,
                             statusrequest: action === 'Approving' ? 'Closed' : request.statusrequest,
                             is_available: action === 'Approving' ? 0 : 1
-                          };              
+                          };
+                          socket.emit("sendNotificationToServer", [response.data.notification, updatedRequest, 'request']);
                           return updatedRequest;
                     }
                     return request;
                   });
                   setRequests(newRequests);
             }
-            socket.emit("sendNotificationToServer", [response.data.notification, newRequests]);
         }
         catch(error) {
             alert(error.response.data.message);
