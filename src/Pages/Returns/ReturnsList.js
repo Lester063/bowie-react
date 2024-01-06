@@ -1,10 +1,11 @@
 import { useState } from "react";
 import HoverMessage from "../../components/HoverMessage";
+import { useLocation } from "react-router-dom";
 
 const ReturnsList = ({ returns, approveReturn }) => {
     const is_admin = localStorage.getItem('is_admin');
-
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState('');
+    const url = useLocation();
 
     const hoverDisabledButton = async (id, isDisabled) => {
         if (isDisabled) {
@@ -22,7 +23,9 @@ const ReturnsList = ({ returns, approveReturn }) => {
             <thead>
                 <tr>
                     <th style={{ width: "10px" }}>List#</th>
-                    <th>Returner's Name</th>
+                    {url.pathname === '/returns' &&
+                        <th>Returner's Name</th>
+                    }
                     <th>Item Name</th>
                     <th>Item Code</th>
                     <th>Return Status</th>
@@ -36,7 +39,9 @@ const ReturnsList = ({ returns, approveReturn }) => {
                     return (
                         <tr key={index}>
                             <td>{index + 1}.</td>
-                            <td>{returnn.name}</td>
+                            {url.pathname === '/returns' &&
+                                <td>{returnn.name}</td>
+                            }
                             <td><a href={`requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
                             <td>{returnn.itemcode}</td>
                             <td><span style={{

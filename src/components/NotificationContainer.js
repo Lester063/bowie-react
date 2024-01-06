@@ -1,7 +1,7 @@
 const NotificationContainer = ({isOpen, notifications}) => {
 
     return (
-        <div style={{
+        <div id='scrollbar' style={{
             width: "300px",
             height:"500px",
             maxHeight: "500px",

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import HoverMessage from "../../components/HoverMessage";
+import { useLocation } from "react-router-dom";
 
 const RequestsList = ({ requests, actionRequest, returnItem }) => {
     const is_admin = localStorage.getItem('is_admin');
     const userid = localStorage.getItem('userid');
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState('');
+    const url = useLocation();
 
     const hoverDisabledButton = async (id, message, isDisabled) => {
         if (isDisabled) {
@@ -43,7 +45,9 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
             <thead>
                 <tr>
                     <th style={{ width: "10px" }}>List#</th>
-                    <th>Requester's Name</th>
+                    {url.pathname === '/requests' &&
+                        <th>Requester's Name</th>
+                    }
                     <th>Item Name</th>
                     <th>Item Code</th>
                     <th>Item Status</th>
@@ -56,7 +60,9 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
                     return (
                         <tr key={index}>
                             <td>{index + 1}.</td>
-                            <td>{request.name}</td>
+                            {url.pathname === '/requests' && 
+                                <td>{request.name}</td>
+                            }
                             <td><a href={`requestcommunication/${request.id}`}>{request.itemname}</a></td>
                             <td>{request.itemcode}</td>
                             <td>{request.is_available === 1 ? 'Available' : 'Not available'}</td>
