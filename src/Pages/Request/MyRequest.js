@@ -80,6 +80,7 @@ const MyRequest = () => {
                     return request;
                 });
                 setRequests(newRequests);
+                socket.emit("sendNotificationToServer", [response.data.notification]);
             }
             else {
                 console.log(response.status);

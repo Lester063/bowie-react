@@ -4,6 +4,9 @@ import axios from 'axios';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ItemList from './ItemList';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
 
 const Items = () => {
     const [items, setItem] = useState([]);
@@ -87,6 +90,7 @@ const Items = () => {
                     updated_at: response.data.data.updated_at
                 }
             ]);
+            socket.emit("sendNotificationToServer", [response.data.notification]);
         }
         catch (error) {
             if (error.response.status === 422) {
