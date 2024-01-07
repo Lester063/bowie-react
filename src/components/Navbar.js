@@ -150,30 +150,33 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/myreturns">My Returns</Link>
                         </li>
-                        <li className="nav-item">
-                            <button className="nav-link" onClick={(e) => { toggleNotification(e) }}>
-                                {
-                                    unreadNotificationCount > 0 &&
-                                    <b style={{
-                                        position: "absolute",
-                                        zIndex: "1",
-                                        backgroundColor: "red",
-                                        color: "#fff",
-                                        marginTop: "-10px",
-                                        marginLeft: "10px",
-                                        width: "18px",
-                                        height: "18px",
-                                        fontSize: "11px",
-                                        borderRadius: "100%",
-                                    }}>{unreadNotificationCount}</b>
-                                }
-                                <i className="bi bi-bell"></i>
-                            </button>
-
-                        </li>
+                        {window.innerWidth > 700 &&
+                            <li className="nav-item">
+                                <button className="nav-link" onClick={(e) => { toggleNotification(e) }}>
+                                    {
+                                        unreadNotificationCount > 0 &&
+                                        <b style={{
+                                            position: "absolute",
+                                            zIndex: "1",
+                                            backgroundColor: "red",
+                                            color: "#fff",
+                                            marginTop: "-10px",
+                                            marginLeft: "10px",
+                                            width: "18px",
+                                            height: "18px",
+                                            fontSize: "11px",
+                                            borderRadius: "100%",
+                                        }}>{unreadNotificationCount}</b>
+                                    }
+                                    <i className="bi bi-bell"></i>
+                                </button>
+                            </li>
+                        }
                         <li className="nav-item">
                             <button className="nav-link" onClick={handleLogout}>Logout</button>
-                            <NotificationContainer isOpen={isOpen} notifications={notifications} />
+                            {window.innerWidth > 700 &&
+                                <NotificationContainer isOpen={isOpen} notifications={notifications} />
+                            }
                         </li>
                     </ul>
                 </div>
