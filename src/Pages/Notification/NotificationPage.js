@@ -8,6 +8,7 @@ const NotificationPage = () => {
     async function getNotification() {
         try {
             const response = await axios.get(`http://localhost:8000/api/notifications`, { withCredentials: true });
+            await axios.put(`http://localhost:8000/api/notifications`, 'data', { withCredentials: true });
             setNotifications(response.data.data);
         }
         catch (error) {

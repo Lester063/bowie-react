@@ -127,7 +127,7 @@ const Navbar = () => {
             <>
                 <Link className="navbar-brand" to="/">{name}</Link>
                 {window.innerWidth < 700 &&
-                    <Link to="/notifications" style={{margin:"0 auto", marginRight:"10px"}}>
+                    <Link to="/notifications" style={{margin:"0 auto", marginRight:"10px"}} onClick={()=>setUnreadNotificationCount(0)}>
                         {
                             unreadNotificationCount > 0 &&
                             <b style={{
