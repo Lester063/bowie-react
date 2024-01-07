@@ -16,6 +16,7 @@ import MyReturns from "../Pages/Returns/MyReturn";
 import UsersReturns from "../Pages/Returns/UsersReturn";
 import ViewRequest from '../Pages/Request/ViewRequest';
 import ViewReturn from '../Pages/Returns/ViewReturn';
+import NotificationPage from '../Pages/Notification/NotificationPage';
 
 function MyRouter() {
 
@@ -45,6 +46,8 @@ function MyRouter() {
             <Route path="/myreturns" element={<><Navbar /> <MyReturns/></>} />
             <Route path="/returns" element={<><Navbar /> <UsersReturns/></>} />
             <Route path="/return/:id" element={<><Navbar /> <ViewReturn/></>} />
+
+            <Route path="/notifications" element={<><Navbar /> <NotificationPage/></>} />
 
             <Route path="*" element={<NotFound />}/>
         </Routes>

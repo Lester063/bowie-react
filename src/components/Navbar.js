@@ -126,6 +126,27 @@ const Navbar = () => {
         menu = (
             <>
                 <Link className="navbar-brand" to="/">{name}</Link>
+                {window.innerWidth < 700 &&
+                    <Link to="/notifications" style={{margin:"0 auto", marginRight:"10px"}}>
+                        {
+                            unreadNotificationCount > 0 &&
+                            <b style={{
+                                position: "absolute",
+                                zIndex: "1",
+                                backgroundColor: "red",
+                                color: "#fff",
+                                marginTop: "-10px",
+                                marginLeft: "10px",
+                                width: "18px",
+                                height: "18px",
+                                fontSize: "11px",
+                                borderRadius: "100%",
+                                textAlign:"center"
+                            }}>{unreadNotificationCount}</b>
+                        }
+                        <i className="bi bi-bell"></i>
+                    </Link>
+                }
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -166,6 +187,7 @@ const Navbar = () => {
                                             height: "18px",
                                             fontSize: "11px",
                                             borderRadius: "100%",
+                                            textAlign:"center"
                                         }}>{unreadNotificationCount}</b>
                                     }
                                     <i className="bi bi-bell"></i>
