@@ -22,8 +22,8 @@ const NotificationContainer = ({isOpen, notifications}) => {
                     case 'approve the request': path = '/myrequests'; break;
                     case 'approve the return': path = '/myreturns'; break;
                     case 'sent a message': path = `/requestcommunication/${notification.typeValueID}`; break;
-                    case 'requesting the item': path = '/requests'; break;
-                    case 'returning the item': path = '/returns'; break;
+                    case 'requesting the item': path = `/requests/${notification.typeValueID}`; break;
+                    case 'returning the item': path = `/return/${notification.typeValueID}`; break;
                     default: path = '#';
                 }
 

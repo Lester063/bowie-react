@@ -45,7 +45,7 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
             <thead>
                 <tr>
                     <th style={{ width: "10px" }}>List#</th>
-                    {url.pathname === '/requests' &&
+                    {!url.pathname.includes('myrequests') &&
                         <th>Requester's Name</th>
                     }
                     <th>Item Name</th>
@@ -60,7 +60,7 @@ const RequestsList = ({ requests, actionRequest, returnItem }) => {
                     return (
                         <tr key={index}>
                             <td>{index + 1}.</td>
-                            {url.pathname === '/requests' && 
+                            {!url.pathname.includes('myrequests') && 
                                 <td>{request.name}</td>
                             }
                             <td><a href={`requestcommunication/${request.id}`}>{request.itemname}</a></td>

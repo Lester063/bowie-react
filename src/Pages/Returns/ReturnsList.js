@@ -23,7 +23,7 @@ const ReturnsList = ({ returns, approveReturn }) => {
             <thead>
                 <tr>
                     <th style={{ width: "10px" }}>List#</th>
-                    {url.pathname === '/returns' &&
+                    {!url.pathname.includes('myreturns') &&
                         <th>Returner's Name</th>
                     }
                     <th>Item Name</th>
@@ -39,7 +39,7 @@ const ReturnsList = ({ returns, approveReturn }) => {
                     return (
                         <tr key={index}>
                             <td>{index + 1}.</td>
-                            {url.pathname === '/returns' &&
+                            {!url.pathname.includes('myreturns') &&
                                 <td>{returnn.name}</td>
                             }
                             <td><a href={`requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>

@@ -14,6 +14,8 @@ import UsersRequest from "../Pages/Request/UsersRequest";
 import RequestCommunication from "../Pages/RequestCommunication/RequestCommunication";
 import MyReturns from "../Pages/Returns/MyReturn";
 import UsersReturns from "../Pages/Returns/UsersReturn";
+import ViewRequest from '../Pages/Request/ViewRequest';
+import ViewReturn from '../Pages/Returns/ViewReturn';
 
 function MyRouter() {
 
@@ -34,6 +36,7 @@ function MyRouter() {
             {/*request */}
             <Route path="/myrequests" element={<><Navbar /> <MyRequests/></>} />
             <Route path="/requests" element={<><Navbar /> <UsersRequest/></>} />
+            <Route path="/requests/:id" element={<><Navbar /> <ViewRequest/></>} />
 
             {/*request communication */}
             <Route path="/requestcommunication/:id" element={<><Navbar /> <RequestCommunication/></>} />
@@ -41,6 +44,7 @@ function MyRouter() {
             {/*returns */}
             <Route path="/myreturns" element={<><Navbar /> <MyReturns/></>} />
             <Route path="/returns" element={<><Navbar /> <UsersReturns/></>} />
+            <Route path="/return/:id" element={<><Navbar /> <ViewReturn/></>} />
 
             <Route path="*" element={<NotFound />}/>
         </Routes>
