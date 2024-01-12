@@ -110,6 +110,7 @@ const RequestCommunication = () => {
     }, [socket]);
 
     return (
+        <div className="mobile-body">
         <div className="container mt-3">
             {loading && <Loading />}
             {
@@ -171,6 +172,7 @@ const RequestCommunication = () => {
                     </div>
                 </div>
             }
+        </div>
         </div>
     );
 }

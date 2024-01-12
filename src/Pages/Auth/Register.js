@@ -58,7 +58,7 @@ const Register = () => {
     }
 
     return (
-        <div>
+        <div className="mobile-body">
             {loading && <Loading />}
             {!loading &&
                 <form onSubmit={saveUser}>

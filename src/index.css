@@ -32,3 +32,16 @@ code {
 #scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+@media (max-width: 768px) {
+  #navcontainer{
+      position: absolute;
+      width:100%;
+      z-index: 1;
+      margin-top:-60px;
+  }
+
+  .mobile-body{
+    margin-top:60px !important;
+  }
+}

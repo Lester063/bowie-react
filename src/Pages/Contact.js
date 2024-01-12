@@ -9,7 +9,7 @@ const Contact = () => {
         body: "If you are looking for a Software Engineer, you can directly contact me with my LinkedIn account, https://www.linkedin.com/in/lester-tuazon-665569199/"
     }
     return (
-        <div>
+        <div className="mobile-body">
             {loading && <Loading />}
             {!loading && <BodyTemplate title="Contact" body={data}/>}
         </div>

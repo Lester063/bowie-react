@@ -74,7 +74,7 @@ const Home = () => {
     }
 
     return (
-        <div>
+        <div className="mobile-body">
             {loading &&
                 <Loading />
             }

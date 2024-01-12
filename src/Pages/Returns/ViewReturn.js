@@ -66,7 +66,7 @@ const ViewReturn = () => {
                     !loading &&
                     <div className="row">
                         <div className="col-md-12">
-                            <div className="card">
+                            <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>View Return</h4>
                                 </div>
@@ -88,9 +88,9 @@ const ViewReturn = () => {
     }
 
     return (
-        <>
+        <div className="mobile-body">
             {menu}
-        </>
+        </div>
     );
 }
 

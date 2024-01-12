@@ -64,7 +64,7 @@ const ItemEdit = () => {
                     !loading &&
                     <div className="row">
                         <div className="col-md-12">
-                            <div className="card">
+                            <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>
                                         <Link to="/items" className="btn btn-secondary float-right"><i className="bi bi-arrow-left"></i></Link>
@@ -87,9 +87,9 @@ const ItemEdit = () => {
     }
 
     return (
-        <>
+        <div className="mobile-body">
             {menu}
-        </>
+        </div>
     );
 }
 

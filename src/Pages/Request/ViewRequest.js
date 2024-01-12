@@ -113,7 +113,7 @@ const ViewRequest = () => {
                     !loading &&
                     <div className="row">
                         <div className="col-md-12">
-                            <div className="card">
+                            <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>View Request</h4>
                                 </div>
@@ -130,9 +130,9 @@ const ViewRequest = () => {
     )
 
     return (
-        <>
+        <div className="mobile-body">
             {menu}
-        </>
+        </div>
     );
 }
 

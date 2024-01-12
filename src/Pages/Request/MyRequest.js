@@ -111,7 +111,7 @@ const MyRequest = () => {
                     !loading &&
                     <div className="row">
                         <div className="col-md-12">
-                            <div className="card">
+                            <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>My Requests</h4>
                                 </div>
@@ -128,9 +128,9 @@ const MyRequest = () => {
     )
 
     return (
-        <>
+        <div className="mobile-body">
             {menu}
-        </>
+        </div>
     );
 }
 

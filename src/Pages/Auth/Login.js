@@ -55,7 +55,7 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className="mobile-body">
             {(clickLoading || loading) && <Loading />}
             {!clickLoading && !loading &&
                 <form onSubmit={login}>

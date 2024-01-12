@@ -124,7 +124,7 @@ const Items = () => {
                     !loading &&
                     <div className="row">
                         <div className="col-md-12">
-                            <div className="card">
+                            <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>Item List
                                         {is_admin === '1' &&
@@ -147,9 +147,9 @@ const Items = () => {
     )
 
     return (
-        <>
+        <div className="mobile-body">
             {menu}
-        </>
+        </div>
     );
 }
 

@@ -22,7 +22,7 @@ const NotificationPage = () => {
         }
     }, [userid]);
     return (
-        <div style={{padding:"10px"}}>
+        <div className="mobile-body" style={{padding:"10px"}}>
             <NotificationList notifications={notifications}/>
         </div>
     );

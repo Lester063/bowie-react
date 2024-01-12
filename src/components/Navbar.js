@@ -96,7 +96,7 @@ const Navbar = () => {
     let menu;
     if (is_admin === null || is_admin === '') {
         menu = (
-            <>
+            <div className="container">
                 <Link className="navbar-brand" to="/">Bowie</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -120,11 +120,11 @@ const Navbar = () => {
                         </li>
                     </ul>
                 </div>
-            </>
+            </div>
         )
     } else if (is_admin !== null || is_admin !== '') {
         menu = (
-            <>
+            <div className="container">
                 <Link className="navbar-brand" to="/">{name}</Link>
                 {window.innerWidth < 700 &&
                     <Link to="/notifications" style={{margin:"0 auto", marginRight:"10px"}} onClick={()=>setUnreadNotificationCount(0)}>
@@ -202,14 +202,12 @@ const Navbar = () => {
                         </li>
                     </ul>
                 </div>
-            </>
+            </div>
         )
     }
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary shadow">
-            <div className="container">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary shadow" id="navcontainer">
                 {menu}
-            </div>
         </nav>
     );
 }
