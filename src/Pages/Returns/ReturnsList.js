@@ -42,7 +42,7 @@ const ReturnsList = ({ returns, approveReturn }) => {
                             {!url.pathname.includes('myreturns') &&
                                 <td>{returnn.name}</td>
                             }
-                            <td><a href={`requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
+                            <td><a href={`/requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
                             <td>{returnn.itemcode}</td>
                             <td><span style={{
                                 backgroundColor: '#47bf67',
