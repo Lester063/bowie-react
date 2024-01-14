@@ -37,9 +37,11 @@ const Navbar = () => {
         e.preventDefault();
         setIsOpen(!isOpen);
         try {
-            await getNotification()
-            await axios.put(`http://localhost:8000/api/notifications`, 'data', { withCredentials: true });
-            setUnreadNotificationCount(0);
+            if(!isOpen) {
+                await getNotification()
+                await axios.put(`http://localhost:8000/api/notifications`, 'data', { withCredentials: true });
+                setUnreadNotificationCount(0);
+            }
         }
         catch (error) {
             console.log(error);
