@@ -8,7 +8,7 @@ import ForbiddenPage from '../../components/ForbiddenPage';
 export const ViewRequestContext = createContext(null);
 const ViewRequest = () => {
     const [requests, setRequests] = useState([]);
-    const [isUserHasAccess, setUserAccess] = useState(false);
+    const [isUserHasAccess, setUserAccess] = useState(true);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
     const is_admin = localStorage.getItem('is_admin');

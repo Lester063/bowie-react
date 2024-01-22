@@ -9,7 +9,7 @@ const NotificationList = ({ notifications }) => {
                     case 'approve the request': path = `/requests/${notification.typeValueID}`; break;
                     case 'decline the request': path = `/requests/${notification.typeValueID}`; break;
                     case 'close the request': path = `/requests/${notification.typeValueID}`; break;
-                    case 'approve the return': path = `/myreturns/`; break;
+                    case 'approve the return': path = `/return/${notification.typeValueID}`; break;
                     case 'sent a message': path = `/requestcommunication/${notification.typeValueID}`; break;
                     case 'requesting the item': path = `/requests/${notification.typeValueID}`; break;
                     case 'returning the item': path = `/return/${notification.typeValueID}`; break;

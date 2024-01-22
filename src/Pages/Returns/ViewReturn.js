@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 export const ViewReturnContext = createContext(null);
 const ViewReturn = () => {
     const [returns, setReturns] = useState([]);
-    //const [isUserHasAccess, setUserAccess] = useState(false);
+    const [isUserHasAccess, setUserAccess] = useState(true);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
 
@@ -25,19 +25,19 @@ const ViewReturn = () => {
         }
     }, [data]);
 
-    // useEffect(() => {
-    //     returns.map((returnn)=>{
-    //         returnn.idreturner == userid || is_admin === '1' ?
-    //         setUserAccess(true)
-    //         :
-    //         setUserAccess(false)
-    //     });
-    // }, [returns])
+    useEffect(() => {
+        returns.map((returnn)=>{
+            returnn.idreturner == userid || is_admin === '1' ?
+            setUserAccess(true)
+            :
+            setUserAccess(false)
+        });
+    }, [returns])
 
 
     let menu;
     menu = (
-        // isUserHasAccess ?
+        isUserHasAccess ?
             <>
                 <div className="container mt-3">
                     {loading && <Loading />}
@@ -59,8 +59,8 @@ const ViewReturn = () => {
                     }
                 </div>
             </>
-            // :
-            // <ForbiddenPage />
+            :
+            <ForbiddenPage />
     )
 
 
