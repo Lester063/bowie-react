@@ -22,9 +22,9 @@ const Navbar = () => {
             //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
             const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata', { withCredentials: true });
             if (response.data.message === 'Success') {
-                localStorage.setItem('is_admin', '');
-                localStorage.setItem('userid', '');
-                localStorage.setItem('name', '');
+                localStorage.removeItem('is_admin');
+                localStorage.removeItem('name');
+                localStorage.removeItem('userid');
                 navigate('/login');
             }
         }
@@ -90,7 +90,7 @@ const Navbar = () => {
     }, [socket, unreadNotificationCount]);
 
     useEffect(() => {
-        if (userid !== '') {
+        if (userid !== null) {
             getNotification();
         }
     }, [userid]);

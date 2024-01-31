@@ -17,6 +17,7 @@ import UsersReturns from "../Pages/Returns/UsersReturn";
 import ViewRequest from '../Pages/Request/ViewRequest';
 import ViewReturn from '../Pages/Returns/ViewReturn';
 import NotificationPage from '../Pages/Notification/NotificationPage';
+import Profile from '../Pages/Profile/Profile';
 
 function MyRouter() {
 
@@ -48,6 +49,9 @@ function MyRouter() {
             <Route path="/return/:id" element={<><Navbar /> <ViewReturn/></>} />
 
             <Route path="/notifications" element={<><Navbar /> <NotificationPage/></>} />
+
+            {/*profile */}
+            <Route path="/profile" element={<><Navbar /> <Profile/></>} />
 
             <Route path="*" element={<NotFound />}/>
         </Routes>
