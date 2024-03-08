@@ -16,7 +16,7 @@ const Home = () => {
     const { loading } = useLoading();
     const [imageSrc, setImageSrc] = useState(null);
     const data = {
-        body: `Bowie is a web application that can be used as something like a management tool
+        body: `Bowie is a web application that can be used as a management tool
         for the Organisation to let their member to request or borrow any item they 
         need to perform a task.`
     }
@@ -61,16 +61,16 @@ const Home = () => {
 
     const displayFeatureData = async (index) => {
         var x = document.getElementById('feature');
-        x.innerHTML=features[index].description;
+        x.innerHTML = features[index].description;
         setImageSrc(features[index].image);
-        
+
     }
     const hoverList = async (id) => {
-        document.getElementById(id).style.cursor='pointer';
+        document.getElementById(id).style.cursor = 'pointer';
     }
 
     const unHoverList = async (id) => {
-        document.getElementById(id).style.cursor='none';
+        document.getElementById(id).style.cursor = 'none';
     }
 
     return (
@@ -80,35 +80,37 @@ const Home = () => {
             }
 
             {!loading &&
-                <BodyTemplate title="Home" body={data} />
-            }
-            <div className="container mt-3">
-                <div className="row">
-                    <div className='col-4'>
-                        <h3>Features: </h3>
-                        <ul>
-                        {   
-                            features.map((feature, index)=>{
-                                return (
-                                    <li key={index} id={index+'list'}
-                                    onClick={() => {displayFeatureData(index)}}
-                                    onMouseOver={() => {hoverList(index+'list')}}
-                                    onMouseOut={() => {unHoverList(index+'list')}}
-                                    >{feature.featurename}</li>
-                                )
-                            })
-                        }
-                        </ul>
+                <>
+                    <BodyTemplate title="Home" body={data} />
+                    <div className="container mt-3">
+                        <div className="row">
+                            <div className='col-4'>
+                                <h3>Features: </h3>
+                                <ul>
+                                    {
+                                        features.map((feature, index) => {
+                                            return (
+                                                <li key={index} id={index + 'list'}
+                                                    onClick={() => { displayFeatureData(index) }}
+                                                    onMouseOver={() => { hoverList(index + 'list') }}
+                                                    onMouseOut={() => { unHoverList(index + 'list') }}
+                                                >{feature.featurename}</li>
+                                            )
+                                        })
+                                    }
+                                </ul>
 
+                            </div>
+                            <div className='col-8'>
+                                {imageSrc &&
+                                    <img src={imageSrc} alt="ReactLogs" style={{ width: '100%' }} />
+                                }
+                                <p id='feature'></p>
+                            </div>
+                        </div>
                     </div>
-                    <div className='col-8'>
-                        {imageSrc && 
-                            <img src={imageSrc} alt="ReactLogs" style={{width:'100%'}}/>
-                        }
-                        <p id='feature'></p>
-                    </div>
-                </div>
-            </div>
+                </>
+            }
         </div>
     );
 }

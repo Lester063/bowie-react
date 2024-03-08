@@ -7,17 +7,17 @@ const Login = () => {
     document.title = 'Login';
     const navigate = useNavigate();
     const { loading } = useLoading();
-    const [ clickLoading, setLoading] = useState(false);
+    const [clickLoading, setLoading] = useState(false);
     const [inputError, setInputError] = useState();
 
-    const [ cred, setCredentials ] = useState({
-        email:"",
-        password:""
+    const [cred, setCredentials] = useState({
+        email: "",
+        password: ""
     });
 
     const handleChange = (e) => {
         e.preventDefault();
-        setCredentials({...cred, [e.target.name]: e.target.value});
+        setCredentials({ ...cred, [e.target.name]: e.target.value });
     }
 
     const login = async (e) => {
@@ -29,13 +29,13 @@ const Login = () => {
             password: cred.password
         }
         setCredentials({
-            email:"",
-            password:""
+            email: "",
+            password: ""
         });
         try {
-            const response = await axios.post(`http://localhost:8000/api/login`, data,{withCredentials:true});
+            const response = await axios.post(`http://localhost:8000/api/login`, data, { withCredentials: true });
             setLoading(false);
-            if(response.data.statuscode === 200) {
+            if (response.data.statuscode === 200) {
                 localStorage.setItem('is_admin', response.data.data.is_admin);
                 localStorage.setItem('userid', response.data.data.id);
                 localStorage.setItem('name', response.data.data.name);
@@ -49,8 +49,8 @@ const Login = () => {
             }
 
         }
-        catch(error) {
-            console.log('error: '+error);
+        catch (error) {
+            console.log('error: ' + error);
         }
     }
 
@@ -58,13 +58,17 @@ const Login = () => {
         <div className="mobile-body">
             {(clickLoading || loading) && <Loading />}
             {!clickLoading && !loading &&
-                <form onSubmit={login}>
-                    <h1>Please login</h1>
-                    <input type="email" placeholder="Email" className="form-control" value={cred.email} name="email" onChange={handleChange}/>
-                    <input type="password" placeholder="Password" className="form-control" value={cred.password} name="password" onChange={handleChange} />
-                    <span className="text-danger">{inputError}</span>
-                    <button className="w-100 btn btn-lg btn-primary">Login</button>
-                </form>
+                <div class="row">
+                    <div className={window.innerWidth < 700 ? "col-11 mt-3 mx-auto" : "col-3 mt-3 mx-auto"}>
+                        <form onSubmit={login}>
+                            <h1>Please login</h1>
+                            <input type="email" placeholder="Email" className="form-control mt-1" value={cred.email} name="email" onChange={handleChange} />
+                            <input type="password" placeholder="Password" className="form-control mt-1" value={cred.password} name="password" onChange={handleChange} />
+                            <span className="text-danger">{inputError}</span>
+                            <button className="w-100 btn btn-lg btn-primary mt-2">Login</button>
+                        </form>
+                    </div>
+                </div>
             }
         </div>
     );
