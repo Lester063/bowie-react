@@ -38,7 +38,7 @@ const Login = () => {
             if (response.data.statuscode === 200) {
                 localStorage.setItem('is_admin', response.data.data.is_admin);
                 localStorage.setItem('userid', response.data.data.id);
-                localStorage.setItem('name', response.data.data.name);
+                localStorage.setItem('first_name', response.data.data.first_name);
                 navigate('/');
             }
             else if (response.data.statuscode === 422) {
@@ -61,10 +61,11 @@ const Login = () => {
                 <div class="row">
                     <div className={window.innerWidth < 700 ? "col-11 mt-3 mx-auto" : "col-3 mt-3 mx-auto"}>
                         <form onSubmit={login}>
-                            <h1>Please login</h1>
+                            <h1>Login</h1>
                             <input type="email" placeholder="Email" className="form-control mt-1" value={cred.email} name="email" onChange={handleChange} />
                             <input type="password" placeholder="Password" className="form-control mt-1" value={cred.password} name="password" onChange={handleChange} />
                             <span className="text-danger">{inputError}</span>
+                            <a href="/register">No account yet?</a>
                             <button className="w-100 btn btn-lg btn-primary mt-2">Login</button>
                         </form>
                     </div>

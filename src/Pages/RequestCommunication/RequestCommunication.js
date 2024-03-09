@@ -127,10 +127,10 @@ const RequestCommunication = () => {
                             return (
                                 <div key={index}>
                                     {index == 0 && String(comm.idsender) !== String(userid) &&
-                                        <span>{comm.name}</span>
+                                        <span>{comm.first_name}</span>
                                     }
                                     {index > 0 && String(comm.idsender) !== String(previousItem.idsender) && String(comm.idsender) !== String(userid) &&
-                                        <span>{comm.name}</span>
+                                        <span>{comm.first_name}</span>
                                     }
                                     <div className="messageBox mt-1" key={index} style={{
                                         backgroundColor: String(userid) === String(comm.idsender) ? "#78b5ff" : "#f5f3f0",

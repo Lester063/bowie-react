@@ -112,7 +112,7 @@ const ReturnsList = () => {
                         <tr key={index}>
                             <td>{index + 1}.</td>
                             {!url.pathname.includes('myreturns') &&
-                                <td>{returnn.name}</td>
+                                <td>{returnn.first_name}</td>
                             }
                             <td><a href={`/requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
                             <td>{returnn.itemcode}</td>

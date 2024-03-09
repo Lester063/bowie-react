@@ -9,7 +9,7 @@ const socket = io.connect('http://localhost:3001');
 const Navbar = () => {
     const navigate = useNavigate();
     const is_admin = localStorage.getItem('is_admin');
-    const name = localStorage.getItem('name');
+    const first_name = localStorage.getItem('first_name');
     const userid = localStorage.getItem('userid');
 
     const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +23,7 @@ const Navbar = () => {
             const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata', { withCredentials: true });
             if (response.data.message === 'Success') {
                 localStorage.removeItem('is_admin');
-                localStorage.removeItem('name');
+                localStorage.removeItem('first_name');
                 localStorage.removeItem('userid');
                 navigate('/login');
             }
@@ -127,7 +127,7 @@ const Navbar = () => {
     } else if (is_admin !== null || is_admin !== '') {
         menu = (
             <div className="container">
-                <Link className="navbar-brand" to="/">{name}</Link>
+                <Link className="navbar-brand" to="/">{first_name}</Link>
                 {window.innerWidth < 700 &&
                     <Link to="/notifications" style={{margin:"0 auto", marginRight:"10px"}} onClick={()=>setUnreadNotificationCount(0)}>
                         {
