@@ -7,7 +7,9 @@ const Register = () => {
     const [inputError, setInputError] = useState({});
 
     const [user, setUser] = useState({
-        name: "",
+        first_name: "",
+        middle_name: "",
+        last_name: "",
         email: "",
         password: "",
     });
@@ -29,7 +31,9 @@ const Register = () => {
         e.preventDefault();
         setLoading(true);
         const data = {
-            name: user.name,
+            first_name: user.first_name,
+            middle_name: user.middle_name,
+            last_name: user.last_name,
             email: user.email,
             password: user.password
         }
@@ -38,7 +42,9 @@ const Register = () => {
             setLoading(false);
             alert(res.data.message);
             setUser({
-                name: "",
+                first_name: "",
+                middle_name: "",
+                last_name: "",
                 email: "",
                 password: ""
             })
@@ -64,9 +70,13 @@ const Register = () => {
                 <div class="row">
                     <div className={window.innerWidth < 700 ? "col-11 mt-3 mx-auto" : "col-3 mt-3 mx-auto"}>
                     <form onSubmit={saveUser}>
-                        <h1>Please register</h1>
-                        <input type="text" placeholder="Name" className="form-control mt-1" value={user.name} name="name" onChange={handleChange} />
-                        <span className="text-danger">{inputError.name}</span>
+                        <h1>Create account</h1>
+                        <input type="text" placeholder="First name" className="form-control mt-1" value={user.first_name} name="first_name" onChange={handleChange} />
+                        <span className="text-danger">{inputError.first_name}</span>
+                        <input type="text" placeholder="Middle name" className="form-control mt-1" value={user.middle_name} name="middle_name" onChange={handleChange} />
+                        <span className="text-danger">{inputError.middle_name}</span>
+                        <input type="text" placeholder="Last name" className="form-control mt-1" value={user.last_name} name="last_name" onChange={handleChange} />
+                        <span className="text-danger">{inputError.last_name}</span>
                         <input type="email" placeholder="Email" className="form-control mt-1" value={user.email} name="email" onChange={handleChange} />
                         <span className="text-danger">{inputError.email}</span>
                         <input type="password" placeholder="Password" className="form-control mt-1" value={user.password} name="password" onChange={handleChange} />

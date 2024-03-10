@@ -72,21 +72,21 @@ const Profile = () => {
                                                         <td>{profileImage !== null
                                                             ? <img src={profileImage} style={{ width: "250px" }} />
                                                             :
-                                                            <>Please upload your profile picture.</>}
+                                                            <p className="text-danger">Please upload your profile picture.*</p>}
                                                         </td>
 
                                                     </tr>
                                                     <tr>
                                                         <td style={{ width: "200px" }}>First Name: </td>
-                                                        <td>{userData.name}</td>
+                                                        <td>{userData.first_name}</td>
                                                     </tr>
                                                     <tr>
                                                         <td style={{ width: "200px" }}>Middle Name: </td>
-                                                        <td>Middle Name</td>
+                                                        <td>{userData.middle_name}</td>
                                                     </tr>
                                                     <tr>
                                                         <td style={{ width: "200px" }}>Last Name: </td>
-                                                        <td>Last Name</td>
+                                                        <td>{userData.last_name}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

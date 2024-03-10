@@ -171,7 +171,7 @@ const RequestsList = () => {
                         <tr key={index}>
                             <td>{index + 1}.</td>
                             {!url.pathname.includes('myrequests') &&
-                                <td>{request.name}</td>
+                                <td>{request.first_name}</td>
                             }
                             <td><a href={`/requestcommunication/${request.id}`}>{request.itemname}</a></td>
                             <td>{request.itemcode}</td>
