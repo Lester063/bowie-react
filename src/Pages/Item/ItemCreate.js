@@ -14,33 +14,53 @@ const ItemCreate = () => {
     const [item, setItem] = useState({
         itemname: "",
         itemcode: "",
+        item_image: "",
     });
+    const [selectedFile, setSelectedFile] = useState(null);
 
     //input changes
     const handleChange = (e) => {
         e.preventDefault();
         setItem({ ...item, [e.target.name]: e.target.value });
     }
+    //file changes
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+        console.log(e.target.files[0]);
+    };
 
     //click save button
     const saveItem = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const data = {
-            itemname: item.itemname,
-            itemcode: item.itemcode,
+
+        let data = new FormData()
+        data.append("itemname", item.itemname);
+        data.append("itemcode", item.itemcode);
+        if (selectedFile) {
+            data.append('item_image', selectedFile);
         }
+
         try {
-            const response = await axios.post(`http://localhost:8000/api/items`, data, { withCredentials: true });
+            const response = await axios.post(`http://localhost:8000/api/items`, data,
+                {
+                    withCredentials: true,
+                    headers: {
+                        'contentType': 'multipart/form-data',
+                    },
+                }
+            );
+
             setLoading(false);
             alert(response.data.message);
             setItem({
                 itemname: "",
-                itemcode: ""
+                itemcode: "",
+                item_image: "",
             });
             setInputError({});
         }
-        catch(error) {
+        catch (error) {
             console.log(error)
             setLoading(false);
             setInputError(error.response.data.errors);
@@ -51,7 +71,7 @@ const ItemCreate = () => {
     if (is_admin === '1') {
         menu = (
             <>
-                <form onSubmit={saveItem}>
+                <form onSubmit={saveItem} encType="multipart/form-data">
                     <div className="container mt-3">
                         {loading && <Loading />}
                         {
@@ -65,7 +85,7 @@ const ItemCreate = () => {
                                                 Create Item
                                             </h4>
                                         </div>
-                                        <ItemForm item={item} handleChange={handleChange} inputError={inputError} />
+                                        <ItemForm item={item} handleChange={handleChange} handleFileChange={handleFileChange} inputError={inputError} />
                                     </div>
                                 </div>
                             </div>
