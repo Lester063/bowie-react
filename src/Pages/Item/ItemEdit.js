@@ -13,7 +13,10 @@ const ItemEdit = () => {
     const [item, setItem] = useState({
         itemname: "",
         itemcode: "",
+        item_image: "",
     });
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const [loading, setLoading] = useState(false);
     const [inputError, setInputError] = useState({});
 
@@ -25,10 +28,17 @@ const ItemEdit = () => {
         setItem({...item, [e.target.name]: e.target.value});
     }
 
+    //file changes
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+
     useEffect(()=>{
         async function getItemData(){
             try {
-                const itemdata = await axios.get(`http://localhost:8000/api/items/${id}/edit`,{withCredentials:true});
+                const itemdata = await axios.get(`http://localhost:8000/api/items/${id}/edit`,{withCredentials:true, headers: {
+                    'contentType': 'multipart/form-data',
+                },});
                 setItem(itemdata.data.data);
                 setLoading(false);
             }
@@ -41,8 +51,17 @@ const ItemEdit = () => {
 
     const saveNewItemData = async (e) =>{
         e.preventDefault();
+        setLoading(true);
+
+        let data = new FormData()
+        data.append("itemname", item.itemname);
+        data.append("itemcode", item.itemcode);
+        if (selectedFile) {
+            data.append('item_image', selectedFile);
+        }
+
         try {
-            const response = await axios.put(`http://localhost:8000/api/items/${id}/edit`, item,{withCredentials:true});
+            const response = await axios.post(`http://localhost:8000/api/items/${id}/edit`, data,{withCredentials:true});
             setLoading(false);
             alert(response.data.message);
             navigate('/items');
@@ -57,7 +76,7 @@ const ItemEdit = () => {
     if (is_admin === '1') {
         menu = (
             <>
-        <form onSubmit={saveNewItemData}>
+        <form onSubmit={saveNewItemData} encType="multipart/form-data">
             <div className="container mt-3">
                 {loading && <Loading />}
                 {
@@ -71,7 +90,7 @@ const ItemEdit = () => {
                                         Edit Item
                                     </h4>
                                 </div>
-                                    <ItemForm item={item} handleChange={handleChange} inputError={inputError}/>
+                                    <ItemForm item={item} handleChange={handleChange} handleFileChange={handleFileChange} inputError={inputError}/>
                             </div>
                         </div>
                     </div>

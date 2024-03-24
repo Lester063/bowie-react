@@ -26,7 +26,6 @@ const ItemCreate = () => {
     //file changes
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
-        console.log(e.target.files[0]);
     };
 
     //click save button
