@@ -8,6 +8,7 @@ import NotFound from '../Pages/NotFound';
 import Navbar from "../components/Navbar";
 import Items from "../Pages/Item/Items";
 import ItemCreate from "../Pages/Item/ItemCreate";
+import ItemShow from "../Pages/Item/ItemShow";
 import ItemEdit from "../Pages/Item/ItemEdit";
 import MyRequests from "../Pages/Request/MyRequest";
 import UsersRequest from "../Pages/Request/UsersRequest";
@@ -34,6 +35,7 @@ function MyRouter() {
             <Route path="/items" element={<><Navbar /> <Items/></>} />
             <Route path="/item/create" element={<><Navbar /> <ItemCreate/></>} />
             <Route path="/items/:id/edit" element={<><Navbar /> <ItemEdit/></>} />
+            <Route path="/items/:id" element={<><Navbar /> <ItemShow/></>} />
 
             {/*request */}
             <Route path="/myrequests" element={<><Navbar /> <MyRequests/></>} />

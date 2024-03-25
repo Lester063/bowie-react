@@ -52,7 +52,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                     return (
                         <tr key={index}>
                             <td style={{ width: "10px" }}>{index + 1}</td>
-                            <td>{item.itemname}</td>
+                            <td><a href={`/items/${item.id}`}>{item.itemname}</a></td>
                             <td>{item.itemcode}</td>
                             <td>{item.is_available ? 'Available' : 'Not available'}</td>
                             {is_admin === '1' &&
