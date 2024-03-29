@@ -42,7 +42,7 @@ const RequestCommunication = () => {
                         message: res.data.data.message,
                         created_at: res.data.data.created_at,
                         updated_at: res.data.data.updated_at,
-                        name: res.data.sendername,
+                        first_name: res.data.sendername,
                     },
                 ]);
             setRequestData({
@@ -89,7 +89,6 @@ const RequestCommunication = () => {
                 }
             });
         socket.on("sendChatToClient", ([message, sendername]) => {
-            console.log(sendername);
             setComms((state) =>
                 [
                     ...state,
@@ -100,7 +99,7 @@ const RequestCommunication = () => {
                         message: message.message,
                         created_at: message.created_at,
                         updated_at: message.updated_at,
-                        name: sendername,
+                        first_name: sendername,
                     },
                 ]);
         });
