@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import HoverMessage from "../../components/HoverMessage";
+import ModalTemplate from "../../components/ModalTemplate";
 import { useLocation } from "react-router-dom";
 import { ViewReturnContext } from "./ViewReturn";
 import { MyReturnContext } from "./MyReturn";
@@ -18,22 +19,46 @@ const ReturnsList = () => {
     const usersreturndata = useContext(UsersReturnContext);
     const [returns, setReturns] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setReturns(viewreturndata);
-    },[viewreturndata]);
+    }, [viewreturndata]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setReturns(myreturndata);
-    },[myreturndata]);
+    }, [myreturndata]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setReturns(usersreturndata);
-    },[usersreturndata]);
+    }, [usersreturndata]);
 
-    const hoverDisabledButton = async (id, isDisabled) => {
+    const hoverDisabledButton = async (id, message, isDisabled) => {
         if (isDisabled) {
-            setMessage('Request for return is already approved.')
-            document.getElementById(id).style.display = 'block';
+            switch (message) {
+                case 'Return':
+                    setMessage('Request for return is already approved.');
+                    document.getElementById(id).style.display = 'block';
+                    break;
+                case 'Review':
+                    setMessage('Unable to review the item as it is still pending for return.');
+                    document.getElementById(id).style.display = 'block';
+                    break;
+                default:
+                    console.log('no message being displayed when hovering disabled button.');
+            }
+        }
+        else {
+            switch (message) {
+                case 'Return':
+                    setMessage('Return');
+                    document.getElementById(id).style.display = 'block';
+                    break;
+                case 'Review':
+                    setMessage('Review/Comment');
+                    document.getElementById(id).style.display = 'block';
+                    break;
+                default:
+                    console.log('no message being displayed when hovering disabled button.');
+            }
         }
     }
 
@@ -70,11 +95,11 @@ const ReturnsList = () => {
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         socket.on("sendNotificationToClient", ([message, updatedReturn, action]) => {
-            if(action === 'return') {
-                const newreturn = returns.map((returnn)=>{
-                    if(String(returnn.id) === String(updatedReturn.id)) {
+            if (action === 'return') {
+                const newreturn = returns.map((returnn) => {
+                    if (String(returnn.id) === String(updatedReturn.id)) {
                         const updated = {
                             ...returnn,
                             is_approve: updatedReturn.is_approve,
@@ -88,7 +113,7 @@ const ReturnsList = () => {
         });
 
         return () => socket.off('sendNotificationToClient');
-    },[socket, returns]);
+    }, [socket, returns]);
 
     return (
         <table className="table table-striped">
@@ -103,6 +128,9 @@ const ReturnsList = () => {
                     <th>Return Status</th>
                     {is_admin === '1' &&
                         <th>Action</th>
+                    }
+                    {url.pathname.includes('myreturns') &&
+                        <th>Review</th>
                     }
                 </tr>
             </thead>
@@ -127,7 +155,7 @@ const ReturnsList = () => {
                                     <HoverMessage id={index + 'approvereturn'} message={message} />
                                     <span onMouseOut={() => { hoverOut(index + 'approvereturn') }}
                                         onMouseOver={() => {
-                                            hoverDisabledButton(index + 'approvereturn', returnn.is_approve === 1 ? true : false)
+                                            hoverDisabledButton(index + 'approvereturn', 'Return', returnn.is_approve === 1 ? true : false)
                                         }}>
                                         <button className="btn btn-primary" disabled={returnn.is_approve === 1 ? true : false}
                                             onClick={(e) => {
@@ -137,6 +165,20 @@ const ReturnsList = () => {
                                             }
                                             }
                                         ><i className="bi bi-check-circle"></i></button>
+                                    </span>
+                                </td>
+                            }
+                            {url.pathname.includes('myreturns') &&
+                                <td>
+                                    <HoverMessage id={index + 'review'} message={message} />
+                                    <span onMouseOut={() => { hoverOut(index + 'review') }}
+                                        onMouseOver={() => {
+                                            hoverDisabledButton(index + 'review', 'Review', returnn.is_approve === 1 ? false : true)
+                                        }}>
+                                        <button type="button" className="btn btn-primary" data-toggle="modal"
+                                            data-target="#exampleModalCenter" disabled={returnn.is_approve === 1 ? false : true}>
+                                            <i className="bi bi-chat-right-heart"></i>
+                                        </button>
                                     </span>
                                 </td>
                             }

@@ -2,6 +2,7 @@ import React, { useEffect, useState, createContext } from 'react';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
+import ModalTemplate from "../../components/ModalTemplate";
 
 export const MyReturnContext = createContext(null);
 const MyReturn = () => {
@@ -35,6 +36,7 @@ const MyReturn = () => {
                                     <ReturnsList />
                                     {returns.length < 1 && <p>No returns to fetch.</p>}
                                 </div>
+                                <ModalTemplate title="Review"/>
                             </div>
                         </div>
                     </div>
