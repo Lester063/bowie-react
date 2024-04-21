@@ -58,10 +58,10 @@ const Login = () => {
         <div className="mobile-body">
             {(clickLoading || loading) && <Loading />}
             {!clickLoading && !loading &&
-                <div class="row">
+                <div className="row">
                     <div className={window.innerWidth < 700 ? "col-11 mt-3 mx-auto" : "col-3 mt-3 mx-auto"}>
                         <form onSubmit={login}>
-                            <h1>Login</h1>
+                            <h1>Log In</h1>
                             <input type="email" placeholder="Email" className="form-control mt-1" value={cred.email} name="email" onChange={handleChange} />
                             <input type="password" placeholder="Password" className="form-control mt-1" value={cred.password} name="password" onChange={handleChange} />
                             <span className="text-danger">{inputError}</span>

@@ -36,7 +36,7 @@ const MyReturn = () => {
                                     <ReturnsList />
                                     {returns.length < 1 && <p>No returns to fetch.</p>}
                                 </div>
-                                <ModalTemplate title="Review" form = 'review' />
+                                
                             </div>
                         </div>
                     </div>

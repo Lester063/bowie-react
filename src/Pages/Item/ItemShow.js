@@ -62,7 +62,7 @@ const ItemShow = () => {
             <div className="row mt-3">
                 <h3>Comments/Reviews</h3>
                 <hr/>
-                {itemReviews &&
+                {itemReviews[0] && itemReviews[0].length >= 1 &&
                     itemReviews.map((itemReview, index) => {
                         return (
                             <div className="col-12" key={index}>
@@ -72,6 +72,7 @@ const ItemShow = () => {
                         )
                     })
                 }
+                {itemReviews[0] <= 0 && <p>No comments/reviews available for this item.</p>}
             </div>
         </div>
 

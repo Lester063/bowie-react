@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 import HoverMessage from "../../components/HoverMessage";
 import ModalTemplate from "../../components/ModalTemplate";
 import { useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 const socket = io.connect('http://localhost:3001');
+export const MyIdRequestContext = createContext(null);
 const ReturnsList = () => {
     const is_admin = localStorage.getItem('is_admin');
     const [message, setMessage] = useState('');
@@ -18,6 +19,11 @@ const ReturnsList = () => {
     const myreturndata = useContext(MyReturnContext);
     const usersreturndata = useContext(UsersReturnContext);
     const [returns, setReturns] = useState([]);
+    const [getidreq, setIdRequest] = useState(null);
+
+    const getRequestId = async (idreq) => {
+        setIdRequest(idreq);
+    }
 
     useEffect(() => {
         setReturns(viewreturndata);
@@ -115,80 +121,92 @@ const ReturnsList = () => {
         return () => socket.off('sendNotificationToClient');
     }, [socket, returns]);
 
-    return (
+    let menu;
+    menu = (
+        <>
         <table className="table table-striped">
-            <thead>
-                <tr>
-                    <th style={{ width: "10px" }}>List#</th>
-                    {!url.pathname.includes('myreturns') &&
-                        <th>Returner's Name</th>
-                    }
-                    <th>Item Name</th>
-                    <th>Item Code</th>
-                    <th>Return Status</th>
-                    {is_admin === '1' &&
-                        <th>Action</th>
-                    }
-                    {url.pathname.includes('myreturns') &&
-                        <th>Review</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                {returns && returns.map((returnn, index) => {
-                    return (
-                        <tr key={index}>
-                            <td>{index + 1}.</td>
-                            {!url.pathname.includes('myreturns') &&
-                                <td>{returnn.first_name}</td>
-                            }
-                            <td><a href={`/requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
-                            <td>{returnn.itemcode}</td>
-                            <td><span style={{
-                                backgroundColor: '#47bf67',
-                                padding: "5px",
-                                borderRadius: "5px",
-                                color: "#fff",
-                            }}>{returnn.is_approve === 1 ? 'Approved' : 'Pending'}</span></td>
-                            {is_admin === '1' &&
-                                <td>
-                                    <HoverMessage id={index + 'approvereturn'} message={message} />
-                                    <span onMouseOut={() => { hoverOut(index + 'approvereturn') }}
-                                        onMouseOver={() => {
-                                            hoverDisabledButton(index + 'approvereturn', 'Return', returnn.is_approve === 1 ? true : false)
-                                        }}>
-                                        <button className="btn btn-primary" disabled={returnn.is_approve === 1 ? true : false}
-                                            onClick={(e) => {
-                                                if (window.confirm('are you sure?')) {
-                                                    approveReturn(e, returnn.id)
+                <thead>
+                    <tr>
+                        <th style={{ width: "10px" }}>List#</th>
+                        {!url.pathname.includes('myreturns') &&
+                            <th>Returner's Name</th>
+                        }
+                        <th>Item Name</th>
+                        <th>Item Code</th>
+                        <th>Return Status</th>
+                        {is_admin === '1' &&
+                            <th>Action</th>
+                        }
+                        {url.pathname.includes('myreturns') &&
+                            <th>Review</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    {returns && returns.map((returnn, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{index + 1}.</td>
+                                {!url.pathname.includes('myreturns') &&
+                                    <td>{returnn.first_name}</td>
+                                }
+                                <td><a href={`/requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
+                                <td>{returnn.itemcode}</td>
+                                <td><span style={{
+                                    backgroundColor: '#47bf67',
+                                    padding: "5px",
+                                    borderRadius: "5px",
+                                    color: "#fff",
+                                }}>{returnn.is_approve === 1 ? 'Approved' : 'Pending'}</span></td>
+                                {is_admin === '1' &&
+                                    <td>
+                                        <HoverMessage id={index + 'approvereturn'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'approvereturn') }}
+                                            onMouseOver={() => {
+                                                hoverDisabledButton(index + 'approvereturn', 'Return', returnn.is_approve === 1 ? true : false)
+                                            }}>
+                                            <button className="btn btn-primary" disabled={returnn.is_approve === 1 ? true : false}
+                                                onClick={(e) => {
+                                                    if (window.confirm('are you sure?')) {
+                                                        approveReturn(e, returnn.id)
+                                                    }
                                                 }
-                                            }
-                                            }
-                                        ><i className="bi bi-check-circle"></i></button>
-                                    </span>
-                                </td>
-                            }
-                            {url.pathname.includes('myreturns') &&
-                                <td>
-                                    <HoverMessage id={index + 'review'} message={message} />
-                                    <span onMouseOut={() => { hoverOut(index + 'review') }}
-                                        onMouseOver={() => {
-                                            hoverDisabledButton(index + 'review', 'Review', returnn.is_approve === 1 ? false : true)
-                                        }}>
-                                        <button type="button" className="btn btn-primary" data-toggle="modal"
-                                            data-target="#exampleModalCenter" disabled={returnn.is_approve === 1 ? false : true}>
-                                            <i className="bi bi-chat-right-heart"></i>
-                                        </button>
-                                    </span>
-                                </td>
-                            }
-                        </tr>
-                    )
-                })
-                }
-            </tbody>
+                                                }
+                                            ><i className="bi bi-check-circle"></i></button>
+                                        </span>
+                                    </td>
+                                }
+                                {url.pathname.includes('myreturns') &&
+                                    <td>
+                                        <HoverMessage id={index + 'review'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'review') }}
+                                            onMouseOver={() => {
+                                                hoverDisabledButton(index + 'review', 'Review', returnn.is_approve === 1 ? false : true)
+                                            }}>
+                                            <button type="button" className="btn btn-primary" data-toggle="modal"
+                                                data-target="#exampleModalCenter" disabled={returnn.is_approve === 1 ? false : true}
+                                                onClick={() => getRequestId(returnn.idrequest)}
+                                            >
+                                                <i className="bi bi-chat-right-heart"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                }
+                            </tr>
+                        )
+                    })
+                    }
+                </tbody>
 
-        </table>
+            </table>
+        </>
+    )
+
+    return (
+        <MyIdRequestContext.Provider value={getidreq}>
+            {menu}
+            <ModalTemplate title="Review" form="review" />
+        </MyIdRequestContext.Provider>
     );
 }
 
