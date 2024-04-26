@@ -66,7 +66,7 @@ const ItemShow = () => {
                     itemReviews.map((itemReview, index) => {
                         return (
                             <div className="col-12" key={index}>
-                                <b>{itemReview[0].first_name}</b>
+                                <b>{itemReview[0].first_name} - {itemReview[0].rating}</b>
                                 <p>{itemReview[0].comment}</p>
                             </div>
                         )
