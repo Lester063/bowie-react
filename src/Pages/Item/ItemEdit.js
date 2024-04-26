@@ -61,7 +61,7 @@ const ItemEdit = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:8000/api/items/${id}/edit`, data,{withCredentials:true});
+            const response = await axios.post(`http://localhost:8000/api/items/${id}/edit`, data, { withCredentials: true });
             setLoading(false);
             alert(response.data.message);
             navigate('/items');
