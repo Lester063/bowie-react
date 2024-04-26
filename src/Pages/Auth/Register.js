@@ -27,7 +27,7 @@ const Register = () => {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
 
-    const saveUser = (e) => {
+    const saveUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         const data = {
@@ -38,9 +38,10 @@ const Register = () => {
             password: user.password
         }
 
-        axios.post(`http://localhost:8000/api/register`, data).then(res => {
+        try {
+            const response = await axios.post(`http://localhost:8000/api/register`, data);
             setLoading(false);
-            alert(res.data.message);
+            alert(response.data.message);
             setUser({
                 first_name: "",
                 middle_name: "",
@@ -49,7 +50,8 @@ const Register = () => {
                 password: ""
             })
             setInputError({});
-        }).catch(function (error) {
+        }
+        catch(error) {
             if (error.response) {
                 if (error.response.status === 422) {
                     setLoading(false);
@@ -60,14 +62,14 @@ const Register = () => {
                     setInputError(error.response.data.message);
                 }
             }
-        })
+        }
     }
 
     return (
         <div className="mobile-body">
             {loading && <Loading />}
             {!loading &&
-                <div class="row">
+                <div className="row">
                     <div className={window.innerWidth < 700 ? "col-11 mt-3 mx-auto" : "col-3 mt-3 mx-auto"}>
                     <form onSubmit={saveUser}>
                         <h1>Create account</h1>

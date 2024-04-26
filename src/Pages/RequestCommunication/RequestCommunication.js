@@ -31,34 +31,36 @@ const RequestCommunication = () => {
             message: requestData.message,
         }
 
-        await axios.post(`http://localhost:8000/api/requestcommunication/`, datos, { withCredentials: true }).then(res => {
-            setComms((state) =>
-                [
-                    ...state,
-                    {
-                        id: res.data.data.id,
-                        idrequest: res.data.data.idrequest,
-                        idsender: res.data.data.idsender,
-                        message: res.data.data.message,
-                        created_at: res.data.data.created_at,
-                        updated_at: res.data.data.updated_at,
-                        first_name: res.data.sendername,
-                    },
-                ]);
-            setRequestData({
-                idrequest: "",
-                message: ""
-            });
-            messageRef.current.focus();
-            socket.emit("sendChatToServer", [res.data.data, res.data.sendername]);
-            socket.emit("sendNotificationToServer", [res.data.notification]);
-        }).catch((error) => {
+        try {
+            const response = await axios.post(`http://localhost:8000/api/requestcommunication/`, datos, { withCredentials: true });
+                setComms((state) =>
+                    [
+                        ...state,
+                        {
+                            id: response.data.data.id,
+                            idrequest: response.data.data.idrequest,
+                            idsender: response.data.data.idsender,
+                            message: response.data.data.message,
+                            created_at: response.data.data.created_at,
+                            updated_at: response.data.data.updated_at,
+                            first_name: response.data.sendername,
+                        },
+                    ]);
+                setRequestData({
+                    idrequest: "",
+                    message: ""
+                });
+                messageRef.current.focus();
+                socket.emit("sendChatToServer", [response.data.data, response.data.sendername]);
+                socket.emit("sendNotificationToServer", [response.data.notification]);
+        }
+        catch (error) {
             if (error.response) {
                 if (error.response.status === 422) {
                     console.log(error.response.status);
                 }
             }
-        })
+        }
     }
 
     useEffect(() => {
@@ -71,8 +73,6 @@ const RequestCommunication = () => {
             { withCredentials: true })
             .then(res => {
                 setRequestStatus(res.data.statusrequest)
-                //console.log(res.data.statusrequest)
-                console.log(res.data.data)
                 setComms(res.data.data);
                 setLoading(false);
             })

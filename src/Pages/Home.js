@@ -17,7 +17,7 @@ const Home = () => {
     const [imageSrc, setImageSrc] = useState(null);
     const data = {
         body: `Bowie is a web application that can be used as a management tool
-        for the Organisation to let their member to request or borrow any item they 
+        for the Organisation to let their member request or borrow any item they 
         need to perform a task.`
     }
 
