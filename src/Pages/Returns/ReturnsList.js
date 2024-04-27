@@ -45,7 +45,7 @@ const ReturnsList = () => {
                     document.getElementById(id).style.display = 'block';
                     break;
                 case 'Review':
-                    setMessage('Unable to review the item as it is still pending for return.');
+                    setMessage('Pending for return / Item reviewed.');
                     document.getElementById(id).style.display = 'block';
                     break;
                 default:
@@ -181,10 +181,11 @@ const ReturnsList = () => {
                                         <HoverMessage id={index + 'review'} message={message} />
                                         <span onMouseOut={() => { hoverOut(index + 'review') }}
                                             onMouseOver={() => {
-                                                hoverDisabledButton(index + 'review', 'Review', returnn.is_approve === 1 ? false : true)
+                                                hoverDisabledButton(index + 'review', 'Review',
+                                                    returnn.is_approve === 1 && returnn.is_reviewed !== 1 ? false : true)
                                             }}>
                                             <button type="button" className="btn btn-primary" data-toggle="modal"
-                                                data-target="#exampleModalCenter" disabled={returnn.is_approve === 1 ? false : true}
+                                                data-target="#exampleModalCenter" disabled={returnn.is_approve === 1 && returnn.is_reviewed !== 1 ? false : true}
                                                 onClick={() => getRequestId(returnn.idrequest)}
                                             >
                                                 <i className="bi bi-chat-right-heart"></i>
