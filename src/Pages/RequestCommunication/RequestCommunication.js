@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import Loading from '../../components/Loading';
+import Login from "../Auth/Login";
 import axios from "axios";
 import io from 'socket.io-client';
 
@@ -33,26 +34,26 @@ const RequestCommunication = () => {
 
         try {
             const response = await axios.post(`http://localhost:8000/api/requestcommunication/`, datos, { withCredentials: true });
-                setComms((state) =>
-                    [
-                        ...state,
-                        {
-                            id: response.data.data.id,
-                            idrequest: response.data.data.idrequest,
-                            idsender: response.data.data.idsender,
-                            message: response.data.data.message,
-                            created_at: response.data.data.created_at,
-                            updated_at: response.data.data.updated_at,
-                            first_name: response.data.sendername,
-                        },
-                    ]);
-                setRequestData({
-                    idrequest: "",
-                    message: ""
-                });
-                messageRef.current.focus();
-                socket.emit("sendChatToServer", [response.data.data, response.data.sendername]);
-                socket.emit("sendNotificationToServer", [response.data.notification]);
+            setComms((state) =>
+                [
+                    ...state,
+                    {
+                        id: response.data.data.id,
+                        idrequest: response.data.data.idrequest,
+                        idsender: response.data.data.idsender,
+                        message: response.data.data.message,
+                        created_at: response.data.data.created_at,
+                        updated_at: response.data.data.updated_at,
+                        first_name: response.data.sendername,
+                    },
+                ]);
+            setRequestData({
+                idrequest: "",
+                message: ""
+            });
+            messageRef.current.focus();
+            socket.emit("sendChatToServer", [response.data.data, response.data.sendername]);
+            socket.emit("sendNotificationToServer", [response.data.notification]);
         }
         catch (error) {
             if (error.response) {
@@ -107,71 +108,82 @@ const RequestCommunication = () => {
         return () => socket.off('receive_message');
 
     }, [socket]);
+    let menu;
+    {
+        userid === null ?
+            menu = (
+                <Login />
+            )
+            :
+            menu = (
+                <div className="container mt-3">
+                    {loading && <Loading />}
+                    {
+                        !loading &&
+                        <div className="row">
+                            <div className="col-md-12" style={{
+                                border: "1px solid #ccc",
+                                maxHeight: "800px",
+                                overflowY: "scroll",
+                                borderRadius: "5px",
+                            }}>
+                                {comms && comms.constructor === Array && comms.map((comm, index, arr) => {
+                                    const previousItem = arr[index - 1];
+                                    return (
+                                        <div key={index}>
+                                            {index == 0 && String(comm.idsender) !== String(userid) &&
+                                                <span>{comm.first_name}</span>
+                                            }
+                                            {index > 0 && String(comm.idsender) !== String(previousItem.idsender) && String(comm.idsender) !== String(userid) &&
+                                                <span>{comm.first_name}</span>
+                                            }
+                                            <div className="messageBox mt-1" key={index} style={{
+                                                backgroundColor: String(userid) === String(comm.idsender) ? "#78b5ff" : "#f5f3f0",
+                                                width: "fit-content",
+                                                padding: "10px",
+                                                borderRadius: "7px",
+                                                marginRight: String(userid) === String(comm.idsender) ? "0" : "",
+                                                marginLeft: String(userid) === String(comm.idsender) ? "auto" : "",
+
+                                            }}>
+                                                <p>{comm.message}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                                }
+
+                                {comms.length < 1 && <>No messages.</>}
+                                {requestStatus === 'Closed' ?
+                                    <p ref={messageRef} style={{ textAlign: "center", marginTop: "20px" }}>This request has been closed due to the item being unavailable at the moment,
+                                        please make a request again or contact the admin if you have any question.</p>
+                                    :
+                                    <div className="mt-2 mb-2">
+                                        <input type="text" ref={messageRef} required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control"
+                                            style={{
+                                                width:
+                                                    window.innerWidth > 1450 ?
+                                                        (requestData.message !== '' || messageRef.current != null ? "95%" : "100%")
+                                                        :
+                                                        (requestData.message !== '' || messageRef.current != null ? "85%" : "100%"),
+                                                display: "inline-block",
+                                            }} />
+                                        <button className="btn btn-primary" onClick={sendCommunication} style={{
+                                            float: "right",
+                                            display: requestData.message !== '' || messageRef.current != null ? "block" : "none",
+                                        }}>Send</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            )
+    }
 
     return (
         <div className="mobile-body">
-        <div className="container mt-3">
-            {loading && <Loading />}
-            {
-                !loading &&
-                <div className="row">
-                    <div className="col-md-12" style={{
-                        border: "1px solid #ccc",
-                        maxHeight: "800px",
-                        overflowY: "scroll",
-                        borderRadius: "5px",
-                    }}>
-                        {comms && comms.constructor === Array && comms.map((comm, index, arr) => {
-                            const previousItem = arr[index - 1];
-                            return (
-                                <div key={index}>
-                                    {index == 0 && String(comm.idsender) !== String(userid) &&
-                                        <span>{comm.first_name}</span>
-                                    }
-                                    {index > 0 && String(comm.idsender) !== String(previousItem.idsender) && String(comm.idsender) !== String(userid) &&
-                                        <span>{comm.first_name}</span>
-                                    }
-                                    <div className="messageBox mt-1" key={index} style={{
-                                        backgroundColor: String(userid) === String(comm.idsender) ? "#78b5ff" : "#f5f3f0",
-                                        width: "fit-content",
-                                        padding: "10px",
-                                        borderRadius: "7px",
-                                        marginRight: String(userid) === String(comm.idsender) ? "0" : "",
-                                        marginLeft: String(userid) === String(comm.idsender) ? "auto" : "",
-
-                                    }}>
-                                        <p>{comm.message}</p>
-                                    </div>
-                                </div>
-                            )
-                        })
-                        }
-
-                        {comms.length < 1 && <>No messages.</>}
-                        {requestStatus === 'Closed' ?
-                            <p ref={messageRef} style={{textAlign:"center", marginTop:"20px"}}>This request has been closed due to the item being unavailable at the moment,
-                            please make a request again or contact the admin if you have any question.</p>
-                            :
-                            <div className="mt-2 mb-2">
-                                <input type="text" ref={messageRef} required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control"
-                                    style={{
-                                        width:
-                                            window.innerWidth > 1450 ?
-                                                (requestData.message !== '' || messageRef.current != null ? "95%" : "100%")
-                                                :
-                                                (requestData.message !== '' || messageRef.current != null ? "85%" : "100%"),
-                                        display: "inline-block",
-                                    }} />
-                                <button className="btn btn-primary" onClick={sendCommunication} style={{
-                                    float: "right",
-                                    display: requestData.message !== '' || messageRef.current != null ? "block" : "none",
-                                }}>Send</button>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
+            {menu}
         </div>
     );
 }
