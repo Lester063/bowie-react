@@ -19,7 +19,7 @@ const Navbar = () => {
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
-            //no need to pass token, I am just having a 401 issue when not passing any data, looks like a bug.
+            //no need to pass data, I am just having a 401 issue when not passing any data, looks like a bug.
             const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata', { withCredentials: true });
             if (response.data.message === 'Success') {
                 localStorage.removeItem('is_admin');
