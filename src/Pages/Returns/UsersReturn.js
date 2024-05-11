@@ -1,4 +1,5 @@
 import React, { useEffect, useState, createContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
@@ -6,6 +7,7 @@ import ForbiddenPage from '../../components/ForbiddenPage';
 
 export const UsersReturnContext = createContext(null);
 const UsersReturn = () => {
+    const navigate = useNavigate();
     const [returns, setReturns] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,6 +23,12 @@ const UsersReturn = () => {
             console.log(data);
         }
     }, [data]);
+
+    useEffect(() => {
+        if (is_admin === null) {
+            navigate('/login');
+        }
+    }, [is_admin]);
 
     let menu;
     if (is_admin === '1') {
@@ -47,7 +55,8 @@ const UsersReturn = () => {
                 </div>
             </>
         )
-    } else {
+    }
+    else if (is_admin === '0') {
         menu = (
             <ForbiddenPage />
         )

@@ -3,10 +3,11 @@ import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
 import ForbiddenPage from '../../components/ForbiddenPage';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export const ViewReturnContext = createContext(null);
 const ViewReturn = () => {
+    const navigate = useNavigate();
     const [returns, setReturns] = useState([]);
     const [isUserHasAccess, setUserAccess] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -26,6 +27,9 @@ const ViewReturn = () => {
     }, [data]);
 
     useEffect(() => {
+        if (userid === null) {
+            navigate('/login');
+        }
         returns.map((returnn)=>{
             returnn.idreturner == userid || is_admin === '1' ?
             setUserAccess(true)

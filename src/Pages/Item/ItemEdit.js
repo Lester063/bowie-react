@@ -1,9 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loading from '../../components/Loading';
-import { useNavigate } from 'react-router-dom';
 import ItemForm from '../../components/ItemForm';
 import ForbiddenPage from '../../components/ForbiddenPage';
 
@@ -47,7 +46,13 @@ const ItemEdit = () => {
             }
         }
         getItemData();
-    },[id])
+    },[id]);
+
+    useEffect(() => {
+        if (is_admin === null) {
+            navigate('/login');
+        }
+    }, [is_admin]);
 
     const saveNewItemData = async (e) =>{
         e.preventDefault();
@@ -99,7 +104,8 @@ const ItemEdit = () => {
         </form>
             </>
         )
-    } else {
+    }
+    else if (is_admin === '0') {
         menu = (
             <ForbiddenPage />
         )
