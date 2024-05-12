@@ -2,11 +2,12 @@ import React, { useEffect, useState, createContext } from 'react';
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import RequestsList from './RequestsList';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ForbiddenPage from '../../components/ForbiddenPage';
 
 export const ViewRequestContext = createContext(null);
 const ViewRequest = () => {
+    const navigate = useNavigate();
     const [requests, setRequests] = useState([]);
     const [isUserHasAccess, setUserAccess] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -25,13 +26,16 @@ const ViewRequest = () => {
     }, [data]);
 
     useEffect(() => {
+        if (userid === null) {
+            navigate('/login');
+        }
         requests.map((request)=>{
             request.idrequester == userid || is_admin === '1' ?
             setUserAccess(true)
             :
             setUserAccess(false)
         });
-    }, [requests])
+    }, [requests, userid])
 
     
     let menu;

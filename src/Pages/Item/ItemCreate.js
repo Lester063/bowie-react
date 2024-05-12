@@ -1,11 +1,12 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loading from '../../components/Loading';
 import ItemForm from '../../components/ItemForm';
 import ForbiddenPage from '../../components/ForbiddenPage';
 
 const ItemCreate = () => {
+    const navigate = useNavigate();
     const [inputError, setInputError] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -66,6 +67,12 @@ const ItemCreate = () => {
         }
     }
 
+    useEffect(() => {
+        if (is_admin === null) {
+            navigate('/login');
+        }
+    }, [is_admin]);
+
     let menu;
     if (is_admin === '1') {
         menu = (
@@ -93,7 +100,8 @@ const ItemCreate = () => {
                 </form>
             </>
         )
-    } else {
+    }
+    else if (is_admin === '0') {
         menu = (
             <ForbiddenPage />
         )

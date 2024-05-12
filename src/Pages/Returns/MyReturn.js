@@ -1,12 +1,12 @@
 import React, { useEffect, useState, createContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import ReturnsList from './ReturnsList';
-import ModalTemplate from "../../components/ModalTemplate";
-import Login from "../Auth/Login";
 
 export const MyReturnContext = createContext(null);
 const MyReturn = () => {
+    const navigate = useNavigate();
     const [returns, setReturns] = useState([]);
     const [loading, setLoading] = useState(true);
     const userid = localStorage.getItem('userid');
@@ -21,13 +21,15 @@ const MyReturn = () => {
         }
     }, [data]);
 
+    useEffect(() => {
+        if (userid === null) {
+            navigate('/login');
+        }
+    }, [userid]);
+
     let menu;
     {
-        userid === null ?
-            menu = (
-                <Login />
-            )
-            :
+        if (userid !== null) {
             menu = (
                 <>
                     <div className="container mt-3">
@@ -52,6 +54,7 @@ const MyReturn = () => {
                     </div>
                 </>
             )
+        }
     }
 
     return (

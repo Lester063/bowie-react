@@ -3,10 +3,12 @@ import Loading from '../../components/Loading';
 import useFetch from '../../components/useFetch';
 import RequestsList from './RequestsList';
 import ForbiddenPage from '../../components/ForbiddenPage';
+import { useNavigate } from 'react-router-dom';
 
 export const UsersRequestContext = createContext(null);
 
 const UsersRequest = () => {
+    const navigate = useNavigate();
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,6 +23,12 @@ const UsersRequest = () => {
             setLoading(false);
         }
     }, [data]);
+
+    useEffect(() => {
+        if (is_admin === null) {
+            navigate('/login');
+        }
+    }, [is_admin]);
 
     let menu;
     if (is_admin === '1') {
@@ -47,7 +55,8 @@ const UsersRequest = () => {
                 </div>
             </>
         )
-    } else {
+    }
+    else if (is_admin === '0') {
         menu = (
             <ForbiddenPage />
         )
