@@ -44,4 +44,8 @@ code {
   .mobile-body{
     margin-top:60px !important;
   }
+
+  .mb-ml-65px{
+    margin-left:65px;
+  }
 }

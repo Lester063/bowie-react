@@ -44,7 +44,7 @@ const ReviewForm = () => {
                     <span className="text-danger">{inputError.message}</span>
                     <input type="number" placeholder="Rating" className="form-control mt-1" name="rating" value={review.rating ? review.rating : 0} onChange = {handleChange} />
                     <span className="text-danger">{inputError.rating}</span>
-                    <input type="text" placeholder="Comment" className="form-control mt-1" name="comment" value={review.comment} onChange = {handleChange} />
+                    <textarea placeholder="Comment" className="form-control mt-1" name="comment" value={review.comment} onChange = {handleChange} />
                     <span className="text-danger">{inputError.comment}</span>
                     <input type="hidden" className="form-control mt-1" value={review.idrequest} name="idrequest" onChange = {handleChange} />
 

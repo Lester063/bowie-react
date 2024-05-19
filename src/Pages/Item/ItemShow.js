@@ -37,37 +37,49 @@ const ItemShow = () => {
     }, []);
 
     return (
-        <div className="container">
-            {loading && <Loading />}
-            <div className="row mt-3">
-                <h3>{item.itemname}</h3>
-                <div className="col-6" style={{ maxHeight: "400px" }}>
-                    {item &&
-                        <>
-                            {item.item_image ?
-                                <img src={`http://localhost:8000/storage/${item.item_image}`} alt="Item Image"
-                                    style={{
-                                        maxHeight: "100%",
-                                        maxWidth: "100%"
-                                    }}
-                                />
-                                :
-                                <p>No image available for this item.</p>
-                            }
-                        </>
-                    }
+        <div className="mobile-body">
+            <div className="container">
+                {loading && <Loading />}
+                <div className="row mt-3">
+                    <h3>{item.itemname}</h3>
+                    <div className="col-6" style={{ maxHeight: "400px" }}>
+                        {item &&
+                            <>
+                                {item.item_image ?
+                                    <img src={`http://localhost:8000/storage/${item.item_image}`} alt="Item Image"
+                                        style={{
+                                            maxHeight: "100%",
+                                            maxWidth: "100%"
+                                        }}
+                                    />
+                                    :
+                                    <p>No image available for this item.</p>
+                                }
+                            </>
+                        }
+                    </div>
                 </div>
-            </div>
 
-            <div className="row mt-3">
                 <h3>Comments/Reviews</h3>
-                <hr/>
+                <hr />
                 {itemReviews && itemReviews.length >= 1 &&
                     itemReviews.map((itemReview, index) => {
                         return (
-                            <div className="col-12" key={index}>
-                                <b>{itemReview.first_name} - {itemReview.rating}</b>
-                                <p>{itemReview.comment}</p>
+                            <div className="row mt-3" key={index} >
+                                <div className="col-1 order-1">
+                                    <img src={`http://localhost:8000/storage/${itemReview.profile_image}`}
+                                        style={{
+                                            width: "100px",
+                                            borderRadius: "100%",
+                                        }}
+                                    />
+                                </div>
+                                <div className="col-11 order-2">
+                                    <div className="mb-ml-65px">
+                                        <b>{itemReview.first_name} - {itemReview.rating}</b>
+                                        <p>{itemReview.comment}</p>
+                                    </div>
+                                </div>
                             </div>
                         )
                     })
@@ -75,7 +87,6 @@ const ItemShow = () => {
                 {itemReviews <= 0 && <p>No comments/reviews available for this item.</p>}
             </div>
         </div>
-
     );
 }
 
