@@ -134,32 +134,59 @@ const RequestCommunication = () => {
                                             {index == 0 && String(comm.idsender) !== String(userid) &&
                                                 <span>{comm.first_name}</span>
                                             }
-                                            {index > 0 && String(comm.idsender) !== String(previousItem.idsender) && String(comm.idsender) !== String(userid) &&
+                                            {index > 0 && String(comm.idsender) !== String(previousItem.idsender)
+                                                && String(comm.idsender) !== String(userid) &&
                                                 <span>{comm.first_name}</span>
                                             }
                                             <div className="messageBox mt-1" key={index} style={{
                                                 backgroundColor: String(userid) === String(comm.idsender) ? "#78b5ff" : "#f5f3f0",
                                                 width: "fit-content",
-                                                padding: "10px",
+                                                padding: "7px",
                                                 borderRadius: "7px",
                                                 marginRight: String(userid) === String(comm.idsender) ? "0" : "",
                                                 marginLeft: String(userid) === String(comm.idsender) ? "auto" : "",
 
                                             }}>
-                                                <p>{comm.message}</p>
+                                                <p style={{
+                                                    margin: "0",
+                                                    padding: "0"
+                                                }}>
+                                                    {comm.message}
+                                                </p>
+                                                <div style={{
+                                                    fontSize: "9px",
+                                                    textAlign: String(comm.idsender) == String(userid) ? "right" : "left"
+                                                }}>
+                                                    {
+                                                        `Sent ${comm.created_at}`
+
+                                                    }
+                                                    {
+                                                        comm.isRead && String(comm.idsender) === String(userid)
+                                                            ?
+                                                            `Seen ${comm.updated_at}`
+                                                            :
+                                                            null
+                                                    }
+                                                </div>
                                             </div>
+
+
                                         </div>
+
                                     )
                                 })
                                 }
 
                                 {comms.length < 1 && <>No messages.</>}
                                 {requestStatus === 'Closed' ?
-                                    <p ref={messageRef} style={{ textAlign: "center", marginTop: "20px" }}>This request has been closed due to the item being unavailable at the moment,
-                                        please make a request again or contact the admin if you have any question.</p>
+                                    <p ref={messageRef} style={{ textAlign: "center", marginTop: "20px" }}>This request has been closed
+                                        due to the item being unavailable at the moment, please make a request again or contact
+                                        the admin if you have any question.</p>
                                     :
                                     <div className="mt-2 mb-2">
-                                        <input type="text" ref={messageRef} required id="message" placeholder="Enter a message" name="message" value={requestData.message} onChange={handleChange} className="form-control"
+                                        <input type="text" ref={messageRef} required id="message" placeholder="Enter a message" name="message"
+                                            value={requestData.message} onChange={handleChange} className="form-control"
                                             style={{
                                                 width:
                                                     window.innerWidth > 1450 ?
