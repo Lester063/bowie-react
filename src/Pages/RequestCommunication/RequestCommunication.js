@@ -4,6 +4,7 @@ import Loading from '../../components/Loading';
 import Login from "../Auth/Login";
 import axios from "axios";
 import io from 'socket.io-client';
+import moment from 'moment';
 
 const socket = io.connect('http://localhost:3001');
 const RequestCommunication = () => {
@@ -128,6 +129,8 @@ const RequestCommunication = () => {
                                 borderRadius: "5px",
                             }}>
                                 {comms && comms.constructor === Array && comms.map((comm, index, arr) => {
+                                    let messageSentDate = moment(comm.created_at);
+                                    let messageSeenDate = moment(comm.updated_at);
                                     const previousItem = arr[index - 1];
                                     return (
                                         <div key={index}>
@@ -153,24 +156,24 @@ const RequestCommunication = () => {
                                                 }}>
                                                     {comm.message}
                                                 </p>
-                                                <div style={{
+                                                
+                                            </div>
+                                            <div style={{
                                                     fontSize: "9px",
                                                     textAlign: String(comm.idsender) == String(userid) ? "right" : "left"
                                                 }}>
                                                     {
-                                                        `Sent ${comm.created_at}`
+                                                        `Sent ${messageSentDate.format('MMM DD YYYY h:mmA ')}`
 
                                                     }
                                                     {
                                                         comm.isRead && String(comm.idsender) === String(userid)
                                                             ?
-                                                            `Seen ${comm.updated_at}`
+                                                            `Seen ${messageSeenDate.format('MMM DD YYYY h:mmA')}`
                                                             :
                                                             null
                                                     }
                                                 </div>
-                                            </div>
-
 
                                         </div>
 
