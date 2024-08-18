@@ -10,12 +10,12 @@ const ItemCreate = () => {
     const [inputError, setInputError] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
 
     const [item, setItem] = useState({
-        itemname: "",
-        itemcode: "",
-        item_image: "",
+        itemName: "",
+        itemCode: "",
+        itemImage: "",
     });
     const [selectedFile, setSelectedFile] = useState(null);
 
@@ -35,10 +35,10 @@ const ItemCreate = () => {
         setLoading(true);
 
         let data = new FormData()
-        data.append("itemname", item.itemname);
-        data.append("itemcode", item.itemcode);
+        data.append("itemName", item.itemName);
+        data.append("itemCode", item.itemCode);
         if (selectedFile) {
-            data.append('item_image', selectedFile);
+            data.append('itemImage', selectedFile);
         }
 
         try {
@@ -54,9 +54,9 @@ const ItemCreate = () => {
             setLoading(false);
             alert(response.data.message);
             setItem({
-                itemname: "",
-                itemcode: "",
-                item_image: "",
+                itemName: "",
+                itemCode: "",
+                itemImage: "",
             });
             setInputError({});
         }
@@ -68,13 +68,13 @@ const ItemCreate = () => {
     }
 
     useEffect(() => {
-        if (is_admin === null) {
+        if (isAdmin === null) {
             navigate('/login');
         }
-    }, [is_admin]);
+    }, [isAdmin]);
 
     let menu;
-    if (is_admin === '1') {
+    if (isAdmin === '1') {
         menu = (
             <>
                 <form onSubmit={saveItem} encType="multipart/form-data">
@@ -101,7 +101,7 @@ const ItemCreate = () => {
             </>
         )
     }
-    else if (is_admin === '0') {
+    else if (isAdmin === '0') {
         menu = (
             <ForbiddenPage />
         )

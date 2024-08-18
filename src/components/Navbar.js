@@ -8,8 +8,8 @@ const socket = io.connect('http://localhost:3001');
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const is_admin = localStorage.getItem('is_admin');
-    const first_name = localStorage.getItem('first_name');
+    const isAdmin = localStorage.getItem('isAdmin');
+    const firstName = localStorage.getItem('firstName');
     const userid = localStorage.getItem('userid');
 
     const [isOpen, setIsOpen] = useState(false);
@@ -22,8 +22,8 @@ const Navbar = () => {
             //no need to pass data, I am just having a 401 issue when not passing any data, looks like a bug.
             const response = await axios.post(`http://localhost:8000/api/logout`, 'passingdata', { withCredentials: true });
             if (response.data.message === 'Success') {
-                localStorage.removeItem('is_admin');
-                localStorage.removeItem('first_name');
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('firstName');
                 localStorage.removeItem('userid');
                 navigate('/login');
             }
@@ -69,7 +69,7 @@ const Navbar = () => {
                             senderUserId: notification.senderUserId,
                             type: notification.type,
                             isRead: notification.isRead,
-                            typeValueID: notification.typeValueID,
+                            typeValueId: notification.typeValueId,
                             updated_at: notification.updated_at,
                             created_at: notification.created_at,
                             id: notification.id,
@@ -96,7 +96,7 @@ const Navbar = () => {
     }, [userid]);
 
     let menu;
-    if (is_admin === null || is_admin === '') {
+    if (isAdmin === null || isAdmin === '') {
         menu = (
             <div className="container">
                 <Link className="navbar-brand" to="/">Bowie</Link>
@@ -124,10 +124,10 @@ const Navbar = () => {
                 </div>
             </div>
         )
-    } else if (is_admin !== null || is_admin !== '') {
+    } else if (isAdmin !== null || isAdmin !== '') {
         menu = (
             <div className="container">
-                <Link className="navbar-brand" to="/">{first_name}</Link>
+                <Link className="navbar-brand" to="/">{firstName}</Link>
                 {window.innerWidth < 700 &&
                     <Link to="/notifications" style={{margin:"0 auto", marginRight:"10px"}} onClick={()=>setUnreadNotificationCount(0)}>
                         {
@@ -157,7 +157,7 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/items">Items</Link>
                         </li>
-                        {is_admin === '1' &&
+                        {isAdmin === '1' &&
                             <>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/requests">Users Request</Link>

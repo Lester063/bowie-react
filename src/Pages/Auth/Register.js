@@ -7,9 +7,9 @@ const Register = () => {
     const [inputError, setInputError] = useState({});
 
     const [user, setUser] = useState({
-        first_name: "",
-        middle_name: "",
-        last_name: "",
+        firstName: "",
+        middleName: "",
+        lastName: "",
         email: "",
         password: "",
     });
@@ -31,9 +31,9 @@ const Register = () => {
         e.preventDefault();
         setLoading(true);
         const data = {
-            first_name: user.first_name,
-            middle_name: user.middle_name,
-            last_name: user.last_name,
+            firstName: user.firstName,
+            middleName: user.middleName,
+            lastName: user.lastName,
             email: user.email,
             password: user.password
         }
@@ -43,9 +43,9 @@ const Register = () => {
             setLoading(false);
             alert(response.data.message);
             setUser({
-                first_name: "",
-                middle_name: "",
-                last_name: "",
+                firstName: "",
+                middleName: "",
+                lastName: "",
                 email: "",
                 password: ""
             })
@@ -73,12 +73,12 @@ const Register = () => {
                     <div className={window.innerWidth < 700 ? "col-11 mt-3 mx-auto" : "col-3 mt-3 mx-auto"}>
                     <form onSubmit={saveUser}>
                         <h1>Create account</h1>
-                        <input type="text" placeholder="First name" className="form-control mt-1" value={user.first_name} name="first_name" onChange={handleChange} />
-                        <span className="text-danger">{inputError.first_name}</span>
-                        <input type="text" placeholder="Middle name" className="form-control mt-1" value={user.middle_name} name="middle_name" onChange={handleChange} />
-                        <span className="text-danger">{inputError.middle_name}</span>
-                        <input type="text" placeholder="Last name" className="form-control mt-1" value={user.last_name} name="last_name" onChange={handleChange} />
-                        <span className="text-danger">{inputError.last_name}</span>
+                        <input type="text" placeholder="First name" className="form-control mt-1" value={user.firstName} name="firstName" onChange={handleChange} />
+                        <span className="text-danger">{inputError.firstName}</span>
+                        <input type="text" placeholder="Middle name" className="form-control mt-1" value={user.middleName} name="middleName" onChange={handleChange} />
+                        <span className="text-danger">{inputError.middleName}</span>
+                        <input type="text" placeholder="Last name" className="form-control mt-1" value={user.lastName} name="lastName" onChange={handleChange} />
+                        <span className="text-danger">{inputError.lastName}</span>
                         <input type="email" placeholder="Email" className="form-control mt-1" value={user.email} name="email" onChange={handleChange} />
                         <span className="text-danger">{inputError.email}</span>
                         <input type="password" placeholder="Password" className="form-control mt-1" value={user.password} name="password" onChange={handleChange} />

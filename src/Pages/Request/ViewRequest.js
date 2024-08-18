@@ -12,7 +12,7 @@ const ViewRequest = () => {
     const [isUserHasAccess, setUserAccess] = useState(true);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
     const userid = localStorage.getItem('userid');
 
     const data = useFetch(`http://localhost:8000/api/userrequest/${id}`);
@@ -30,7 +30,7 @@ const ViewRequest = () => {
             navigate('/login');
         }
         requests.map((request)=>{
-            request.idrequester == userid || is_admin === '1' ?
+            request.idRequester == userid || isAdmin === '1' ?
             setUserAccess(true)
             :
             setUserAccess(false)

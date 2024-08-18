@@ -10,16 +10,16 @@ const ItemEdit = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [item, setItem] = useState({
-        itemname: "",
-        itemcode: "",
-        item_image: "",
+        itemName: "",
+        itemCode: "",
+        itemImage: "",
     });
     const [selectedFile, setSelectedFile] = useState(null);
 
     const [loading, setLoading] = useState(false);
     const [inputError, setInputError] = useState({});
 
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
 
     //input changes
     const handleChange = (e) => {
@@ -49,20 +49,20 @@ const ItemEdit = () => {
     },[id]);
 
     useEffect(() => {
-        if (is_admin === null) {
+        if (isAdmin === null) {
             navigate('/login');
         }
-    }, [is_admin]);
+    }, [isAdmin]);
 
     const saveNewItemData = async (e) =>{
         e.preventDefault();
         setLoading(true);
 
         let data = new FormData()
-        data.append("itemname", item.itemname);
-        data.append("itemcode", item.itemcode);
+        data.append("itemName", item.itemName);
+        data.append("itemCode", item.itemCode);
         if (selectedFile) {
-            data.append('item_image', selectedFile);
+            data.append('itemImage', selectedFile);
         }
 
         try {
@@ -78,7 +78,7 @@ const ItemEdit = () => {
     }
 
     let menu;
-    if (is_admin === '1') {
+    if (isAdmin === '1') {
         menu = (
             <>
         <form onSubmit={saveNewItemData} encType="multipart/form-data">
@@ -105,7 +105,7 @@ const ItemEdit = () => {
             </>
         )
     }
-    else if (is_admin === '0') {
+    else if (isAdmin === '0') {
         menu = (
             <ForbiddenPage />
         )

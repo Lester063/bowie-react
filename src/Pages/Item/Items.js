@@ -14,7 +14,7 @@ const Items = () => {
     const [getItems, setNewItem] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
     const userid = localStorage.getItem('userid');
 
     const data = useFetch(`http://localhost:8000/api/items`);
@@ -67,12 +67,12 @@ const Items = () => {
         }
     }
 
-    const handleRequestItem = async (e, iditem) => {
+    const handleRequestItem = async (e, idItem) => {
         const requestdata = {
-            idrequester: userid,
-            iditem: String(iditem),
-            statusrequest: 'Pending',
-            // isreturnsent: false
+            idRequester: userid,
+            idItem: String(idItem),
+            statusRequest: 'Pending',
+            // isReturnSent: false
         }
         e.preventDefault();
         try {
@@ -83,10 +83,10 @@ const Items = () => {
                 {
                     created_at: response.data.data.created_at,
                     id: response.data.data.id,
-                    iditem: response.data.data.iditem,
-                    idrequester: response.data.data.idrequester,
-                    isreturnsent: response.data.data.isreturnsent,
-                    statusrequest: response.data.data.statusrequest,
+                    idItem: response.data.data.idItem,
+                    idRequester: response.data.data.idRequester,
+                    isReturnSent: response.data.data.isReturnSent,
+                    statusRequest: response.data.data.statusRequest,
                     updated_at: response.data.data.updated_at
                 }
             ]);
@@ -106,7 +106,7 @@ const Items = () => {
         setNewItem(items)
         if (event.target.checked) {
             const newItems = items.filter((item) =>
-                item.is_available === 1
+                item.isAvailable === 1
             );
             setItem(newItems);
         } else {
@@ -127,7 +127,7 @@ const Items = () => {
                             <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>Item List
-                                        {is_admin === '1' &&
+                                        {isAdmin === '1' &&
                                             <Link to="/item/create" className="btn btn-primary float-end">Add Item</Link>
                                         }
                                     </h4>
