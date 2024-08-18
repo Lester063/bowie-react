@@ -36,9 +36,9 @@ const Login = () => {
             const response = await axios.post(`http://localhost:8000/api/login`, data, { withCredentials: true });
             setLoading(false);
             if (response.data.statuscode === 200) {
-                localStorage.setItem('is_admin', response.data.data.is_admin);
+                localStorage.setItem('isAdmin', response.data.data.isAdmin);
                 localStorage.setItem('userid', response.data.data.id);
-                localStorage.setItem('first_name', response.data.data.first_name);
+                localStorage.setItem('firstName', response.data.data.firstName);
                 navigate('/');
                 console.log('if');
             }

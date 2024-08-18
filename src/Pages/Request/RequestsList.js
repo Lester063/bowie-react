@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3001');
 
 const RequestsList = () => {
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
     const userid = localStorage.getItem('userid');
     const [message, setMessage] = useState('');
     const url = useLocation();
@@ -39,8 +39,8 @@ const RequestsList = () => {
                     if (String(request.id) === String(updatedRequest.id)) {
                         const updated = {
                             ...request,
-                            is_available: updatedRequest.is_available,
-                            statusrequest: updatedRequest.statusrequest,
+                            isAvailable: updatedRequest.isAvailable,
+                            statusRequest: updatedRequest.statusRequest,
                         };
                         return updated;
                     }
@@ -96,18 +96,18 @@ const RequestsList = () => {
                     if (request.id === id) {
                         updatedRequest = {
                             ...request,
-                            statusrequest: action === 'Approving' ? 'Approved' : 'Declined',
-                            is_available: action === 'Approving' ? 0 : 1
+                            statusRequest: action === 'Approving' ? 'Approved' : 'Declined',
+                            isAvailable: action === 'Approving' ? 0 : 1
                         };
                         socket.emit("sendNotificationToServer", [response.data.notification, updatedRequest, 'request']);
                         return updatedRequest;
                     }
 
-                    if (response.data.data.iditem === request.iditem && request.statusrequest === 'Pending') {
+                    if (response.data.data.idItem === request.idItem && request.statusRequest === 'Pending') {
                         updatedRequest = {
                             ...request,
-                            statusrequest: action === 'Approving' ? 'Closed' : request.statusrequest,
-                            is_available: action === 'Approving' ? 0 : 1
+                            statusRequest: action === 'Approving' ? 'Closed' : request.statusRequest,
+                            isAvailable: action === 'Approving' ? 0 : 1
                         };
                         socket.emit("sendNotificationToServer", [response.data.notification, updatedRequest, 'request']);
                         return updatedRequest;
@@ -123,16 +123,16 @@ const RequestsList = () => {
     }
 
 
-    const returnItem = async (e, idrequest) => {
+    const returnItem = async (e, idRequest) => {
         e.preventDefault();
         try {
-            let response = await axios.post(`http://localhost:8000/api/return`, { idrequest: idrequest }, { withCredentials: true });
+            let response = await axios.post(`http://localhost:8000/api/return`, { idRequest: idRequest }, { withCredentials: true });
             if (response.status === 200) {
                 const newRequests = requests.map((request) => {
-                    if (request.id === idrequest) {
+                    if (request.id === idRequest) {
                         const updatedRequest = {
                             ...request,
-                            isreturnsent: 1
+                            isReturnSent: 1
                         }
                         return updatedRequest;
                     }
@@ -171,57 +171,57 @@ const RequestsList = () => {
                         <tr key={index}>
                             <td>{index + 1}.</td>
                             {!url.pathname.includes('myrequests') &&
-                                <td>{request.first_name}</td>
+                                <td>{request.firstName}</td>
                             }
-                            <td><a href={`/requestcommunication/${request.id}`}>{request.itemname}</a></td>
-                            <td>{request.itemcode}</td>
-                            <td>{request.is_available === 1 ? 'Available' : 'Not available'}</td>
+                            <td><a href={`/requestcommunication/${request.id}`}>{request.itemName}</a></td>
+                            <td>{request.itemCode}</td>
+                            <td>{request.isAvailable === 1 ? 'Available' : 'Not available'}</td>
                             <td><span style=
                                 {{
-                                    backgroundColor: request.statusrequest === 'Approved' || request.statusrequest === 'Pending'
-                                        || request.statusrequest === 'Completed' ? '#47bf67' : '#f75036',
+                                    backgroundColor: request.statusRequest === 'Approved' || request.statusRequest === 'Pending'
+                                        || request.statusRequest === 'Completed' ? '#47bf67' : '#f75036',
                                     padding: "5px",
                                     borderRadius: "5px",
                                     color: "#fff",
-                                }}>{request.statusrequest}</span></td>
+                                }}>{request.statusRequest}</span></td>
                             <td>
-                                {is_admin === '1' &&
+                                {isAdmin === '1' &&
                                     <>
                                         <HoverMessage id={index + 'approve'} message={message} />
                                         <span onMouseOut={() => { hoverOut(index + 'approve') }} onMouseOver={() => {
-                                            hoverDisabledButton(index + 'approve', request.statusrequest,
-                                                request.statusrequest === 'Approved' || request.statusrequest === 'Closed' || request.statusrequest === 'Completed' ? true : false)
+                                            hoverDisabledButton(index + 'approve', request.statusRequest,
+                                                request.statusRequest === 'Approved' || request.statusRequest === 'Closed' || request.statusRequest === 'Completed' ? true : false)
                                         }}>
                                             <button id='approvebutton' className="btn btn-primary" onClick={(e) => {
                                                 if (window.confirm('are you sure?')) {
                                                     actionRequest(e, request.id, 'Approving');
                                                 }
-                                            }} disabled={request.statusrequest === 'Approved' || request.statusrequest === 'Closed'
-                                                || request.statusrequest === 'Completed' ? true : false}><i className="bi bi-check-circle"></i></button>
+                                            }} disabled={request.statusRequest === 'Approved' || request.statusRequest === 'Closed'
+                                                || request.statusRequest === 'Completed' ? true : false}><i className="bi bi-check-circle"></i></button>
                                         </span>
 
                                         <HoverMessage id={index + 'decline'} message={message} />
                                         <span style={{ marginLeft: "5px" }} onMouseOut={() => { hoverOut(index + 'decline') }} onMouseOver={() => {
-                                            hoverDisabledButton(index + 'decline', request.statusrequest,
-                                                request.statusrequest === 'Declined' || request.statusrequest === 'Closed' || request.statusrequest === 'Completed' ? true : false)
+                                            hoverDisabledButton(index + 'decline', request.statusRequest,
+                                                request.statusRequest === 'Declined' || request.statusRequest === 'Closed' || request.statusRequest === 'Completed' ? true : false)
                                         }}>
                                             <button className="btn btn-danger" onClick={(e) => {
                                                 if (window.confirm('are you sure?')) {
                                                     actionRequest(e, request.id, 'Declining');
                                                 }
-                                            }} disabled={request.statusrequest === 'Declined' || request.statusrequest === 'Closed'
-                                                || request.statusrequest === 'Completed' ? true : false}><i className="bi bi-bag-x"></i></button>
+                                            }} disabled={request.statusRequest === 'Declined' || request.statusRequest === 'Closed'
+                                                || request.statusRequest === 'Completed' ? true : false}><i className="bi bi-bag-x"></i></button>
                                         </span>
 
                                     </>
                                 }
-                                {String(request.idrequester) === String(userid) &&
+                                {String(request.idRequester) === String(userid) &&
                                     <>
                                         <HoverMessage id={index + 'return'} message={message} />
                                         <span style={{ marginLeft: "5px" }} onMouseOut={() => { hoverOut(index + 'return') }} onMouseOver={() => {
-                                            hoverDisabledButton(index + 'return', 'Return', request.statusrequest !== 'Approved' || request.isreturnsent === 1 ? true : false)
+                                            hoverDisabledButton(index + 'return', 'Return', request.statusRequest !== 'Approved' || request.isReturnSent === 1 ? true : false)
                                         }}>
-                                            <button id='returnbutton' className="btn btn-primary" disabled={request.statusrequest !== 'Approved' || request.isreturnsent === 1 ? true : false}
+                                            <button id='returnbutton' className="btn btn-primary" disabled={request.statusRequest !== 'Approved' || request.isReturnSent === 1 ? true : false}
                                                 onClick={(e) => {
                                                     if (window.confirm('are you sure?')) {
                                                         returnItem(e, request.id);

@@ -11,7 +11,7 @@ import io from 'socket.io-client';
 const socket = io.connect('http://localhost:3001');
 export const MyIdRequestContext = createContext(null);
 const ReturnsList = () => {
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
     const [message, setMessage] = useState('');
     const url = useLocation();
 
@@ -83,7 +83,7 @@ const ReturnsList = () => {
                     if (String(returnn.id) === String(returnid)) {
                         updatedReturn = {
                             ...returnn,
-                            is_approve: 1
+                            isApprove: 1
                         }
                         socket.emit("sendNotificationToServer", [response.data.notification, updatedReturn, 'return']);
                         return updatedReturn;
@@ -108,7 +108,7 @@ const ReturnsList = () => {
                     if (String(returnn.id) === String(updatedReturn.id)) {
                         const updated = {
                             ...returnn,
-                            is_approve: updatedReturn.is_approve,
+                            isApprove: updatedReturn.isApprove,
                         };
                         return updated;
                     }
@@ -134,7 +134,7 @@ const ReturnsList = () => {
                         <th>Item Name</th>
                         <th>Item Code</th>
                         <th>Return Status</th>
-                        {is_admin === '1' &&
+                        {isAdmin === '1' &&
                             <th>Action</th>
                         }
                         {url.pathname.includes('myreturns') &&
@@ -148,24 +148,24 @@ const ReturnsList = () => {
                             <tr key={index}>
                                 <td>{index + 1}.</td>
                                 {!url.pathname.includes('myreturns') &&
-                                    <td>{returnn.first_name}</td>
+                                    <td>{returnn.firstName}</td>
                                 }
-                                <td><a href={`/requestcommunication/${returnn.idrequest}`}>{returnn.itemname}</a></td>
-                                <td>{returnn.itemcode}</td>
+                                <td><a href={`/requestcommunication/${returnn.idRequest}`}>{returnn.itemName}</a></td>
+                                <td>{returnn.itemCode}</td>
                                 <td><span style={{
                                     backgroundColor: '#47bf67',
                                     padding: "5px",
                                     borderRadius: "5px",
                                     color: "#fff",
-                                }}>{returnn.is_approve === 1 ? 'Approved' : 'Pending'}</span></td>
-                                {is_admin === '1' &&
+                                }}>{returnn.isApprove === 1 ? 'Approved' : 'Pending'}</span></td>
+                                {isAdmin === '1' &&
                                     <td>
                                         <HoverMessage id={index + 'approvereturn'} message={message} />
                                         <span onMouseOut={() => { hoverOut(index + 'approvereturn') }}
                                             onMouseOver={() => {
-                                                hoverDisabledButton(index + 'approvereturn', 'Return', returnn.is_approve === 1 ? true : false)
+                                                hoverDisabledButton(index + 'approvereturn', 'Return', returnn.isApprove === 1 ? true : false)
                                             }}>
-                                            <button className="btn btn-primary" disabled={returnn.is_approve === 1 ? true : false}
+                                            <button className="btn btn-primary" disabled={returnn.isApprove === 1 ? true : false}
                                                 onClick={(e) => {
                                                     if (window.confirm('are you sure?')) {
                                                         approveReturn(e, returnn.id)
@@ -182,11 +182,11 @@ const ReturnsList = () => {
                                         <span onMouseOut={() => { hoverOut(index + 'review') }}
                                             onMouseOver={() => {
                                                 hoverDisabledButton(index + 'review', 'Review',
-                                                    returnn.is_approve === 1 && returnn.is_reviewed !== 1 ? false : true)
+                                                    returnn.isApprove === 1 && returnn.isReviewed !== 1 ? false : true)
                                             }}>
                                             <button type="button" className="btn btn-primary" data-toggle="modal"
-                                                data-target="#exampleModalCenter" disabled={returnn.is_approve === 1 && returnn.is_reviewed !== 1 ? false : true}
-                                                onClick={() => getRequestId(returnn.idrequest)}
+                                                data-target="#exampleModalCenter" disabled={returnn.isApprove === 1 && returnn.isReviewed !== 1 ? false : true}
+                                                onClick={() => getRequestId(returnn.idRequest)}
                                             >
                                                 <i className="bi bi-chat-right-heart"></i>
                                             </button>

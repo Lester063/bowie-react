@@ -41,12 +41,12 @@ const ItemShow = () => {
             <div className="container">
                 {loading && <Loading />}
                 <div className="row mt-3">
-                    <h3>{item.itemname}</h3>
+                    <h3>{item.itemName}</h3>
                     <div className="col-6" style={{ maxHeight: "400px" }}>
                         {item &&
                             <>
-                                {item.item_image ?
-                                    <img src={`http://localhost:8000/storage/${item.item_image}`} alt="Item Image"
+                                {item.itemImage ?
+                                    <img src={`http://localhost:8000/storage/${item.itemImage}`} alt="Item Image"
                                         style={{
                                             maxHeight: "100%",
                                             maxWidth: "100%"
@@ -67,7 +67,7 @@ const ItemShow = () => {
                         return (
                             <div className="row mt-3" key={index} >
                                 <div className="col-1 order-1">
-                                    <img src={`http://localhost:8000/storage/${itemReview.profile_image}`}
+                                    <img src={`http://localhost:8000/storage/${itemReview.profileImage}`}
                                         style={{
                                             width: "100px",
                                             borderRadius: "100%",
@@ -76,7 +76,7 @@ const ItemShow = () => {
                                 </div>
                                 <div className="col-11 order-2">
                                     <div className="mb-ml-65px">
-                                        <b>{itemReview.first_name} - {itemReview.rating}</b>
+                                        <b>{itemReview.firstName} - {itemReview.rating}</b>
                                         <p>{itemReview.comment}</p>
                                     </div>
                                 </div>

@@ -6,13 +6,13 @@ const NotificationList = ({ notifications }) => {
 
                 let path = '#';
                 switch (notification.type) {
-                    case 'approve the request': path = `/requests/${notification.typeValueID}`; break;
-                    case 'decline the request': path = `/requests/${notification.typeValueID}`; break;
-                    case 'close the request': path = `/requests/${notification.typeValueID}`; break;
-                    case 'approve the return': path = `/return/${notification.typeValueID}`; break;
-                    case 'sent a message': path = `/requestcommunication/${notification.typeValueID}`; break;
-                    case 'requesting the item': path = `/requests/${notification.typeValueID}`; break;
-                    case 'returning the item': path = `/return/${notification.typeValueID}`; break;
+                    case 'approve the request': path = `/requests/${notification.typeValueId}`; break;
+                    case 'decline the request': path = `/requests/${notification.typeValueId}`; break;
+                    case 'close the request': path = `/requests/${notification.typeValueId}`; break;
+                    case 'approve the return': path = `/return/${notification.typeValueId}`; break;
+                    case 'sent a message': path = `/requestcommunication/${notification.typeValueId}`; break;
+                    case 'requesting the item': path = `/requests/${notification.typeValueId}`; break;
+                    case 'returning the item': path = `/return/${notification.typeValueId}`; break;
                     default: path = '#';
                 }
 

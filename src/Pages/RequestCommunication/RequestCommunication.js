@@ -14,7 +14,7 @@ const RequestCommunication = () => {
     const userid = localStorage.getItem('userid');
     const [requestStatus, setRequestStatus] = useState('');
     const [requestData, setRequestData] = useState({
-        idrequest: "",
+        idRequest: "",
         message: "",
     });
     const messageRef = useRef(null);
@@ -27,9 +27,10 @@ const RequestCommunication = () => {
 
     const sendCommunication = async (e) => {
         e.preventDefault();
-
+        console.log('id: '+id);
+        console.log('idd: '+requestData.idRequest);
         const datos = {
-            idrequest: id,
+            idRequest: id,
             message: requestData.message,
         }
 
@@ -40,16 +41,16 @@ const RequestCommunication = () => {
                     ...state,
                     {
                         id: response.data.data.id,
-                        idrequest: response.data.data.idrequest,
-                        idsender: response.data.data.idsender,
+                        idRequest: response.data.data.idRequest,
+                        idSender: response.data.data.idSender,
                         message: response.data.data.message,
                         created_at: response.data.data.created_at,
                         updated_at: response.data.data.updated_at,
-                        first_name: response.data.sendername,
+                        firstName: response.data.sendername,
                     },
                 ]);
             setRequestData({
-                idrequest: "",
+                idRequest: "",
                 message: ""
             });
             messageRef.current.focus();
@@ -74,7 +75,7 @@ const RequestCommunication = () => {
         axios.get(`http://localhost:8000/api/requestcommunication/${id}`,
             { withCredentials: true })
             .then(res => {
-                setRequestStatus(res.data.statusrequest)
+                setRequestStatus(res.data.statusRequest)
                 setComms(res.data.data);
                 setLoading(false);
             })
@@ -96,12 +97,12 @@ const RequestCommunication = () => {
                     ...state,
                     {
                         id: message.id,
-                        idrequest: message.idrequest,
-                        idsender: message.idsender,
+                        idRequest: message.idRequest,
+                        idSender: message.idSender,
                         message: message.message,
                         created_at: message.created_at,
                         updated_at: message.updated_at,
-                        first_name: sendername,
+                        firstName: sendername,
                     },
                 ]);
         });
@@ -134,20 +135,20 @@ const RequestCommunication = () => {
                                     const previousItem = arr[index - 1];
                                     return (
                                         <div key={index}>
-                                            {index == 0 && String(comm.idsender) !== String(userid) &&
-                                                <span>{comm.first_name}</span>
+                                            {index == 0 && String(comm.idSender) !== String(userid) &&
+                                                <span>{comm.firstName}</span>
                                             }
-                                            {index > 0 && String(comm.idsender) !== String(previousItem.idsender)
-                                                && String(comm.idsender) !== String(userid) &&
-                                                <span>{comm.first_name}</span>
+                                            {index > 0 && String(comm.idSender) !== String(previousItem.idSender)
+                                                && String(comm.idSender) !== String(userid) &&
+                                                <span>{comm.firstName}</span>
                                             }
                                             <div className="messageBox mt-1" key={index} style={{
-                                                backgroundColor: String(userid) === String(comm.idsender) ? "#78b5ff" : "#f5f3f0",
+                                                backgroundColor: String(userid) === String(comm.idSender) ? "#78b5ff" : "#f5f3f0",
                                                 width: "fit-content",
                                                 padding: "7px",
                                                 borderRadius: "7px",
-                                                marginRight: String(userid) === String(comm.idsender) ? "0" : "",
-                                                marginLeft: String(userid) === String(comm.idsender) ? "auto" : "",
+                                                marginRight: String(userid) === String(comm.idSender) ? "0" : "",
+                                                marginLeft: String(userid) === String(comm.idSender) ? "auto" : "",
 
                                             }}>
                                                 <p style={{
@@ -160,14 +161,14 @@ const RequestCommunication = () => {
                                             </div>
                                             <div style={{
                                                     fontSize: "9px",
-                                                    textAlign: String(comm.idsender) == String(userid) ? "right" : "left"
+                                                    textAlign: String(comm.idSender) == String(userid) ? "right" : "left"
                                                 }}>
                                                     {
                                                         `Sent ${messageSentDate.format('MMM DD YYYY h:mmA ')}`
 
                                                     }
                                                     {
-                                                        comm.isRead && String(comm.idsender) === String(userid)
+                                                        comm.isRead && String(comm.idSender) === String(userid)
                                                             ?
                                                             `Seen ${messageSeenDate.format('MMM DD YYYY h:mmA')}`
                                                             :

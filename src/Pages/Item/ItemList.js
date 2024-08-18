@@ -3,7 +3,7 @@ import { useState } from "react";
 import HoverMessage from "../../components/HoverMessage";
 
 const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
     const [message, setMessage] = useState('');
 
     const hoverDisabledButton = async (id, message, isDisabled) => {
@@ -30,10 +30,10 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                     <th>Item Name</th>
                     <th>Item Code</th>
                     <th>Item Status</th>
-                    {is_admin && //is_admin means there is a user logged in, either a normal user or admin
+                    {isAdmin && //isAdmin means there is a user logged in, either a normal user or admin
                         <th>Action</th>
                     }
-                    {is_admin === '1' && //logged in user must be an admin
+                    {isAdmin === '1' && //logged in user must be an admin
                         <th>User Action</th>
                     }
                 </tr>
@@ -43,7 +43,7 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                     let isRequested = false;
 
                     myRequest.map((myreq) => {
-                        if (String(myreq.iditem) === String(item.id) && myreq.statusrequest === 'Pending') {
+                        if (String(myreq.idItem) === String(item.id) && myreq.statusRequest === 'Pending') {
                             isRequested = true
                         }
                         return isRequested;
@@ -52,10 +52,10 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                     return (
                         <tr key={index}>
                             <td style={{ width: "10px" }}>{index + 1}</td>
-                            <td><a href={`/items/${item.id}`}>{item.itemname}</a></td>
-                            <td>{item.itemcode}</td>
-                            <td>{item.is_available ? 'Available' : 'Not available'}</td>
-                            {is_admin === '1' &&
+                            <td><a href={`/items/${item.id}`}>{item.itemName}</a></td>
+                            <td>{item.itemCode}</td>
+                            <td>{item.isAvailable ? 'Available' : 'Not available'}</td>
+                            {isAdmin === '1' &&
                                 <td style={{ width: "220px" }}>
                                     <Link to={`/items/${item.id}/edit`} className="btn btn-primary"><i className="bi bi-pencil-square"></i></Link>
                                     <button className="btn btn-danger" style={{ marginLeft: "5px" }} onClick={(e) => {
@@ -65,14 +65,14 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                                     }}><i className="bi bi-trash"></i></button>
                                 </td>
                             }
-                            {is_admin &&
+                            {isAdmin &&
                                 <td style={{ width: "220px" }}>
                                     <>
                                         <HoverMessage id={index + 'request'} message={message} />
                                         <span onMouseOut={() => { hoverOut(index + 'request') }} onMouseOver={() => {
-                                            hoverDisabledButton(index + 'request', 'Request', item.is_available && !isRequested ? false : true)
+                                            hoverDisabledButton(index + 'request', 'Request', item.isAvailable && !isRequested ? false : true)
                                         }}>
-                                            <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled={item.is_available && !isRequested ? false : true}
+                                            <button className="btn btn-primary" style={{ marginLeft: "5px" }} disabled={item.isAvailable && !isRequested ? false : true}
                                                 onClick={(e) => {
                                                     if (window.confirm('are you sure?')) {
                                                         handleRequestItem(e, item.id);

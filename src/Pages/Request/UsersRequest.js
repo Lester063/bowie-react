@@ -12,7 +12,7 @@ const UsersRequest = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
 
     const data = useFetch(`http://localhost:8000/api/requests`);
 
@@ -25,13 +25,13 @@ const UsersRequest = () => {
     }, [data]);
 
     useEffect(() => {
-        if (is_admin === null) {
+        if (isAdmin === null) {
             navigate('/login');
         }
-    }, [is_admin]);
+    }, [isAdmin]);
 
     let menu;
-    if (is_admin === '1') {
+    if (isAdmin === '1') {
         menu = (
             <>
                 <div className="container mt-3">
@@ -56,7 +56,7 @@ const UsersRequest = () => {
             </>
         )
     }
-    else if (is_admin === '0') {
+    else if (isAdmin === '0') {
         menu = (
             <ForbiddenPage />
         )

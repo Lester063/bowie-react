@@ -26,8 +26,8 @@ const Profile = () => {
 
     async function getUserProfile(user) {
         try {
-            user.profile_image !== null ?
-                setProfileImage(`http://localhost:8000/storage/${user.profile_image}`)
+            user.profileImage !== null ?
+                setProfileImage(`http://localhost:8000/storage/${user.profileImage}`)
                 :
                 setProfileImage(null);
         }
@@ -78,15 +78,15 @@ const Profile = () => {
                                                     </tr>
                                                     <tr>
                                                         <td style={{ width: "200px" }}>First Name: </td>
-                                                        <td>{userData.first_name}</td>
+                                                        <td>{userData.firstName}</td>
                                                     </tr>
                                                     <tr>
                                                         <td style={{ width: "200px" }}>Middle Name: </td>
-                                                        <td>{userData.middle_name}</td>
+                                                        <td>{userData.middleName}</td>
                                                     </tr>
                                                     <tr>
                                                         <td style={{ width: "200px" }}>Last Name: </td>
-                                                        <td>{userData.last_name}</td>
+                                                        <td>{userData.lastName}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

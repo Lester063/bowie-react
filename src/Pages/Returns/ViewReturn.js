@@ -13,7 +13,7 @@ const ViewReturn = () => {
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
 
-    const is_admin = localStorage.getItem('is_admin');
+    const isAdmin = localStorage.getItem('isAdmin');
     const userid = localStorage.getItem('userid');
 
     const data = useFetch(`http://localhost:8000/api/return/${id}`);
@@ -31,7 +31,7 @@ const ViewReturn = () => {
             navigate('/login');
         }
         returns.map((returnn)=>{
-            returnn.idreturner == userid || is_admin === '1' ?
+            returnn.idReturner == userid || isAdmin === '1' ?
             setUserAccess(true)
             :
             setUserAccess(false)
