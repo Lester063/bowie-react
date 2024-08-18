@@ -19,7 +19,7 @@ const NotificationList = ({ notifications }) => {
                 return (
                     <div key={index} style={{
                         width: "100%",
-                        height: "70px",
+                        minHeight: "40px",
                         borderTop: "1px solid #adaaaa",
                     }}>
                         <a href={path}
