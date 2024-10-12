@@ -40,15 +40,12 @@ const Login = () => {
                 localStorage.setItem('userid', response.data.data.id);
                 localStorage.setItem('firstName', response.data.data.firstName);
                 navigate('/');
-                console.log('if');
             }
             else if (response.data.statuscode === 422) {
                 setInputError(response.data.message);
-                console.log('else if');
             }
             else {
                 setInputError('There might be a problem, please come back later.');
-                console.log('else');
             }
 
         }
