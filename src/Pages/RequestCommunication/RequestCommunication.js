@@ -164,13 +164,13 @@ const RequestCommunication = () => {
                                                     textAlign: String(comm.idSender) == String(userid) ? "right" : "left"
                                                 }}>
                                                     {
-                                                        `Sent ${messageSentDate.format('MMM DD YYYY h:mmA ')}`
+                                                        `Sent ${messageSentDate.format('MMM DD YYYY h:mm A ')}`
 
                                                     }
                                                     {
                                                         comm.isRead && String(comm.idSender) === String(userid)
                                                             ?
-                                                            `Seen ${messageSeenDate.format('MMM DD YYYY h:mmA')}`
+                                                            `Seen ${messageSeenDate.format('MMM DD YYYY h:mm A')}`
                                                             :
                                                             null
                                                     }

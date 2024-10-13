@@ -1,9 +1,11 @@
+import moment from 'moment';
+
 const NotificationList = ({ notifications }) => {
     return (
         <>
             <h5>Notification</h5>
             {notifications.map((notification, index) => {
-
+            let notificationSentData = moment(notification.created_at);
                 let path = '#';
                 switch (notification.type) {
                     case 'approve the request': path = `/requests/${notification.typeValueId}`; break;
@@ -26,7 +28,15 @@ const NotificationList = ({ notifications }) => {
                             style={{
                                 textDecoration: "none",
                                 color: "#000"
-                            }}>{notification.notificationMessage}</a>
+                            }}>
+                                {notification.notificationMessage}
+                        </a>
+                        <p style={{
+                            fontSize: "9px",
+                            textAlign: "right"
+                        }}>
+                            {notificationSentData.format('MMM DD YYYY h:mm A ')}
+                        </p>
                     </div>
                 )
             })}
