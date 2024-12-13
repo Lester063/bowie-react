@@ -95,6 +95,20 @@ const Navbar = () => {
         }
     }, [userid]);
 
+    useEffect(() => {
+        // Clear token when the user closes the browser
+        const handleBeforeUnload = () => {
+          localStorage.removeItem('isAdmin');
+          localStorage.removeItem('userid');
+          localStorage.removeItem('firstName');
+        };
+      
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+      }, []);
+
     let menu;
     if (isAdmin === null || isAdmin === '') {
         menu = (
