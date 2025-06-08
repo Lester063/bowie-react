@@ -13,6 +13,9 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                     setMessage('Item might not be available or you have a pending request.')
                     document.getElementById(id).style.display = 'block';
                     break;
+                case 'Delete':
+                    setMessage('Cannot delete item that is currently assigned to user.')
+                    document.getElementById(id).style.display = 'block';
                 default: break;
             }
         }
@@ -58,11 +61,22 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                             {isAdmin === '1' &&
                                 <td style={{ width: "220px" }}>
                                     <Link to={`/items/${item.id}/edit`} className="btn btn-primary"><i className="bi bi-pencil-square"></i></Link>
-                                    <button className="btn btn-danger" style={{ marginLeft: "5px" }} onClick={(e) => {
+
+
+
+                                    <>
+                                        <HoverMessage id={index + 'delete'} message={message} />
+                                        <span onMouseOut={() => { hoverOut(index + 'delete') }} onMouseOver={() => {
+                                            hoverDisabledButton(index + 'delete', 'Delete', item.isAvailable && !isRequested ? false : true)
+                                        }}>
+                                        <button className="btn btn-danger" style={{ marginLeft: "5px" }} disabled={!item.isAvailable} onClick={(e) => {
                                         if (window.confirm('are you sure?')) {
                                             handleDelete(e, item.id);
                                         }
                                     }}><i className="bi bi-trash"></i></button>
+                                        </span>
+                                    </>
+
                                 </td>
                             }
                             {isAdmin &&

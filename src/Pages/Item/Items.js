@@ -127,10 +127,10 @@ const Items = () => {
                             <div className="card mt-3">
                                 <div className="card-header">
                                     <h4>Item List
-                                        {isAdmin === '1' &&
+                                    </h4>
+                                    {isAdmin === '1' &&
                                             <Link to="/item/create" className="btn btn-primary float-end">Add Item</Link>
                                         }
-                                    </h4>
                                     <input type="checkbox" onChange={(e) => { filterAvailableItems(e) }} />
                                     <label>Available</label>
                                 </div>
