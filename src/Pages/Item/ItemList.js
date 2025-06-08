@@ -61,13 +61,10 @@ const ItemList = ({ items, handleDelete, handleRequestItem, myRequest }) => {
                             {isAdmin === '1' &&
                                 <td style={{ width: "220px" }}>
                                     <Link to={`/items/${item.id}/edit`} className="btn btn-primary"><i className="bi bi-pencil-square"></i></Link>
-
-
-
                                     <>
                                         <HoverMessage id={index + 'delete'} message={message} />
                                         <span onMouseOut={() => { hoverOut(index + 'delete') }} onMouseOver={() => {
-                                            hoverDisabledButton(index + 'delete', 'Delete', item.isAvailable && !isRequested ? false : true)
+                                            hoverDisabledButton(index + 'delete', 'Delete', item.isAvailable ? false : true)
                                         }}>
                                         <button className="btn btn-danger" style={{ marginLeft: "5px" }} disabled={!item.isAvailable} onClick={(e) => {
                                         if (window.confirm('are you sure?')) {
